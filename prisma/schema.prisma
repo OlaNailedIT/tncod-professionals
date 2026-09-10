@@ -1,0 +1,724 @@
+// TNCOD Professionals — Phase 2 schema contract (frozen intent)
+// ONE PostgreSQL database: Supabase. Prisma is ORM/types, not migration authority.
+// users.id = auth.users.id (UUID). No password columns. Auth trigger: Phase 4 SQL.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum ProfileStatus {
+  REGISTERED
+  INCOMPLETE
+  COMPLETE
+  SUBMITTED
+}
+
+enum VerificationStatus {
+  NOT_REVIEWED
+  PENDING
+  UNDER_REVIEW
+  VERIFIED
+  NEEDS_CLARIFICATION
+  REJECTED
+}
+
+enum VisibilityStatus {
+  PRIVATE
+  MEMBERS_ONLY
+  DIRECTORY
+}
+
+/// Phase 14 field-group preference levels (UX: Private / TNCOD members / Public directory).
+/// Distinct from profiles.visibility_status (publication). Not legal consent.
+enum VisibilityPreferenceLevel {
+  PRIVATE
+  MEMBERS
+  PUBLIC
+}
+
+enum BusinessStatus {
+  DRAFT
+  SUBMITTED
+  PENDING_REVIEW
+  APPROVED
+  NEEDS_CLARIFICATION
+  REJECTED
+  SUSPENDED
+}
+
+enum OpportunityType {
+  JOBS
+  BUSINESS
+  COLLABORATION
+  TRAINING
+  MENTORSHIP
+  OTHER
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  FREELANCE
+  TEMPORARY
+  OTHER
+}
+
+enum RemotePreference {
+  ONSITE
+  REMOTE
+  HYBRID
+  FLEXIBLE
+}
+
+enum BusinessProfessionalRelationship {
+  OWNER
+  DIRECTOR
+  EMPLOYEE
+  PARTNER
+  REPRESENTATIVE
+}
+
+enum OpportunityStatus {
+  DRAFT
+  ACTIVE
+  CLOSED
+  EXPIRED
+}
+
+enum DocumentType {
+  CV
+  PROFESSIONAL_CERTIFICATE
+  BUSINESS_REGISTRATION
+  OTHER
+}
+
+enum DocumentStatus {
+  UPLOADED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum ConsentType {
+  DIRECTORY_VISIBILITY
+  COMMUNICATION
+  DATA_PROCESSING
+}
+
+enum VerificationProcessStatus {
+  PENDING
+  UNDER_REVIEW
+  COMPLETED
+}
+
+enum VerificationDecision {
+  APPROVED
+  REJECTED
+  NEEDS_CLARIFICATION
+}
+
+enum PublicationEventStatus {
+  PUBLISHED
+  UNPUBLISHED
+}
+
+enum SpotlightStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AppRole {
+  MEMBER
+  EXCO_VIEWER
+  EXCO_ADMIN
+  SUPER_ADMIN
+}
+
+model User {
+  id            String        @id @db.Uuid
+  email         String        @unique
+  phone         String?
+  accountStatus AccountStatus @default(ACTIVE) @map("account_status")
+  lastLoginAt   DateTime?     @map("last_login_at") @db.Timestamptz(6)
+  deletedAt     DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile              Profile?
+  userRoles            UserRole[]
+  notifications        Notification[]
+  consents             Consent[]
+  auditLogs            AuditLog[]
+  verificationReviewed VerificationRecord[] @relation("VerificationReviewer")
+  adminNotesAuthored   AdminNote[]          @relation("AdminNoteAuthor")
+  publicationsActor    Publication[]        @relation("PublicationActor")
+  spotlightsCreated    Spotlight[]          @relation("SpotlightCreator")
+  opportunitiesCreated Opportunity[]        @relation("OpportunityCreator")
+  legacyImportRows     LegacyImportRow[]
+
+  @@index([accountStatus])
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        AppRole  @unique
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  userRoles       UserRole[]
+  rolePermissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key         String   @unique
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model UserRole {
+  userId    String   @map("user_id") @db.Uuid
+  roleId    String   @map("role_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Restrict)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model RolePermission {
+  roleId       String @map("role_id") @db.Uuid
+  permissionId String @map("permission_id") @db.Uuid
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model Profile {
+  id                     String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                 String             @unique @map("user_id") @db.Uuid
+  displayName            String             @map("display_name")
+  profileImageStorageKey String?            @map("profile_image_storage_key")
+  headline               String?
+  bio                    String?
+  location               String?
+  professionalSituation  String?            @map("professional_situation")
+  publicSlug             String?            @unique @map("public_slug")
+  clarificationMessage   String?            @map("clarification_message")
+  spotlightInterest      Boolean            @default(false) @map("spotlight_interest")
+  profileStatus          ProfileStatus      @default(REGISTERED) @map("profile_status")
+  verificationStatus     VerificationStatus @default(NOT_REVIEWED) @map("verification_status")
+  visibilityStatus       VisibilityStatus   @default(PRIVATE) @map("visibility_status")
+  /// Phase 18 — historical import marker (not new registration)
+  legacyImport           Boolean            @default(false) @map("legacy_import")
+  legacySource           String?            @map("legacy_source")
+  legacyImportedAt       DateTime?          @map("legacy_imported_at") @db.Timestamptz(6)
+  legacyBatchId          String?            @map("legacy_batch_id")
+  deletedAt              DateTime?          @map("deleted_at") @db.Timestamptz(6)
+  createdAt              DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user                   User                            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  professionalDetails    ProfessionalDetails?
+  experiences            Experience[]
+  profileSkills          ProfileSkill[]
+  profileServices        ProfileService[]
+  businessLinks          BusinessProfessional[]
+  opportunities          Opportunity[]
+  opportunityInterests   OpportunityInterest[]
+  churchInformation      ChurchInformation?
+  documents              Document[]
+  verificationRecords    VerificationRecord[]
+  publications           Publication[]
+  adminNotes             AdminNote[]
+  spotlights             Spotlight[]
+  visibilityPreferences  ProfileVisibilityPreference[]
+  legacyImportRows       LegacyImportRow[]
+
+  @@index([profileStatus])
+  @@index([verificationStatus])
+  @@index([visibilityStatus])
+  @@index([location])
+  @@index([legacyImport])
+  @@map("profiles")
+}
+
+/// Phase 14 — one preference per (profile, group). Preference never grants access.
+model ProfileVisibilityPreference {
+  id         String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId  String                     @map("profile_id") @db.Uuid
+  groupKey   String                     @map("group_key")
+  preference VisibilityPreferenceLevel
+  createdAt  DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime                   @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, groupKey])
+  @@index([profileId])
+  @@map("profile_visibility_preferences")
+}
+
+model ProfessionalDetails {
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId              String   @unique @map("profile_id") @db.Uuid
+  profession             String?
+  professionalTitle      String?  @map("professional_title")
+  yearsExperience        Int?     @map("years_experience")
+  professionalSummary    String?  @map("professional_summary")
+  organisationName       String?  @map("organisation_name")
+  industryId             String?  @map("industry_id") @db.Uuid
+  lookingForSummary      String?  @map("looking_for_summary")
+  offeringSummary        String?  @map("offering_summary")
+  linkedinUrl            String?  @map("linkedin_url")
+  websiteUrl             String?  @map("website_url")
+  /// JSON: { collaboration?, mentorship?, referrals?, training? } as boolean | null
+  opportunityPreferences Json     @default("{}") @map("opportunity_preferences")
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile  Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  industry Industry? @relation(fields: [industryId], references: [id], onDelete: SetNull)
+
+  @@index([industryId])
+  @@map("professional_details")
+}
+
+model Experience {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId      String          @map("profile_id") @db.Uuid
+  organisation   String
+  role           String
+  employmentType EmploymentType? @map("employment_type")
+  location       String?
+  description    String?
+  startDate      DateTime?       @map("start_date") @db.Date
+  endDate        DateTime?       @map("end_date") @db.Date
+  isCurrent      Boolean         @default(false) @map("is_current")
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@map("experiences")
+}
+
+model Skill {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String   @unique
+  slug      String   @unique
+  category  String?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profileSkills      ProfileSkill[]
+  opportunitySkills  OpportunitySkill[]
+
+  @@map("skills")
+}
+
+model ProfileSkill {
+  profileId String   @map("profile_id") @db.Uuid
+  skillId   String   @map("skill_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skill   Skill   @relation(fields: [skillId], references: [id], onDelete: Restrict)
+
+  @@id([profileId, skillId])
+  @@map("profile_skills")
+}
+
+model Service {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String   @unique
+  slug        String   @unique
+  category    String?
+  description String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profileServices ProfileService[]
+
+  @@map("services")
+}
+
+model ProfileService {
+  profileId String   @map("profile_id") @db.Uuid
+  serviceId String   @map("service_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+
+  @@id([profileId, serviceId])
+  @@map("profile_services")
+}
+
+model Industry {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  businesses Business[]
+  professionalDetails ProfessionalDetails[]
+
+  @@map("industries")
+}
+
+model Business {
+  id                    String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  slug                  String?
+  description           String?
+  industryId            String?          @map("industry_id") @db.Uuid
+  websiteUrl            String?          @map("website_url")
+  email                 String?
+  phone                 String?
+  location              String?
+  cacNumber             String?          @map("cac_number")
+  cacRegistered         Boolean?         @map("cac_registered")
+  socialLinks           Json             @default("{}") @map("social_links")
+  servicesOffered       String[]         @default([]) @map("services_offered")
+  clarificationMessage  String?          @map("clarification_message")
+  businessStatus        BusinessStatus   @default(DRAFT) @map("business_status")
+  visibilityStatus      VisibilityStatus @default(PRIVATE) @map("visibility_status")
+  deletedAt             DateTime?        @map("deleted_at") @db.Timestamptz(6)
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  industry            Industry?              @relation(fields: [industryId], references: [id], onDelete: Restrict)
+  professionals       BusinessProfessional[]
+  documents           Document[]
+  verificationRecords VerificationRecord[]
+  publications        Publication[]
+  adminNotes          AdminNote[]
+
+  @@index([industryId])
+  @@index([businessStatus])
+  @@index([visibilityStatus])
+  @@map("businesses")
+}
+
+model BusinessProfessional {
+  businessId       String                           @map("business_id") @db.Uuid
+  profileId        String                           @map("profile_id") @db.Uuid
+  relationshipType BusinessProfessionalRelationship @map("relationship_type")
+  createdAt        DateTime                         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime                         @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Restrict)
+  profile  Profile  @relation(fields: [profileId], references: [id], onDelete: Restrict)
+
+  @@id([businessId, profileId])
+  @@index([profileId])
+  @@map("business_professionals")
+}
+
+model Opportunity {
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  /// Legacy member-intent owner; nullable for EXCO-curated platform opportunities (Phase 16).
+  profileId          String?           @map("profile_id") @db.Uuid
+  createdById        String            @map("created_by") @db.Uuid
+  type               OpportunityType
+  title              String?
+  description        String?
+  status             OpportunityStatus @default(DRAFT)
+  expiresAt          DateTime?         @map("expires_at") @db.Timestamptz(6)
+  publishedAt        DateTime?         @map("published_at") @db.Timestamptz(6)
+  /// SEEKING_EMPLOYMENT legacy (nullable; not used by Phase 16 V1.1 UI)
+  desiredRoleTitle   String?           @map("desired_role_title")
+  employmentType     EmploymentType?   @map("employment_type")
+  availability       String?
+  locationPreference String?           @map("location_preference")
+  remotePreference   RemotePreference? @map("remote_preference")
+  /// Phase 17 matching — exact case-insensitive profession requirement
+  requiredProfession String?           @map("required_profession")
+  /// Phase 17 matching — minimum years_experience
+  minYearsExperience Int?              @map("min_years_experience")
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime          @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile   Profile?              @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdBy User                  @relation("OpportunityCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  interests OpportunityInterest[]
+  skills    OpportunitySkill[]
+
+  @@index([profileId])
+  @@index([createdById])
+  @@index([type, status])
+  @@index([expiresAt])
+  @@index([status, createdAt])
+  @@index([publishedAt])
+  @@map("opportunities")
+}
+
+/// Phase 16 — connection signal only. Not application, consent, match, or contact.
+model OpportunityInterest {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  opportunityId String   @map("opportunity_id") @db.Uuid
+  profileId     String   @map("profile_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  opportunity Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  profile     Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([opportunityId, profileId])
+  @@index([profileId])
+  @@index([opportunityId])
+  @@map("opportunity_interests")
+}
+
+/// Phase 17 — required skills for deterministic matching (ALL must match).
+model OpportunitySkill {
+  opportunityId String   @map("opportunity_id") @db.Uuid
+  skillId       String   @map("skill_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  opportunity Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  skill       Skill       @relation(fields: [skillId], references: [id], onDelete: Restrict)
+
+  @@id([opportunityId, skillId])
+  @@index([skillId])
+  @@map("opportunity_skills")
+}
+
+model ChurchInformation {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId   String   @unique @map("profile_id") @db.Uuid
+  serviceArea String?  @map("service_area")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@map("church_information")
+}
+
+model Document {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId    String         @map("profile_id") @db.Uuid
+  businessId   String?        @map("business_id") @db.Uuid
+  documentType DocumentType   @map("document_type")
+  storageKey   String         @map("storage_key")
+  fileName     String         @map("file_name")
+  mimeType     String         @map("mime_type")
+  fileSize     Int            @map("file_size")
+  status       DocumentStatus @default(UPLOADED)
+  uploadedAt   DateTime       @default(now()) @map("uploaded_at") @db.Timestamptz(6)
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile  Profile   @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  business Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+
+  @@index([profileId])
+  @@index([businessId])
+  @@index([status])
+  @@map("documents")
+}
+
+model Consent {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String      @map("user_id") @db.Uuid
+  consentType ConsentType @map("consent_type")
+  version     String
+  granted     Boolean
+  grantedAt   DateTime?   @map("granted_at") @db.Timestamptz(6)
+  withdrawnAt DateTime?   @map("withdrawn_at") @db.Timestamptz(6)
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([userId, consentType])
+  @@map("consents")
+}
+
+model VerificationRecord {
+  id            String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId     String?                   @map("profile_id") @db.Uuid
+  businessId    String?                   @map("business_id") @db.Uuid
+  reviewerId    String                    @map("reviewer_id") @db.Uuid
+  processStatus VerificationProcessStatus @default(PENDING) @map("process_status")
+  decision      VerificationDecision?
+  notes         String?
+  createdAt     DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  completedAt   DateTime?                 @map("completed_at") @db.Timestamptz(6)
+
+  profile  Profile?  @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  business Business? @relation(fields: [businessId], references: [id], onDelete: Restrict)
+  reviewer User      @relation("VerificationReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
+
+  @@index([profileId])
+  @@index([businessId])
+  @@index([processStatus])
+  @@index([reviewerId])
+  @@index([createdAt])
+  @@map("verification_records")
+}
+
+model Publication {
+  id                  String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId           String?                @map("profile_id") @db.Uuid
+  businessId          String?                @map("business_id") @db.Uuid
+  status              PublicationEventStatus
+  resultingVisibility VisibilityStatus       @map("resulting_visibility")
+  actorId             String                 @map("actor_id") @db.Uuid
+  occurredAt          DateTime               @default(now()) @map("occurred_at") @db.Timestamptz(6)
+  createdAt           DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  profile  Profile?  @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  business Business? @relation(fields: [businessId], references: [id], onDelete: Restrict)
+  actor    User      @relation("PublicationActor", fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([profileId])
+  @@index([businessId])
+  @@index([occurredAt])
+  @@map("publications")
+}
+
+model AdminNote {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId  String?  @map("profile_id") @db.Uuid
+  businessId String?  @map("business_id") @db.Uuid
+  authorId   String   @map("author_id") @db.Uuid
+  note       String
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile  Profile?  @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  business Business? @relation(fields: [businessId], references: [id], onDelete: Restrict)
+  author   User      @relation("AdminNoteAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([profileId])
+  @@index([businessId])
+  @@map("admin_notes")
+}
+
+model Spotlight {
+  id           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId    String          @map("profile_id") @db.Uuid
+  title        String
+  description  String?
+  status       SpotlightStatus @default(DRAFT)
+  scheduledFor DateTime?       @map("scheduled_for") @db.Timestamptz(6)
+  publishedAt  DateTime?       @map("published_at") @db.Timestamptz(6)
+  createdById  String          @map("created_by") @db.Uuid
+  createdAt    DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  createdBy User    @relation("SpotlightCreator", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([profileId])
+  @@index([status])
+  @@map("spotlights")
+}
+
+model Notification {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  type      String
+  title     String
+  message   String
+  readAt    DateTime? @map("read_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  actorId    String?  @map("actor_id") @db.Uuid
+  action     String
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id") @db.Uuid
+  metadata   Json?
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+/// Phase 18 — migration batch (dry-run or import). Offline scripts only.
+model LegacyImportBatch {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  batchKey       String   @unique @map("batch_key")
+  sourceFilename String   @map("source_filename")
+  sourceSha256   String   @map("source_sha256")
+  mode           String
+  environment    String
+  summary        Json     @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  rows LegacyImportRow[]
+
+  @@map("legacy_import_batches")
+}
+
+/// Phase 18 — per source-row lineage / classification.
+model LegacyImportRow {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  batchId            String   @map("batch_id") @db.Uuid
+  sourceRowNumber    Int      @map("source_row_number")
+  sourceRowHash      String   @map("source_row_hash")
+  classification     String
+  proposedAction     String   @map("proposed_action")
+  emailFingerprint   String?  @map("email_fingerprint")
+  phoneNormalized    String?  @map("phone_normalized")
+  profileId          String?  @map("profile_id") @db.Uuid
+  userId             String?  @map("user_id") @db.Uuid
+  warnings           Json     @default("[]")
+  manualReviewReason String?  @map("manual_review_reason")
+  maskedPreview      Json     @default("{}") @map("masked_preview")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  batch   LegacyImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  profile Profile?          @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  user    User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([batchId])
+  @@index([sourceRowHash])
+  @@map("legacy_import_rows")
+}

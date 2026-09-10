@@ -1,0 +1,846 @@
+{
+  "mode": "DRY_RUN",
+  "batchKey": "phase18-google-form-dryrun-4EC0A1773D77-1788981328854",
+  "generatedAt": "2026-09-09T19:15:28.854Z",
+  "productionImportAuthorized": false,
+  "source": {
+    "path": "C:\\Users\\O\\Devs\\tncod-professional\\scripts\\migrations\\phase18\\raw\\TNCOD-PROFESSIONALS-DIRECTORY-Responses.xlsx",
+    "sha256": "4EC0A1773D771F78488169B44DA7DCF424BD0354684A2D42F6C06264E12CE29C",
+    "authoritativeSheet": "Form responses 1",
+    "sheetNames": [
+      "Form responses 1",
+      "Spotlight Queue",
+      "Dashboard"
+    ],
+    "rowCount": 18,
+    "columnCount": 43
+  },
+  "withDb": false,
+  "summary": {
+    "CREATE": 18,
+    "class:LIKELY_NEW_MEMBER": 18,
+    "total": 18
+  },
+  "idempotencyPass2Summary": {
+    "SKIP_ALREADY_IMPORTED": 18,
+    "class:ALREADY_IMPORTED": 18,
+    "total": 18
+  },
+  "rows": [
+    {
+      "sourceRowNumber": 2,
+      "sourceRowHash": "51C6EFCBB1F29F334E38C14A68ADE3B2313239B336968D67C0A889824010DBF0",
+      "emailFingerprint": "568817F8796ECC455DFDD71B404D36CA69924261318D61CBC82D2CBD57A6CA48",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 3–5 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "M***",
+        "email": "m***@g***",
+        "phone": "***5949",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 3,
+      "sourceRowHash": "BA9BA65C52B98E80AABD74976FC1D3CCB73C821C881C4BAC16C912F96C45CE03",
+      "emailFingerprint": "0D66BF3D2328B6FEE895529BE519E5DC7FD24DF03B7DE6198E54497D67EAA675",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 6–10 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Business candidate — no automatic business/OWNER creation",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "O*** O***",
+        "email": "o***@g***",
+        "phone": "***5545",
+        "situation": "Entrepreneur / business owner",
+        "hasBusinessCandidate": true
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 4,
+      "sourceRowHash": "2D82057B1A3E68FE9E61F8C6B7E27D694E7457D199421FCE4BF2EEC3817B5333",
+      "emailFingerprint": "F8B63CE3163923D90A1187291D1815C130A6B2366A915C14466DB2B27D5C0346",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 6–10 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "M***",
+        "email": "m***@g***",
+        "phone": "***1961",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 5,
+      "sourceRowHash": "605A600FDB4F06FCB8AD605C5883E4FF82A4DB2497F9C28E6978B8AF95502E65",
+      "emailFingerprint": "D4295E72694A8F86495CDF63C2C2232E8161EBDAD66AD8249C766AC29EF2D48D",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 10+ years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "O*** O*** I***",
+        "email": "a***@g***",
+        "phone": "***6386",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 6,
+      "sourceRowHash": "B60C1326A64671CE266F153FFF501C3C7610E529D2806E5F428644C743FD464F",
+      "emailFingerprint": "73B0392637342440DA096DAD0092942CBC8CAD90EEE4E05C0FE6FAF308581639",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 6–10 years",
+        "LinkedIn value discarded as junk",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "G***",
+        "email": "o***@g***",
+        "phone": "***2251",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 7,
+      "sourceRowHash": "38C15936069B8A948AE4EA01F97F006DCD46CC5B63D60C1E87581379964D712A",
+      "emailFingerprint": "ADF72F072790F5751CBFAC846F06B778E663C06158635E9F3C34A2BAFF76FD31",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 10+ years",
+        "LinkedIn value discarded as junk",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Business candidate — no automatic business/OWNER creation",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "K***",
+        "email": "m***@g***",
+        "phone": "***4169",
+        "situation": "Entrepreneur / business owner",
+        "hasBusinessCandidate": true
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 8,
+      "sourceRowHash": "D68CDC8BDE2DE6A089F6ED781A67E786B56564CD1769876EEF9D18585CE06FFB",
+      "emailFingerprint": "665F9788B79F4EBA9F4E99FE0E5833106A0B9D3CD9F9FD673A0F8E90745632A1",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 6–10 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Business candidate — no automatic business/OWNER creation",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "O***",
+        "email": "o***@g***",
+        "phone": "***0441",
+        "situation": "Entrepreneur / business owner",
+        "hasBusinessCandidate": true
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 9,
+      "sourceRowHash": "D8F63370EE4FA4822D0DD2010AF8C17A2E42691F6CB8F08F667A99FD7D6DF673",
+      "emailFingerprint": "C9D8A65B76FC6F5D16FF804EB69F781B663B887CD76FFB22787118A9504069DB",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 0–2 years",
+        "LinkedIn value discarded as junk",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "D***",
+        "email": "b***@g***",
+        "phone": "***2974",
+        "situation": "Student / intern",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 10,
+      "sourceRowHash": "3EC2AF4D5F674E62E042A57CF22D37091C0E28398931206B6A6C656B8511C6E9",
+      "emailFingerprint": "FC6082C90B41B5EBEC2547ED21BEF57C435114754D0EBF64A7FA7A8D387AAF11",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 3–5 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Business candidate — no automatic business/OWNER creation",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "C***",
+        "email": "k***@g***",
+        "phone": "***5501",
+        "situation": "Entrepreneur / business owner",
+        "hasBusinessCandidate": true
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 11,
+      "sourceRowHash": "5CA095D2C5265911650EC8FF03461EC3AEF8C81A862AE73B3293D8D5BD9500F4",
+      "emailFingerprint": "5C76ADE9101FB764B4CD9BE1C30BF63FC25CC6AC4324BAAC4B27BA4CC1D8AC80",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 10+ years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "A***",
+        "email": "b***@y***",
+        "phone": "***6968",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 12,
+      "sourceRowHash": "EB6F996E6BB9AE719AD8D4C85E3BCD336418BC47E734D202CC9B51F11B193810",
+      "emailFingerprint": "DE059921A5B6AB9A389C3DB1400A4C1D70304D0F530CD940038310FBDF209AE0",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 3–5 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "M***",
+        "email": "m***@y***",
+        "phone": "***9115",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 13,
+      "sourceRowHash": "D7BA8ED630EEA10C76CD0A5D5AF5EEC1CD066B9F653AD0BEBCDF6B0421174030",
+      "emailFingerprint": "8A4250F6A72DB788AADB934955E7D1E9EDDF2315824F84F4905F3585373EC986",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 6–10 years",
+        "LinkedIn value discarded as junk",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "B*** B*** S***",
+        "email": "b***@g***",
+        "phone": "***9019",
+        "situation": "Other",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 14,
+      "sourceRowHash": "D460F551D4C617570CE893BAC686CE5425E491471A639B79A3F2BC4D96CBD209",
+      "emailFingerprint": "711E960B25ECF805482E6F82C3A2D426AB16B7FF10D0090E98F180BA8F5B9A47",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 10+ years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "A***",
+        "email": "a***@g***",
+        "phone": "***5824",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 15,
+      "sourceRowHash": "77001DE370614C7CB6CDB243FE7F2CB497138CE6AF8B9587A28921ACDCAD4482",
+      "emailFingerprint": "C6B5A6B5B99CCFF78D6EF73D1F9C631E7AD051B39473A46BA8E6CC7383D82DA9",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 3–5 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "O*** U***",
+        "email": "o***@g***",
+        "phone": "***0927",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 16,
+      "sourceRowHash": "9DCC16C0E94035E359F8B853176A319B0ED72E317705F3C32D4419474DAB04D0",
+      "emailFingerprint": "95CFC0087A2BFCA088B05CCFB3BE5BD0F0181569DC1640644A927D259D10BD07",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 0–2 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "C***",
+        "email": "o***@g***",
+        "phone": "***7929",
+        "situation": "Student / intern",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 17,
+      "sourceRowHash": "FC461310AF04047642CAAC1C93A81E520D8C01957B69C72CA70FB1A0AF5C3ABD",
+      "emailFingerprint": "4C11A62B67508262AE829235BC5FEBCB33FBE63DD601EC82944B9EA067E5C9BA",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 6–10 years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Business candidate — no automatic business/OWNER creation",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "T***",
+        "email": "t***@j***",
+        "phone": "***8456",
+        "situation": "Entrepreneur / business owner",
+        "hasBusinessCandidate": true
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 18,
+      "sourceRowHash": "3876B0C7505D6D0CD6ED6D8DB14C8ED0E925959400D7E6D13AD5B1D22E94A34B",
+      "emailFingerprint": "9FF607E08F15B2691861C656BE7812AF2B4FB8877F8D5E7C7CA242FDC7950BAB",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 10+ years",
+        "LinkedIn value discarded as junk",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Skills free-text requires controlled vocabulary review",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "M***",
+        "email": "a***@g***",
+        "phone": "***6171",
+        "situation": "Employee",
+        "hasBusinessCandidate": false
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    },
+    {
+      "sourceRowNumber": 19,
+      "sourceRowHash": "3EE8733F729B7A0D5B3A516A1FB2DC6C11666AA60A6418F174FED9B524A8D790",
+      "emailFingerprint": "6FB4354CAB7ED40294188CF00B730257B69319239940A77CD772170DBE8B79DB",
+      "classification": "LIKELY_NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "warnings": [
+        "Years bucket retained as historical only: 10+ years",
+        "Historical directory consent ignored for current platform state",
+        "Historical WhatsApp consent ignored for current platform state",
+        "Industry free-text requires controlled vocabulary review",
+        "Business candidate — no automatic business/OWNER creation",
+        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+      ],
+      "manualReviewReason": null,
+      "maskedPreview": {
+        "displayName": "A*** A*** F***",
+        "email": "a***@g***",
+        "phone": "***1622",
+        "situation": "Entrepreneur / business owner",
+        "hasBusinessCandidate": true
+      },
+      "platformBaseline": {
+        "profileStatus": "INCOMPLETE",
+        "verificationStatus": "NOT_REVIEWED",
+        "visibilityStatus": "PRIVATE",
+        "createConsent": false,
+        "createBusiness": false,
+        "createSpotlightRecord": false,
+        "yearsExperience": null
+      },
+      "excludedFromCurrentState": [
+        "Gender",
+        "Birthday",
+        "Email Address (blank question column)",
+        "Directory consent → not consents / not DIRECTORY",
+        "WhatsApp consent → not consents",
+        "Spotlight Status / Date Featured → not Phase 15 Spotlight",
+        "Drive photo / CAC / company profile uploads",
+        "Years bucket → years_experience left null",
+        "Industry free-text → no auto industry_id",
+        "Skills/services free-text → no auto taxonomy upsert",
+        "Business Name → no auto business / OWNER"
+      ]
+    }
+  ]
+}

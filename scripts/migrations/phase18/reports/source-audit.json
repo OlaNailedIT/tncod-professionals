@@ -1,0 +1,683 @@
+{
+  "generatedAt": "2026-09-09T17:36:41.130Z",
+  "source": {
+    "preservedPath": "scripts/migrations/phase18/raw/TNCOD-PROFESSIONALS-DIRECTORY-Responses.xlsx",
+    "originalPath": "C:\\Users\\O\\Downloads\\TNCOD PROFESSIONALS DIRECTORY (Responses).xlsx",
+    "bytes": 45762,
+    "sha256": "4EC0A1773D771F78488169B44DA7DCF424BD0354684A2D42F6C06264E12CE29C",
+    "sheets": [
+      "Form responses 1",
+      "Spotlight Queue",
+      "Dashboard",
+      "_xlnm._FilterDatabase",
+      "SPOTLIGHT_QUEUE_FUNCTION"
+    ],
+    "authoritativeSheet": "Form responses 1",
+    "derivedSheets": [
+      "Spotlight Queue",
+      "Dashboard",
+      "_xlnm._FilterDatabase",
+      "SPOTLIGHT_QUEUE_FUNCTION"
+    ],
+    "tableHint": "Form_Responses A1:AQ19 (43 cols)"
+  },
+  "inventory": {
+    "headerColumns": 43,
+    "dataRows": 18,
+    "blankRowsSkipped": 0,
+    "exactDuplicateRowGroups": 0,
+    "exactDuplicateRowGroupsDetail": []
+  },
+  "columns": [
+    {
+      "index": 0,
+      "name": "The TNCOD Professionals Directory serves as a networking and visibility platform for members. The church and its leadership do not guarantee or endorse the services of any professional listed. Members are advised to conduct their own due diligence before engaging in any professional or business transaction.",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 1,
+      "samples": [
+        "I acknowledge and agree to the above statement."
+      ]
+    },
+    {
+      "index": 1,
+      "name": "Timestamp",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 18,
+      "samples": [
+        "46097.951619444444",
+        "46098.74889159722",
+        "46098.728524328704",
+        "46098.85306258102",
+        "46098.896808391204"
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Email address",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 18,
+      "samples": [
+        "m***@g***",
+        "o***@g***",
+        "m***@g***",
+        "a***@g***",
+        "o***@g***"
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Full Name",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 18,
+      "samples": [
+        "O*** M*** I***",
+        "T*** O*** O***",
+        "M*** T***",
+        "O*** O*** I***",
+        "O*** G*** O***"
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Preferred Name (Optional)",
+      "populated": 14,
+      "blank": 4,
+      "distinct": 14,
+      "samples": [
+        "M***",
+        "O*** O***",
+        "M***",
+        "G***",
+        "K***"
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Gender",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 2,
+      "samples": [
+        "Female",
+        "Male"
+      ]
+    },
+    {
+      "index": 6,
+      "name": "Phone Number",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 18,
+      "samples": [
+        "***5949",
+        "***5545",
+        "***1961",
+        "***6386",
+        "***2251"
+      ]
+    },
+    {
+      "index": 7,
+      "name": "Email Address",
+      "populated": 0,
+      "blank": 18,
+      "distinct": 0,
+      "samples": []
+    },
+    {
+      "index": 8,
+      "name": "LinkedIn Profile",
+      "populated": 15,
+      "blank": 3,
+      "distinct": 15,
+      "samples": [
+        "[url]",
+        "www.linkedin.com/in/olayinkaolugidan",
+        "[url]",
+        "Tosin Omotehinse",
+        "I don’t have"
+      ]
+    },
+    {
+      "index": 9,
+      "name": "WhatsApp Number",
+      "populated": 10,
+      "blank": 8,
+      "distinct": 10,
+      "samples": [
+        "***5949",
+        "***0662",
+        "***6386",
+        "***4169",
+        "***0441"
+      ]
+    },
+    {
+      "index": 10,
+      "name": "Birthday",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 16,
+      "samples": [
+        "12/02",
+        "25/08",
+        "22/07",
+        "31/08",
+        "19/08"
+      ]
+    },
+    {
+      "index": 11,
+      "name": "Are you a member of TNCOD?",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 1,
+      "samples": [
+        "Yes"
+      ]
+    },
+    {
+      "index": 12,
+      "name": "Service/Department in Church",
+      "populated": 17,
+      "blank": 1,
+      "distinct": 15,
+      "samples": [
+        "Protocol Unit",
+        "Media, Devotional, Choir and Professionals Group",
+        "TNN",
+        "Steward",
+        "T Aid"
+      ]
+    },
+    {
+      "index": 13,
+      "name": "How long have you been attending the church?",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 4,
+      "samples": [
+        "3–5 years",
+        "Less than 1 year",
+        "Over 5 years",
+        "1–3 years"
+      ]
+    },
+    {
+      "index": 14,
+      "name": "Which category best describes you?",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 4,
+      "samples": [
+        "Employee / Corporate Professional",
+        "Entrepreneur / Business Owner",
+        "Student / Entry-Level Professional",
+        "Other"
+      ]
+    },
+    {
+      "index": 15,
+      "name": "Current Job Title / Professional Role",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 18,
+      "samples": [
+        "Administrative Head",
+        "Chief Tech. Officer",
+        "Senior Technical Lead",
+        "Retiree",
+        "HR Generalist"
+      ]
+    },
+    {
+      "index": 16,
+      "name": "Industry / Field",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 16,
+      "samples": [
+        "Immigration",
+        "IT",
+        "NGO",
+        "Finance/Education",
+        "Fintech."
+      ]
+    },
+    {
+      "index": 17,
+      "name": "Name of Company or Business",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 18,
+      "samples": [
+        "Pathfinder Group",
+        "VIIX Solutions",
+        "Stand With A Girl Initiative",
+        "Dave Associate",
+        "SmiPay Technology"
+      ]
+    },
+    {
+      "index": 18,
+      "name": "Years of Professional Experience",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 4,
+      "samples": [
+        "3–5 years",
+        "6–10 years",
+        "10+ years",
+        "0–2 years"
+      ]
+    },
+    {
+      "index": 19,
+      "name": "What services do you provide?",
+      "populated": 12,
+      "blank": 6,
+      "distinct": 12,
+      "samples": [
+        "Immigration services",
+        "Facilitation and Policy Advisory",
+        "Accounting, Educational",
+        "Human Resources",
+        "Digital marketing \nUIUX Design"
+      ]
+    },
+    {
+      "index": 20,
+      "name": "Key Professional Skills",
+      "populated": 12,
+      "blank": 6,
+      "distinct": 12,
+      "samples": [
+        "Writing, communication and administrative skills",
+        "Public Health, Program Management and Grant writing",
+        "Financial Analysis",
+        "Employee relations, data management, Employee engagement etc",
+        "Digital and Technical skills"
+      ]
+    },
+    {
+      "index": 21,
+      "name": "Who do you primarily serve? (your clients)",
+      "populated": 12,
+      "blank": 6,
+      "distinct": 12,
+      "samples": [
+        "Individuals and corporations",
+        "NGOs, Government, women and girls",
+        "Individuals, Small businesses",
+        "Individuals ,, and small businesses",
+        "Individual small business owner startups and online brand"
+      ]
+    },
+    {
+      "index": 22,
+      "name": "Business Name",
+      "populated": 6,
+      "blank": 12,
+      "distinct": 6,
+      "samples": [
+        "VIIX Solutions",
+        "Kafton cake and mix",
+        "Wunmex Treats",
+        "ANT-MEN STUDIOS OF ART",
+        "Junction Community LTD"
+      ]
+    },
+    {
+      "index": 23,
+      "name": "Is your business registered with CAC?",
+      "populated": 6,
+      "blank": 12,
+      "distinct": 1,
+      "samples": [
+        "Yes"
+      ]
+    },
+    {
+      "index": 24,
+      "name": "CAC Registration Number (if applicable)",
+      "populated": 4,
+      "blank": 14,
+      "distinct": 4,
+      "samples": [
+        "1787666.0",
+        "3660712.0",
+        "8822136.0",
+        "2989609.0"
+      ]
+    },
+    {
+      "index": 25,
+      "name": "Business Address",
+      "populated": 6,
+      "blank": 12,
+      "distinct": 6,
+      "samples": [
+        "Omikunle Street, Bankole Area, Tipper Garage, Off Akala E…",
+        "Olakunle traffic lights",
+        "Online",
+        "Benin city",
+        "DMJ Rehoboth,  73 Shodipo street, Ekotedo Dugbe Alawo, Du…"
+      ]
+    },
+    {
+      "index": 26,
+      "name": "Business Website",
+      "populated": 4,
+      "blank": 14,
+      "distinct": 4,
+      "samples": [
+        "www.viix.solutions",
+        "I don’t have yet",
+        "www.junctioncommunity.com",
+        "[url]"
+      ]
+    },
+    {
+      "index": 27,
+      "name": "Business Social Media Pages",
+      "populated": 5,
+      "blank": 13,
+      "distinct": 5,
+      "samples": [
+        "Kafton cake and mix",
+        "Wunmextreats",
+        "ANT-MEN STUDIOS",
+        "[url]",
+        "Facebook and Whatsapp."
+      ]
+    },
+    {
+      "index": 28,
+      "name": "Business Description",
+      "populated": 6,
+      "blank": 12,
+      "distinct": 6,
+      "samples": [
+        "VIIX Solutions is a forward-thinking technology and media…",
+        "I make cake for all occasions,small chops,snacks etc",
+        "Wunmex Treats  it’s a snack & event treat vendor (especia…",
+        "Studio for creatives",
+        "An Ecosystem of tech builders- from Academy - Community- …"
+      ]
+    },
+    {
+      "index": 29,
+      "name": "Company Profile",
+      "populated": 5,
+      "blank": 13,
+      "distinct": 5,
+      "samples": [
+        "[url]",
+        "[url]",
+        "[url]",
+        "[url]",
+        "[url]"
+      ]
+    },
+    {
+      "index": 30,
+      "name": "CAC Certificate / Business Registration",
+      "populated": 3,
+      "blank": 15,
+      "distinct": 3,
+      "samples": [
+        "[url]",
+        "[url]",
+        "[url]"
+      ]
+    },
+    {
+      "index": 31,
+      "name": "Are you interested in being featured in the TNCOD Professionals Spotlight?",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 2,
+      "samples": [
+        "No",
+        "Yes"
+      ]
+    },
+    {
+      "index": 32,
+      "name": "Upload Your Professional Photo",
+      "populated": 13,
+      "blank": 5,
+      "distinct": 13,
+      "samples": [
+        "[url]",
+        "[url]",
+        "[url]",
+        "[url]",
+        "[url]"
+      ]
+    },
+    {
+      "index": 33,
+      "name": "Short Professional Bio (50–100 words)",
+      "populated": 12,
+      "blank": 6,
+      "distinct": 12,
+      "samples": [
+        "I am a Web Developer and SEO Consultant who helps busines…",
+        "I am a passionate advocate and public health expert with …",
+        "I'm  a dedicated Human Resources professional , a farmer,…",
+        "I am Kafayat Adeosun,Am a baker and I make cake for all o…",
+        "Business Support Professional, Legal Administrator, and C…"
+      ]
+    },
+    {
+      "index": 34,
+      "name": "Key Services You Want Highlighted",
+      "populated": 12,
+      "blank": 6,
+      "distinct": 12,
+      "samples": [
+        "Website Development \nSEO Consultancy\nDigital Presence Opt…",
+        "Policy Advisory and Stakeholder Engagement",
+        "Finance and Education",
+        "Cakes/Small chops/yoghurt drink",
+        "Business Support Professional, Legal Administrator, and C…"
+      ]
+    },
+    {
+      "index": 35,
+      "name": "Preferred Contact Method",
+      "populated": 16,
+      "blank": 2,
+      "distinct": 8,
+      "samples": [
+        "Phone, Email, LinkedIn, WhatsApp",
+        "Phone, Email, LinkedIn",
+        "Email",
+        "WhatsApp",
+        "Phone"
+      ]
+    },
+    {
+      "index": 36,
+      "name": "Are you open to receiving referrals from members?",
+      "populated": 17,
+      "blank": 1,
+      "distinct": 1,
+      "samples": [
+        "Yes"
+      ]
+    },
+    {
+      "index": 37,
+      "name": "Are you open to professional collaborations?",
+      "populated": 17,
+      "blank": 1,
+      "distinct": 1,
+      "samples": [
+        "Yes"
+      ]
+    },
+    {
+      "index": 38,
+      "name": "Are you open to mentoring younger professionals?",
+      "populated": 17,
+      "blank": 1,
+      "distinct": 1,
+      "samples": [
+        "Yes"
+      ]
+    },
+    {
+      "index": 39,
+      "name": "Do you consent to having your professional information included in the TNCOD Professionals Directory?",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 1,
+      "samples": [
+        "Yes"
+      ]
+    },
+    {
+      "index": 40,
+      "name": "Do you consent to your information being shared within the TNCOD Professionals WhatsApp group for professional networking purposes?",
+      "populated": 18,
+      "blank": 0,
+      "distinct": 1,
+      "samples": [
+        "Yes"
+      ]
+    },
+    {
+      "index": 41,
+      "name": "Spotlight Status",
+      "populated": 16,
+      "blank": 2,
+      "distinct": 3,
+      "samples": [
+        "Not Interested",
+        "Featured",
+        "Pending"
+      ]
+    },
+    {
+      "index": 42,
+      "name": "Date Featured",
+      "populated": 13,
+      "blank": 5,
+      "distinct": 6,
+      "samples": [
+        "46104.0",
+        "46129.0",
+        "46111.0",
+        "46118.0",
+        "46125.0"
+      ]
+    }
+  ],
+  "identity": {
+    "records": 18,
+    "usableEmail": 18,
+    "missingEmail": 0,
+    "invalidEmail": 0,
+    "usablePhoneNg": 18,
+    "missingPhone": 0,
+    "invalidPhoneNg": 0,
+    "whatsappDiffersFromPhone": 2,
+    "emailCollectorVsQuestionMismatch": 0,
+    "duplicateEmailGroups": [],
+    "duplicatePhoneGroups": [],
+    "zaFirstNormalizerConflictsWithNg": 18,
+    "note": "Existing-member DB match not executed in this audit (analysis-only; no production queries required for Gate A mapping)."
+  },
+  "distributions": {
+    "category": {
+      "header": "Which category best describes you?",
+      "counts": {
+        "Employee / Corporate Professional": 9,
+        "Entrepreneur / Business Owner": 6,
+        "Student / Entry-Level Professional": 2,
+        "Other": 1
+      }
+    },
+    "tncodMember": {
+      "header": "Are you a member of TNCOD?",
+      "counts": {
+        "Yes": 18
+      }
+    },
+    "cacRegistered": {
+      "header": "Is your business registered with CAC?",
+      "counts": {
+        "(blank)": 12,
+        "Yes": 6
+      }
+    },
+    "spotlightInterest": {
+      "header": "Are you interested in being featured in the TNCOD Professionals Spotlight?",
+      "counts": {
+        "No": 1,
+        "Yes": 17
+      }
+    },
+    "directoryConsent": {
+      "header": "Do you consent to having your professional information included in the TNCOD Professionals Directory?",
+      "counts": {
+        "Yes": 18
+      }
+    },
+    "whatsappConsent": {
+      "header": "Do you consent to your information being shared within the TNCOD Professionals WhatsApp group for professional networking purposes?",
+      "counts": {
+        "Yes": 18
+      }
+    },
+    "referrals": {
+      "header": "Are you open to receiving referrals from members?",
+      "counts": {
+        "(blank)": 1,
+        "Yes": 17
+      }
+    },
+    "collaborations": {
+      "header": "Are you open to professional collaborations?",
+      "counts": {
+        "(blank)": 1,
+        "Yes": 17
+      }
+    },
+    "mentoring": {
+      "header": "Are you open to mentoring younger professionals?",
+      "counts": {
+        "(blank)": 1,
+        "Yes": 17
+      }
+    },
+    "spotlightStatus": {
+      "header": "Spotlight Status",
+      "counts": {
+        "Not Interested": 1,
+        "Featured": 10,
+        "Pending": 5,
+        "(blank)": 2
+      }
+    }
+  },
+  "privacyFlags": {
+    "piiColumns": 17,
+    "driveUploadColumns": [
+      "Company Profile",
+      "CAC Certificate / Business Registration",
+      "Upload Your Professional Photo"
+    ],
+    "consentColumns": [
+      "Do you consent to having your professional information included in the TNCOD Professionals Directory?",
+      "Do you consent to your information being shared within the TNCOD Professionals WhatsApp group for professional networking purposes?"
+    ],
+    "verificationLike": "None that map to platform VerificationStatus — DO NOT infer VERIFIED"
+  }
+}

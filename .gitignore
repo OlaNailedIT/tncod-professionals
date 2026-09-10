@@ -1,0 +1,32 @@
+# Tailwind / Next
+.next/
+out/
+
+# Tests
+playwright-report/
+test-results/
+blob-report/
+.cache/
+
+node_modules/
+dist/
+*.log
+.DS_Store
+
+.env
+.env.*
+!.env.example
+
+*.pem
+*.p12
+*.key
+credentials.json
+service-account*.json
+
+# Phase 18 — historical PII exports (never commit raw responses)
+scripts/migrations/phase18/raw/
+scripts/migrations/phase18/derived/
+# Keep masked reports; if a report ever contains unmasked PII, ignore it:
+# scripts/migrations/phase18/reports/unmasked/
+
+*.tsbuildinfo

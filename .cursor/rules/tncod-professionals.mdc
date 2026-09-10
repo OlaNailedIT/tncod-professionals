@@ -1,0 +1,184 @@
+---
+description: TNCOD Professionals — read locked docs; do not invent product or skip phases
+alwaysApply: true
+---
+
+# TNCOD Professionals — agent governance
+
+This repository has a locked product specification. You implement approved phases. You do not architect the product from scratch.
+
+## Before any implementation
+
+Read:
+
+- `docs/product/product-brief.md`
+- `docs/product/product-scope.md`
+- `docs/product/product-principles.md`
+- `docs/product/user-roles.md`
+- `docs/architecture/system-overview.md`
+- `docs/architecture/implementation-governance.md`
+- `docs/architecture/domain-model.md` and `docs/architecture/component-system-architecture.md` before schema or UI implementation
+- `docs/ux/README.md` and the locked Phase 1 UX files when the work is UX or implementation of screens/routes
+- Plus the phase-specific docs that exist for the current task
+
+If the human instruction conflicts with locked docs, stop and report the conflict.
+
+## Rules
+
+- Work phase-by-phase. Do not implement future phases.
+- Do not invent product requirements, roles, fields, or V1 features.
+- Do not modify locked architecture without explicit approval and a docs update.
+- Label unknowns **OPEN DECISION**. Do not silently invent answers.
+- V1 non-goals must not leak into design or code.
+- Do not collapse profile status, verification status, and directory visibility into one status field.
+- Do not treat member claims as verified credentials.
+- Do not use insecure permanent secret profile URLs as long-term auth.
+- Minimize dependencies. Preserve working behaviour once code exists.
+- Report files changed. Report failures honestly. Do not claim PASS without meeting that phase’s acceptance criteria.
+
+## Phase 0
+
+**LOCKED.** Do not reopen product architecture in application code.
+
+## Phase 1
+
+UX/IA, conceptual domain, and construction **contracts** only. No UI, database, Auth, APIs, RLS, or major product installs until **Phase 2–4** are instructed in order (schema → security → technical foundation).
+
+Do not treat “Phase 1.8 locked” as permission to scaffold Next.js. Do not rename implementation to “Phase 2.” Phase 2 in this product is **data architecture**.
+
+## Phase 2
+
+Schema **contract** locked. Local Database Gate **PASS** (disposable). Do not invent schema changes. Do not use Prisma as migration authority.
+
+## Phase 3
+
+Security **contract** locked (`docs/security/`). Live RLS was validated at the Database Gate / Phase 4 runtime. Do not build profile/EXCO/document UI.
+
+## Phase 4
+
+Technical foundation and Auth/runtime integration are **PASS — COMPLETE** on local disposable Supabase. Do not reopen Phase 4 for coverage theatre. Documented caveats become requirements in later owning phases.
+
+Prisma with a privileged `DATABASE_URL` bypasses RLS — domain authorization is mandatory.
+
+## Phase 5
+
+**FORMALLY CLOSED.** 5.1–5.14 **LOCKED**. Do not reopen Phase 5 for redesign.
+
+## Phase 6
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Quick Registration MVP. Do not reopen unless a Phase 7 dependency defect requires a minimal fix.
+
+## Phase 7
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Authentication & profile access (`/sign-in`, session, `/dashboard`, `/profile`, `/profile/edit`, sign-out). See `docs/product/phase-7-authentication-profile-access.md`.
+
+Do not reopen Phase 7 for redesign.
+
+## Phase 8
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Profile Completion System (`/profile` overview, derived completion %, section editing via `/profile/edit`, conditional Business). See `docs/product/phase-8-profile-completion.md`.
+
+Completion is derived and informational — never auto-verify, publish, or collapse into profile/verification/visibility status.
+
+Forensic reconciliation (2026-09-08): premature lock withdrawn; Industry + opportunity preference persistence added; headshot excluded from denominator until upload UX exists.
+
+## Phase 9
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Business Profile & Verification (member create/edit/submit, private documents, EXCO review). See `docs/product/phase-9-business-profile-verification.md`.
+
+Business verification ≠ professional verification ≠ directory publication. Preserve `business_professionals` M:N. No `businesses.profile_id`.
+
+Do not reopen Phase 9 for redesign.
+
+## Phase 10
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Narrow `/exco` operational dashboard (read-model metrics + deep links). See `docs/product/phase-10-exco-dashboard-scope.md`.
+
+Canonical route: `/exco` only. **No `/admin`.** No dashboard mutations. Professional and business verification metrics remain separate. Export directory is out of scope.
+
+EXCO routes require EXCO_VIEWER / EXCO_ADMIN / SUPER_ADMIN — not MEMBER `business.view` alone.
+
+Do not reopen Phase 10 for redesign.
+
+## Phase 11
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** EXCO professionals directory + single-page record under `/exco/professionals`. See `docs/product/phase-11-exco-professionals-scope.md`.
+
+**No `/admin`.** Read/find/understand only. Do not reopen for redesign or expand into mutations, CRM, export, or public directory.
+
+## Phase 12
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** EXCO Verification Centre (`/exco/verification`), professional `submitProfile`, clarification persistence, EXCO professional decisions, and publication foundation (`publishProfile` / `unpublishProfile` + slug). See `docs/product/phase-12-verification-centre-scope.md`.
+
+Evidence remediation (2026-09-09): command-boundary suite, real-command DB closeout, member submit Playwright; adversarial claims layered honestly.
+
+One queue / two machines. No `/admin`. No `/exco/verification/[id]`. Verification does not auto-publish. Unpublish = `DIRECTORY` → `MEMBERS_ONLY` only. Live-record evidence; no fabricated consent. Phase 9 business verification reused.
+
+Do not reopen Phase 12 for redesign.
+
+## Phase 13
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Professionals Directory — `/professionals`, `/professionals/[slug]` only. See `docs/product/phase-13-public-member-directory-scope.md`.
+
+**Product:** Controlled public/member projection of `VERIFIED`+`DIRECTORY` professionals. Anon = member V1. No `/directory` second product. No `/admin`. Business deferred. Verified badge not filter. Page size 25. `noindex`. Publication owned by Phase 12.
+
+Do not reopen Phase 13 for redesign.
+
+## Phase 14
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Consent & Visibility Centre (`/settings/privacy`), field/group preferences, RLS preference store, Phase 13 projection withhold. See `docs/product/phase-14-consent-visibility-centre-scope.md`.
+
+**Invariants:** `MEMBER PREFERENCE NEVER GRANTS ACCESS.`; exposure = preference ∩ allowlist ∩ eligibility ∩ authz; `DEFAULT PUBLIC PREFERENCE ≠ DEFAULT PUBLIC EXPOSURE`; visibility ≠ legal consent.
+
+Contact/community Private-only; business/opportunities Public unavailable; identity Public while DIRECTORY; no fake consent writes.
+
+Do not reopen Phase 14 for redesign.
+
+## Phase 15
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** EXCO Spotlight System (`/exco/spotlight`). See `docs/product/phase-15-spotlight-system-scope.md`.
+
+EXCO-only V1. Mutations require `spotlight.manage`. Eligibility = interest ∧ Phase 8 100% ∧ headshot metadata ∧ VERIFIED (DIRECTORY not required). Curated record over live Professional data. One non-ARCHIVED Spotlight per profile. No contact/business. No public Spotlight. Headshot upload remains a deferred prerequisite.
+
+Do not reopen Phase 15 for redesign.
+
+## Phase 16
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Opportunities V1.1 (`/opportunities`). See `docs/product/phase-16-opportunities-scope.md`.
+
+EXCO creates with `opportunity.manage`; members discover ACTIVE opportunities and express interest. Interest = connection signal only — not application, messaging, matching, consent, or contact exchange. Six types only. No `/admin`. No public Opportunities.
+
+Do not reopen Phase 16 for redesign.
+
+## Phase 17
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Deterministic Matching. See `docs/product/phase-17-matching-scope.md`.
+
+Dynamic EXCO potential matches on `/opportunities/[id]`. Structured requirements + deterministic rules; no AI, no % scores, no persisted match rows. Safe projection only. Members cannot enumerate matches. Potential match ≠ interest/application/contact.
+
+Do not reopen Phase 17 for redesign.
+
+## Phase 18
+
+**IMPLEMENTATION / DRY-RUN PASS — NOT FULLY LOCKED.** Historical Google Form migration. See `docs/product/phase-18-historical-google-form-migration-scope.md`.
+
+Phone default is Nigeria (`+234`). Offline dry-run only under `scripts/migrations/phase18/`. **Credential architecture:** preflight uses dedicated PostgreSQL **read-only** `PHASE18_PRODUCTION_DATABASE_URL` only — never `service_role`/Storage/write creds for preflight; import write/Auth creds are a **separate** gate. **Production read-only preflight gate explicitly authorized — RESULT BLOCKED** (no `PRODUCTION_DATABASE_URL` / `PHASE18_PRODUCTION_DATABASE_URL`; do not substitute local). **Production import NOT AUTHORIZED** until explicit `AUTHORIZE PHASE 18 PRODUCTION IMPORT`. Auth strategy for legacy members: Auth-first at authorized import (same as `/join`) — CODE REVIEWED; dedicated claim UX not implemented. Do not create Auth/passwords/consents/DIRECTORY/VERIFIED from historical answers. Do not treat local CREATE×18 as production inserts. Phase 18 is **NOT COMPLETE / NOT LOCKED** until production preflight (+ authorized import if applicable) passes.
+
+Do not start Phase 19.
+
+## Phase 19+
+
+**NOT AUTHORIZED.**
+
+## Gated delivery (execution discipline)
+
+Each phase is a **gated delivery unit**, not a planning-only milestone:
+
+```text
+Architecture → Decisions → Readiness → IMPLEMENTATION AUTHORIZED
+→ Build completely → Test (functional/DB/security/browser/responsive/a11y)
+→ Adversarial/source/scope audit → Fix in-scope → Evidence + docs
+→ PASS / COMPLETE / VERIFIED / LOCKED → only then next phase
+```
+
+“Implementation not authorized” is normal during planning — **not** final completion. Do not accumulate next-phase architecture while the current phase is undelivered. Dependent implementation does not start while its predecessor remains conditional.

@@ -1,0 +1,20 @@
+-- RLS negative tests. Requires applied RLS + JWT-authenticated sessions (Supabase).
+-- Status: DEFINED. NOT EXECUTED (no live Postgres / no Auth sessions in this gate).
+
+-- Anon: SELECT profiles → empty/denied
+-- Anon: SELECT users → denied
+-- Anon: SELECT documents → denied
+-- Anon: SELECT church_information → denied
+-- Anon: SELECT verification_records → denied
+-- Anon: SELECT admin_notes → denied
+-- Anon: SELECT audit_logs → denied
+-- Anon: SELECT directory_professionals → listed PublicProfessional columns only
+-- Member A SET ROLE: SELECT other private profile → empty
+-- Member A: UPDATE other profile → denied
+-- Member A: UPDATE own verification_status → trigger exception
+-- Member A: INSERT user_roles EXCO_ADMIN → denied
+-- Viewer: DELETE professional_details → denied
+-- Viewer: SELECT admin_notes → empty
+-- Viewer: SELECT church_information → empty
+-- Viewer: SELECT users (all emails) → empty / own only
+-- Admin: INSERT user_roles SUPER_ADMIN → denied (not super)

@@ -1,0 +1,122 @@
+{
+  "localDb": true,
+  "localUserCount": 723,
+  "counts": {
+    "MATCHED_TO_EXISTING_MEMBER": 0,
+    "LIKELY_NEW_MEMBER": 18,
+    "CONFLICTING_IDENTITY": 0,
+    "UNMATCHABLE": 0,
+    "DUPLICATE_WITHIN_LEGACY_SOURCE": 0,
+    "AMBIGUOUS_IDENTITY": 0
+  },
+  "rows": [
+    {
+      "sourceRow": 2,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "m***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 3,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "o***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 4,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "m***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 5,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "a***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 6,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "o***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 7,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "m***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 8,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "o***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 9,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "b***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 10,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "k***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 11,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "b***@y***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 12,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "m***@y***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 13,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "b***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 14,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "a***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 15,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "o***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 16,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "o***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 17,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "t***@j***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 18,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "a***@g***",
+      "matchedBy": null
+    },
+    {
+      "sourceRow": 19,
+      "classification": "LIKELY_NEW_MEMBER",
+      "email": "a***@g***",
+      "matchedBy": null
+    }
+  ]
+}
