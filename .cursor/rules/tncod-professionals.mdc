@@ -166,6 +166,10 @@ Phone default is Nigeria (`+234`). Offline dry-run only under `scripts/migration
 
 Do not start Phase 19.
 
+## Supabase production infrastructure
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Migrations **16/16** on `tncod-professionals` (`brpppukzqgpzxjelwwrj`, `us-west-2`). Schema/Storage/RLS configuration LIVE VERIFIED; anon write denied (prior). Hosted Auth Site URL / redirects remain localhost/empty — **DEFERRED TO VERCEL**; do not invent a production URL; do not `config push` from local localhost templates; do not fabricate production Auth users for IDOR. Authenticated adversarial testing **DEFERRED UNTIL LEGITIMATE AUTHENTICATED DEPLOYMENT**. DB authority = `supabase/migrations/` only — no Prisma migrations. Evidence classes: LIVE VERIFIED / CODE REVIEWED / DEFERRED / NOT VERIFIED. See `docs/infrastructure/SUPABASE-PRODUCTION-READINESS-REPORT.md`. **HISTORICAL IMPORT = NOT AUTHORIZED.** **Vercel = NOT TOUCHED** in this phase. Do not reopen this infrastructure gate for redesign or coverage theatre.
+
 ## Phase 19+
 
 **NOT AUTHORIZED.**

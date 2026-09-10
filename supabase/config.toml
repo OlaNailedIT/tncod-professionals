@@ -56,16 +56,16 @@ max_client_conn = 100
 # secret_key = "env(SECRET_VALUE)"
 
 [db.migrations]
-# If disabled, migrations will be skipped during a db push or reset.
-# Keep disabled until the Phase 2 Database Gate is instructed to APPLY
-# supabase/migrations/*.sql. Environment setup must not apply those files.
-enabled = false
+# Authoritative schema evolution via supabase/migrations/*.sql.
+# Enabled for linked production `db push` and local apply after Phase 2 Database Gate PASS.
+# Do not disable casually — production schema must track the repository migration history.
+enabled = true
 # Specifies an ordered list of schema files, directories, or glob patterns that describe your database.
 # Supports paths relative to supabase directory: "./schemas/*.sql", "./database".
 schema_paths = []
 
 [db.seed]
-# If enabled, seeds the database after migrations during a db reset.
+# Keep disabled — do not load development/test seed into production via db push.
 # No project seed.sql is used during environment setup.
 enabled = false
 # Specifies an ordered list of seed files to load during db reset.

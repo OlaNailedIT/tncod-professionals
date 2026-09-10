@@ -1,11 +1,10 @@
 -- Phase 9 — Business profile & verification (additive)
 -- Preserves business_professionals M:N. No businesses.profile_id.
 -- Does not weaken visibility/publication rules.
+-- Enum value NEEDS_CLARIFICATION is added in 20260908135000_phase9_business_status_enum.sql
+-- (must commit before use — PostgreSQL 55P04).
 
--- 1) Extend business_status for clarification (member-facing lifecycle mapping)
-ALTER TYPE "BusinessStatus" ADD VALUE IF NOT EXISTS 'NEEDS_CLARIFICATION';
-
--- 2) Business content fields for Phase 9 requirements not already present
+-- 1) Business content fields for Phase 9 requirements not already present
 ALTER TABLE public.businesses
   ADD COLUMN IF NOT EXISTS social_links JSONB NOT NULL DEFAULT '{}'::jsonb,
   ADD COLUMN IF NOT EXISTS services_offered TEXT[] NOT NULL DEFAULT '{}',
