@@ -160,17 +160,33 @@ Do not reopen Phase 17 for redesign.
 
 ## Phase 18
 
-**IMPLEMENTATION / DRY-RUN PASS — NOT FULLY LOCKED.** Historical Google Form migration. See `docs/product/phase-18-historical-google-form-migration-scope.md`.
+**PASS / COMPLETE / VERIFIED / LOCKED.** Historical Google Form migration. See `docs/product/phase-18-historical-google-form-migration-scope.md`.
 
-Phone default is Nigeria (`+234`). Offline dry-run only under `scripts/migrations/phase18/`. **Credential architecture:** preflight uses dedicated PostgreSQL **read-only** `PHASE18_PRODUCTION_DATABASE_URL` only — never `service_role`/Storage/write creds for preflight; import write/Auth creds are a **separate** gate. **Production read-only preflight gate explicitly authorized — RESULT BLOCKED** (no `PRODUCTION_DATABASE_URL` / `PHASE18_PRODUCTION_DATABASE_URL`; do not substitute local). **Production import NOT AUTHORIZED** until explicit `AUTHORIZE PHASE 18 PRODUCTION IMPORT`. Auth strategy for legacy members: Auth-first at authorized import (same as `/join`) — CODE REVIEWED; dedicated claim UX not implemented. Do not create Auth/passwords/consents/DIRECTORY/VERIFIED from historical answers. Do not treat local CREATE×18 as production inserts. Phase 18 is **NOT COMPLETE / NOT LOCKED** until production preflight (+ authorized import if applicable) passes.
+## Phase 18A
 
-Do not start Phase 19.
+**PASS / COMPLETE / VERIFIED / LOCKED.** Auth-first importer implementation & preflight. See `docs/product/phase-18a-auth-first-importer.md`.
+
+Auth-first executor exists (`execute.ts` / `plan.ts` / `import.ts`). Production mutation **DENY** unless exact `PHASE18_PRODUCTION_IMPORT_AUTHORIZED` phrase + `PHASE18_IMPORT_*` credentials + project ref `brpppukzqgpzxjelwwrj`. **2026-09-11:** Production Pass 1 `CREATED 18`; Pass 2 `SKIP_ALREADY_IMPORTED 18`; post-import historical reconciliation PASS (18 COMPLETE_SAFE, all `NOT_REVIEWED`/`PRIVATE`). Pre-existing Auth-less orphan `p***@e***` soft-deleted under separate explicit authorization (`deleted_at`; references_found=0). Evidence: `scripts/migrations/phase18/reports/production-execute-latest.md`, `production-post-import-reconciliation.md`, `pre-existing-orphan-disposition.md`. Do not invent claim UX. Do not auto VERIFIED/DIRECTORY/consent/Spotlight/business. Phone default Nigeria (`+234`).
+
+Do not re-run Production import without a new explicit authorization. Phase 19 is **PASS / COMPLETE / VERIFIED / LOCKED**. Phase 20 is **IMPLEMENTATION COMPLETE / NOT LOCKED** (forensic verification incomplete — authenticated EXCO browser + Production `/exco/analytics` not verified). Phase 21+ remain **NOT AUTHORIZED**.
+
+Phone default is Nigeria (`+234`). Offline tooling under `scripts/migrations/phase18/`. **Credential architecture:** preflight uses dedicated PostgreSQL **read-only** `PHASE18_PRODUCTION_DATABASE_URL` only — never `service_role`/Storage/write creds for preflight; import write/Auth creds are a **separate** gate.
 
 ## Supabase production infrastructure
 
-**PASS / COMPLETE / VERIFIED / LOCKED.** Migrations **16/16** on `tncod-professionals` (`brpppukzqgpzxjelwwrj`, `us-west-2`). Schema/Storage/RLS configuration LIVE VERIFIED; anon write denied (prior). Hosted Auth Site URL / redirects remain localhost/empty — **DEFERRED TO VERCEL**; do not invent a production URL; do not `config push` from local localhost templates; do not fabricate production Auth users for IDOR. Authenticated adversarial testing **DEFERRED UNTIL LEGITIMATE AUTHENTICATED DEPLOYMENT**. DB authority = `supabase/migrations/` only — no Prisma migrations. Evidence classes: LIVE VERIFIED / CODE REVIEWED / DEFERRED / NOT VERIFIED. See `docs/infrastructure/SUPABASE-PRODUCTION-READINESS-REPORT.md`. **HISTORICAL IMPORT = NOT AUTHORIZED.** **Vercel = NOT TOUCHED** in this phase. Do not reopen this infrastructure gate for redesign or coverage theatre.
+**PASS / COMPLETE / VERIFIED / LOCKED.** Migrations **16/16** on `tncod-professionals` (`brpppukzqgpzxjelwwrj`, `us-west-2`). Schema/Storage/RLS configuration LIVE VERIFIED; anon write denied (prior). Hosted Auth Site URL / redirects remain localhost/empty — **DEFERRED TO A SEPARATE AUTH ORIGIN GATE** (not Analytics Phase 20); do not invent a production Auth URL; do not `config push` from local localhost templates; do not fabricate production Auth users for IDOR. Authenticated adversarial testing **DEFERRED UNTIL LEGITIMATE AUTHENTICATED DEPLOYMENT**. DB authority = `supabase/migrations/` only — no Prisma migrations. Evidence classes: LIVE VERIFIED / CODE REVIEWED / DEFERRED / NOT VERIFIED. See `docs/infrastructure/SUPABASE-PRODUCTION-READINESS-REPORT.md`. **HISTORICAL IMPORT = EXECUTED 2026-09-11** (Phase 18 LOCKED). Do not reopen this infrastructure gate for redesign or coverage theatre.
 
-## Phase 19+
+## Phase 19 — Vercel production deployment / origin establishment
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** Access / azure origin / SSO-off confirmed. Owner corrected Production `DATABASE_URL` (password-bearing hosted Supabase URI; secret never in chat/source). One Production redeploy (`fmllbdy82`, aliased to `https://tncod-professionals-azure.vercel.app`). Live smoke (re-verified 2026-09-11): `/` **200**, `/professionals` **200**. Docker = local only — not in Production path. Prisma uses `DATABASE_URL` only. Phase 18 historical import **EXECUTED 2026-09-11** (directory remains non-public unless VERIFIED+DIRECTORY). Supabase Advisor `directory_professionals` SECURITY DEFINER = **SAFE TO REMAIN DEFERRED** (intentional Phase 13 contract). See `docs/infrastructure/VERCEL-PRODUCTION-DEPLOYMENT-REPORT.md` and `docs/product/phase-20-analytics-operational-intelligence-scope.md` §4. Phase 20 analytics **NOT LOCKED** pending forensic closeout (Production `/exco/analytics` was **404** as of 2026-09-11 audit).
+
+## Phase 20 — Analytics & Operational Intelligence
+
+**IMPLEMENTATION COMPLETE — FULL VERIFICATION NOT COMPLETE — NOT LOCKED.** See `docs/product/phase-20-analytics-operational-intelligence-scope.md` §22–§23.
+
+Local EXCO read-only aggregates at `/exco/analytics`; server-side Prisma aggregation (`computeExcoAnalytics` via `loadExcoAnalytics`); reuse Phase 8 completion + Phase 10 EXCO authz; privacy suppression n&lt;3 on composition breakdowns; no analytics tables/migrations. Forensic audit withdrew premature LOCK: Production `/exco/analytics` **404**; authenticated EXCO browser **NOT VERIFIED**; historical `created_at` inflation is a documented **CONTRACT GAP**. Conversion/abandonment / mentors / volunteers / client needs remain deferred or prerequisite. Auth Site URL cutover is **NOT** this Phase 20.
+
+## Phase 21+
 
 **NOT AUTHORIZED.**
 

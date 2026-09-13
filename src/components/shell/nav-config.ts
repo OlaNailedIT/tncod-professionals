@@ -39,7 +39,10 @@ export const memberAccountItems: NavItem[] = [
 export const excoNavGroups: NavGroup[] = [
   {
     label: "Overview",
-    items: [{ href: "/exco", label: "Dashboard" }],
+    items: [
+      { href: "/exco", label: "Dashboard" },
+      { href: "/exco/analytics", label: "Analytics" },
+    ],
   },
   {
     label: "Manage",

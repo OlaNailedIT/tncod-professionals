@@ -127,6 +127,14 @@ export default async function ExcoDashboardPage() {
           <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
             <li>
               <Link
+                href="/exco/analytics"
+                className="inline-flex rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium underline-offset-2 hover:underline"
+              >
+                Analytics
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/exco/professionals"
                 className="inline-flex rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium underline-offset-2 hover:underline"
               >
