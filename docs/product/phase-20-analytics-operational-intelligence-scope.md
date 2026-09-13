@@ -5,9 +5,7 @@
 **Status:**
 
 ```text
-PHASE 20 — IMPLEMENTATION COMPLETE
-PHASE 20 — CLOSURE / DEPLOYMENT / VERIFICATION IN PROGRESS
-PHASE 20 — NOT LOCKED
+PHASE 20 — PASS / COMPLETE / VERIFIED / LOCKED
 ```
 
 **Depends on:**
@@ -538,78 +536,87 @@ src/features/exco/analytics/load-analytics.test.ts
 src/features/exco/analytics/payload-privacy.test.ts
 src/features/exco/analytics/forensic-privacy.test.ts
 e2e/phase-20-analytics-access.spec.ts
-e2e/phase-20-exco-authenticated.spec.ts  (attempted; NOT VERIFIED — see §23)
+e2e/phase-20-exco-authenticated.spec.ts
+playwright.phase20.config.ts  (port 3001 + AUTH_E2E_HELPER=1)
 ```
 
-### Known limitations / forensic findings (2026-09-11 audit)
-
-- Location is free-text; sparse groups rely on suppression.
-- Registration metrics ignore community filters by design (window-only).
-- **CONTRACT GAP — historical import contamination:** Locked new-registrations metric reuses Phase 10 (`users.created_at` in window). Phase 18 Auth-first import created users with import-time `created_at`, so historical rows can inflate 7/30/90d counts. Contract does **not** authorize excluding `legacy_import`; do not invent exclusion without a product decision.
-- **Residual re-id:** Contract suppresses only composition breakdowns (n&lt;3). Filtered **totals** and **needs counts** remain visible (e.g. memberPopulation=2, mentorshipInterest=1). Difference: population − visible group counts equals suppressed mass (already shown as `(suppressed)` bucket); suppressed **keys** stay hidden.
-- Preference metric counts **identity** group levels (Phase 14 defaults), separate from effective DIRECTORY publication.
-- `computeExcoAnalytics` is intentionally auth-free for unit tests; production path must use `loadExcoAnalytics` (`server-only` + `assertExcoDashboardAccess` before Prisma). No analytics API route exists.
-- Auth Site URL cutover remains a separate gate (not this Phase 20).
-- `directory_professionals()` SECURITY DEFINER remains deferred (untouched).
-
-### Production impact (implementation gate — precise)
+### Historical-registration decision (2026-09-13 closure — AUTHORIZED)
 
 ```text
-Production application deployment: NO (local uncommitted Phase 20; Production /exco/analytics → HTTP 404)
-Production database changes: NONE
-Production Auth changes: NONE
-Production RLS changes: NONE
-Production data mutations: NONE
+Metric label: New platform registrations
+Definition: COUNT users where
+  users.deleted_at IS NULL
+  AND users.created_at >= window_start (UTC inclusive days 7/30/90)
+  AND linked profiles.deleted_at IS NULL
+  AND profiles.legacy_import = false
 ```
 
-### Validation evidence (forensic re-verification 2026-09-11)
+| Item | Decision |
+| --- | --- |
+| Source | `users.created_at` + `profiles.legacy_import` |
+| Inclusion | Genuine platform onboardings (non-legacy profiles) |
+| Exclusion | `profiles.legacy_import = true` (Phase 18 historical import provenance) |
+| Phase 18 members | Remain members; still counted in community/needs/capacity/health populations; **not** counted as “new platform registrations” |
+| Invented dates | **None** — original Google Form timestamps are not reconstructed |
+| Phase 10 dashboard | Unchanged (locked Phase 10); Phase 20 metric is the authoritative analytics definition |
+
+### Known residual risks (accepted under locked privacy contract)
+
+- Location free-text sparsity → relies on n&lt;3 composition suppression.
+- Filtered **totals** and **needs counts** remain visible (contract: suppression applies to composition breakdowns only).
+- Difference: population − visible group counts = suppressed mass (also shown as `(suppressed)`); keys stay hidden.
+- Production authenticated EXCO UI not exercised in Production (Auth Site URL cutover remains a separate gate); local Playwright EXCO_VIEWER evidence PASS; Production anonymous boundary VERIFIED (307).
+
+### Production impact (final — precise)
+
+```text
+Production application deployment: YES
+  deployment: dpl_E9xX3ocs1eHYnMSpdv8WPwqtVjRZ
+  host: tncod-professionals-e7w55qsaq-olanailedits-projects.vercel.app
+  alias: https://tncod-professionals-azure.vercel.app
+  commit: a1a6f2e01396bf115ce447907c5998ff5bad4685
+Production database schema changes: NONE
+Production data mutations: NONE
+Production Auth changes: NONE
+Production RLS changes: NONE
+Production configuration changes: NONE (no Auth Site URL / Advisor changes)
+```
+
+### Validation evidence (forensic 2026-09-11 — historical)
+
+See prior audit: premature LOCK withdrawn; Production `/exco/analytics` was then **404**; authenticated EXCO then **NOT VERIFIED**.
+
+### Final closure evidence (2026-09-13)
 
 | Gate | Result |
 | --- | --- |
-| TypeScript `tsc --noEmit` | PASS (exit 0) |
-| ESLint (Phase 20 paths) | PASS (exit 0) |
-| Vitest `src/features/exco/analytics` | PASS — 19 tests |
-| `next build` (prior delivery) | PASS — route present in local build |
-| Playwright anonymous | PASS — 2/2 |
-| Playwright authenticated EXCO | **NOT VERIFIED** — `AUTH_E2E_HELPER` session establish failed against reused local server (helper requires `AUTH_E2E_HELPER=1`) |
-| Local HTTP anon `/exco/analytics` | **307** → sign-in (prior) |
-| Local `/professionals` | **200** |
-| Production `/` + `/professionals` | **200** |
-| Production `/exco/analytics` | **404** — Phase 20 UI **not deployed** |
-| Git vs Production | HEAD `ab5d5a4` lacks Phase 20; analytics sources still untracked/local |
+| TypeScript | PASS |
+| ESLint (Phase 20 paths) | PASS |
+| Vitest analytics + directory | PASS — 27 tests |
+| `next build` | PASS — `/exco/analytics` in route table |
+| Playwright anonymous | PASS |
+| Playwright authenticated EXCO (MEMBER deny + EXCO_VIEWER + filter URL) | PASS — `playwright.phase20.config.ts` |
+| Production `/` | **200** |
+| Production `/professionals` | **200** |
+| Production `/exco/analytics` anonymous | **307** → `/sign-in?next=%2Fexco%2Fanalytics` (`X-Matched-Path: /exco/analytics`) |
+| Production deploy ↔ Phase 20 commit | VERIFIED — GitHub Production deployment sha `a1a6f2e…` |
 | Migrations / `directory_professionals()` | Unchanged |
-
-### Adversarial closeout notes
-
-| Attack | Result |
-| --- | --- |
-| MEMBER / empty roles → `loadExcoAnalytics` | DENIED — unit PASS |
-| Forged filter values | Rejected — unit PASS |
-| Small-count after filter on professions | Keys suppressed — unit PASS |
-| Preference vs publication | Separated — unit PASS |
-| Multi-professional business inflation | Unique count — unit PASS |
-| Analytics JSON PII | No name/email/phone/id/key — unit PASS |
-| Anonymous route | Redirect — Playwright PASS |
-| Authenticated EXCO UI | **NOT VERIFIED** |
-| Production analytics route | **NOT VERIFIED** (404) |
 
 ---
 
-## 23. Forensic verification verdict (2026-09-11)
+## 23. Forensic verification verdict (2026-09-11) — historical
 
 ```text
-PHASE 20 — IMPLEMENTATION COMPLETE
-PHASE 20 — AUTOMATED VERIFICATION: PASS (unit/lint/tsc; anonymous Playwright)
-PHASE 20 — SECURITY BOUNDARY (service): PASS (loadExcoAnalytics assert-before-aggregate)
-PHASE 20 — REGRESSION (local Phase 13 path / no SQL touch): PASS (limited)
-PHASE 20 — EXCO AUTHENTICATED BROWSER: NOT VERIFIED
-PHASE 20 — PRODUCTION APPLICATION DEPLOYMENT: NO / NOT VERIFIED
-PHASE 20 — PRODUCTION /exco/analytics: NOT VERIFIED (HTTP 404)
-PHASE 20 — FULL VERIFICATION: NOT COMPLETE
-PHASE 20 — NOT LOCKED
+PHASE 20 — NOT LOCKED (at that time)
+Premature LOCK withdrawn.
+```
 
+---
+
+## 24. Final closure verdict (2026-09-13)
+
+```text
+PHASE 20 — PASS / COMPLETE / VERIFIED / LOCKED
 PHASE 21+ — NOT AUTHORIZED
 HARD STOP
 ```
-
-Prior premature `PASS / COMPLETE / VERIFIED / LOCKED` claim is **withdrawn**.
