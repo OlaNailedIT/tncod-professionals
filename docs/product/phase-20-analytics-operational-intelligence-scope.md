@@ -5,7 +5,15 @@
 **Status:**
 
 ```text
-PHASE 20 — PASS / COMPLETE / VERIFIED / LOCKED
+PHASE 20 — IMPLEMENTATION COMPLETE
+PHASE 20 — AUTOMATED VERIFICATION PASS
+PHASE 20 — SECURITY BOUNDARY VERIFIED
+PHASE 20 — LOCAL AUTHENTICATED E2E VERIFIED
+PHASE 20 — PRODUCTION DEPLOYMENT VERIFIED
+PHASE 20 — PRODUCTION ROUTE PROTECTION VERIFIED
+PHASE 20 — PRODUCTION AUTHENTICATED UI NOT VERIFIED
+PHASE 20 — FULL VERIFICATION NOT COMPLETE
+PHASE 20 — NOT LOCKED
 ```
 
 **Depends on:**
@@ -616,7 +624,25 @@ Premature LOCK withdrawn.
 ## 24. Final closure verdict (2026-09-13)
 
 ```text
-PHASE 20 — PASS / COMPLETE / VERIFIED / LOCKED
+PHASE 20 — IMPLEMENTATION COMPLETE
+PHASE 20 — PRODUCTION AUTHENTICATED UI NOT VERIFIED
+PHASE 20 — FULL VERIFICATION NOT COMPLETE
+PHASE 20 — NOT LOCKED
 PHASE 21+ — NOT AUTHORIZED
 HARD STOP
 ```
+
+### Production authenticated UI gate (2026-09-13 re-audit)
+
+| Probe | Result |
+| --- | --- |
+| Production host | `https://tncod-professionals-azure.vercel.app` |
+| Deployed Phase 20 build | YES — Production deployments include `a1a6f2e` (impl) and later docs commits on `main` |
+| Anonymous `/exco/analytics` | **307** → `/sign-in?next=%2Fexco%2Fanalytics` (browser + curl) |
+| `/api/test/auth-session` on Production | **404** — helper correctly gated (`AUTH_E2E_HELPER` + `NODE_ENV===production`) |
+| Hosted Auth `site_url` | Documented LIVE as `http://localhost:3000` — **DEFERRED** Auth origin cutover (not authorized to change in Phase 20) |
+| Hosted `additional_redirect_urls` | Documented empty — **DEFERRED** |
+| Legitimate Production EXCO OTP session | **NOT AVAILABLE** — no approved EXCO production credentials / inbox access in this gate; fabricating users or enabling helper in Production is prohibited |
+| Production authenticated render of analytics | **NOT VERIFIED** |
+
+**Why not locked:** Local authenticated E2E ≠ Production authenticated UI. Auth Site URL cutover was not altered to manufacture evidence. Phase 20 implementation remains intact and deployed; lock awaits a separately authorized Production Auth cutover **or** an owner-operated EXCO session evidence capture against the live origin.

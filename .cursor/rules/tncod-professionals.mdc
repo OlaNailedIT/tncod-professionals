@@ -168,7 +168,7 @@ Do not reopen Phase 17 for redesign.
 
 Auth-first executor exists (`execute.ts` / `plan.ts` / `import.ts`). Production mutation **DENY** unless exact `PHASE18_PRODUCTION_IMPORT_AUTHORIZED` phrase + `PHASE18_IMPORT_*` credentials + project ref `brpppukzqgpzxjelwwrj`. **2026-09-11:** Production Pass 1 `CREATED 18`; Pass 2 `SKIP_ALREADY_IMPORTED 18`; post-import historical reconciliation PASS (18 COMPLETE_SAFE, all `NOT_REVIEWED`/`PRIVATE`). Pre-existing Auth-less orphan `p***@e***` soft-deleted under separate explicit authorization (`deleted_at`; references_found=0). Evidence: `scripts/migrations/phase18/reports/production-execute-latest.md`, `production-post-import-reconciliation.md`, `pre-existing-orphan-disposition.md`. Do not invent claim UX. Do not auto VERIFIED/DIRECTORY/consent/Spotlight/business. Phone default Nigeria (`+234`).
 
-Do not re-run Production import without a new explicit authorization. Phase 19 is **PASS / COMPLETE / VERIFIED / LOCKED**. Phase 20 is **PASS / COMPLETE / VERIFIED / LOCKED**. Phase 21+ remain **NOT AUTHORIZED**.
+Do not re-run Production import without a new explicit authorization. Phase 19 is **PASS / COMPLETE / VERIFIED / LOCKED**. Phase 20 is **IMPLEMENTATION COMPLETE / NOT LOCKED** — Production authenticated EXCO UI remains **NOT VERIFIED** (Auth Site URL cutover deferred; Production auth helper correctly disabled). Phase 21+ remain **NOT AUTHORIZED**.
 
 Phone default is Nigeria (`+234`). Offline tooling under `scripts/migrations/phase18/`. **Credential architecture:** preflight uses dedicated PostgreSQL **read-only** `PHASE18_PRODUCTION_DATABASE_URL` only — never `service_role`/Storage/write creds for preflight; import write/Auth creds are a **separate** gate.
 
@@ -178,13 +178,13 @@ Phone default is Nigeria (`+234`). Offline tooling under `scripts/migrations/pha
 
 ## Phase 19 — Vercel production deployment / origin establishment
 
-**PASS / COMPLETE / VERIFIED / LOCKED.** Access / azure origin / SSO-off confirmed. Owner corrected Production `DATABASE_URL` (password-bearing hosted Supabase URI; secret never in chat/source). One Production redeploy (`fmllbdy82`, aliased to `https://tncod-professionals-azure.vercel.app`). Live smoke (re-verified 2026-09-11): `/` **200**, `/professionals` **200**. Docker = local only — not in Production path. Prisma uses `DATABASE_URL` only. Phase 18 historical import **EXECUTED 2026-09-11** (directory remains non-public unless VERIFIED+DIRECTORY). Supabase Advisor `directory_professionals` SECURITY DEFINER = **SAFE TO REMAIN DEFERRED** (intentional Phase 13 contract). See `docs/infrastructure/VERCEL-PRODUCTION-DEPLOYMENT-REPORT.md` and `docs/product/phase-20-analytics-operational-intelligence-scope.md` §4. Phase 20 analytics **PASS / COMPLETE / VERIFIED / LOCKED** (Production `/exco/analytics` deployed 2026-09-13, `dpl_E9xX3ocs1eHYnMSpdv8WPwqtVjRZ` / `a1a6f2e`).
+**PASS / COMPLETE / VERIFIED / LOCKED.** Access / azure origin / SSO-off confirmed. Owner corrected Production `DATABASE_URL` (password-bearing hosted Supabase URI; secret never in chat/source). One Production redeploy (`fmllbdy82`, aliased to `https://tncod-professionals-azure.vercel.app`). Live smoke (re-verified 2026-09-11): `/` **200**, `/professionals` **200**. Docker = local only — not in Production path. Prisma uses `DATABASE_URL` only. Phase 18 historical import **EXECUTED 2026-09-11** (directory remains non-public unless VERIFIED+DIRECTORY). Supabase Advisor `directory_professionals` SECURITY DEFINER = **SAFE TO REMAIN DEFERRED** (intentional Phase 13 contract). See `docs/infrastructure/VERCEL-PRODUCTION-DEPLOYMENT-REPORT.md` and `docs/product/phase-20-analytics-operational-intelligence-scope.md` §4. Phase 20 analytics **NOT LOCKED** — Production `/exco/analytics` deployed (`a1a6f2e`+); Production authenticated EXCO UI **NOT VERIFIED**.
 
 ## Phase 20 — Analytics & Operational Intelligence
 
-**PASS / COMPLETE / VERIFIED / LOCKED.** See `docs/product/phase-20-analytics-operational-intelligence-scope.md`.
+**IMPLEMENTATION COMPLETE — PRODUCTION AUTHENTICATED UI NOT VERIFIED — NOT LOCKED.** See `docs/product/phase-20-analytics-operational-intelligence-scope.md` §24.
 
-EXCO read-only aggregates at `/exco/analytics`; server-side Prisma aggregation (`computeExcoAnalytics`); reuse Phase 8 completion + Phase 10 EXCO authz; privacy suppression n&lt;3 on composition breakdowns; no analytics tables/migrations. Conversion/abandonment / mentors / volunteers / client needs remain deferred or prerequisite as locked. Auth Site URL cutover is **NOT** this Phase 20.
+EXCO read-only aggregates at `/exco/analytics`; server-side Prisma aggregation; Phase 8 completion + Phase 10 EXCO authz; n&lt;3 composition suppression; `legacy_import` excluded from new platform registrations; deployed to Production (`a1a6f2e`+). Local authenticated Playwright PASS. Production anonymous protection PASS (307). Production authenticated EXCO render **NOT VERIFIED** without Auth Site URL cutover or owner EXCO session. Auth Site URL cutover is **NOT** this Phase 20. Phase 21+ **NOT AUTHORIZED**.
 
 ## Phase 21+
 
