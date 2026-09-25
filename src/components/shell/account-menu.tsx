@@ -84,13 +84,15 @@ export function AccountMenu({
           {items.map((item) => (
             <div key={item.href} role="none">
               {item.href === "/auth/sign-out" ? (
-                <a
-                  href="/auth/sign-out"
-                  role="menuitem"
-                  className="block w-full rounded-md px-3 py-2 text-left text-label font-normal text-muted-foreground transition-colors hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ring-offset"
-                >
-                  {item.label}
-                </a>
+                <form action="/auth/sign-out" method="post">
+                  <button
+                    type="submit"
+                    role="menuitem"
+                    className="block w-full rounded-md px-3 py-2 text-left text-label font-normal text-muted-foreground transition-colors hover:bg-surface-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ring-offset"
+                  >
+                    {item.label}
+                  </button>
+                </form>
               ) : (
                 <NavLink
                   href={item.href}

@@ -4,7 +4,7 @@
  */
 import { randomUUID } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, appendFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 type Outcome = "PASSED" | "FAILED" | "SKIPPED";
@@ -80,35 +80,14 @@ function ensureLocalSupabaseEnv() {
   });
   const status = parseStatusEnv(raw);
   const url = status.API_URL || status.SUPABASE_URL;
-  const anon = status.ANON_KEY || status.SUPABASE_ANON_KEY;
-  const service = status.SERVICE_ROLE_KEY || status.SUPABASE_SERVICE_ROLE_KEY;
+  const anon = status.PUBLISHABLE_KEY || status.ANON_KEY || status.SUPABASE_ANON_KEY;
+  const service = status.SECRET_KEY || status.SERVICE_ROLE_KEY || status.SUPABASE_SERVICE_ROLE_KEY;
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL && url) process.env.NEXT_PUBLIC_SUPABASE_URL = url;
   if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY && anon) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = anon;
   }
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY && service) {
     process.env.SUPABASE_SERVICE_ROLE_KEY = service;
-  }
-  const envPath = resolve(root, ".env");
-  const existing = existsSync(envPath) ? readFileSync(envPath, "utf8") : "";
-  const additions: string[] = [];
-  if (!/^NEXT_PUBLIC_SUPABASE_URL=/m.test(existing) && process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    additions.push(`NEXT_PUBLIC_SUPABASE_URL="${process.env.NEXT_PUBLIC_SUPABASE_URL}"`);
-  }
-  if (
-    !/^NEXT_PUBLIC_SUPABASE_ANON_KEY=/m.test(existing) &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    additions.push(`NEXT_PUBLIC_SUPABASE_ANON_KEY="${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}"`);
-  }
-  if (
-    !/^SUPABASE_SERVICE_ROLE_KEY=/m.test(existing) &&
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  ) {
-    additions.push(`SUPABASE_SERVICE_ROLE_KEY="${process.env.SUPABASE_SERVICE_ROLE_KEY}"`);
-  }
-  if (additions.length) {
-    appendFileSync(envPath, `\n# Local disposable Supabase (gitignored)\n${additions.join("\n")}\n`);
   }
 }
 
@@ -272,7 +251,7 @@ async function main() {
   record("identity_ids_equal", publicCount === "1" && authCount === "1", "auth.id=public.id");
   record("synced_email_matches", emailMatch === "1", `count=${emailMatch}`);
   record("default_role_member_only", roleNames === "MEMBER", `roles=${roleNames}`);
-  record("default_account_active", accountStatus === "ACTIVE", `status=${accountStatus}`);
+  record("default_account_inert", accountStatus === "DEACTIVATED", `status=${accountStatus}`);
   record(
     "no_profile_auto_created",
     psql(`SELECT count(*) FROM public.profiles WHERE user_id = '${created.id}'`) === "0",
@@ -307,7 +286,11 @@ async function main() {
     );
     const metaProfiles = psql(`SELECT count(*) FROM public.profiles WHERE user_id = '${metaUser.id}'`);
     record("malicious_metadata_roles_member_only", metaRoles === "MEMBER", `roles=${metaRoles}`);
-    record("malicious_metadata_account_not_elevated", metaAccount === "ACTIVE", `status=${metaAccount}`);
+    record(
+      "malicious_metadata_account_not_elevated",
+      metaAccount === "DEACTIVATED",
+      `status=${metaAccount}`,
+    );
     record("malicious_metadata_no_directory_profile", metaProfiles === "0", `profiles=${metaProfiles}`);
   }
 
@@ -368,6 +351,9 @@ async function main() {
   }
   psql(
     `INSERT INTO public.user_roles (user_id, role_id) SELECT '${exco.id}'::uuid, id FROM public.roles WHERE name = 'EXCO_ADMIN' ON CONFLICT DO NOTHING`,
+  );
+  psql(
+    `UPDATE public.users SET account_status = 'ACTIVE' WHERE id IN ('${owner.id}', '${other.id}', '${exco.id}')`,
   );
 
   const ownerSession = await signIn(api, anon, ownerEmail, password);

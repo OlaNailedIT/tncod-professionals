@@ -41,8 +41,3 @@ export async function POST(request: Request) {
   await clearSession();
   return NextResponse.redirect(new URL("/sign-in", request.url), { status: 303 });
 }
-
-export async function GET(request: Request) {
-  await clearSession();
-  return NextResponse.redirect(new URL("/sign-in", request.url), { status: 303 });
-}

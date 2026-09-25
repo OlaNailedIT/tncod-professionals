@@ -4,8 +4,10 @@ import { AppError } from "@/lib/errors";
 import { getPrisma } from "@/lib/prisma/client";
 import { hasPermission } from "@/security/authorization";
 import type { AppRoleName, PermissionKey } from "@/security/permissions";
+import { activeIdentityExists } from "@/server/auth/active-identity";
 
 export async function loadPermissionKeys(userId: string): Promise<readonly PermissionKey[]> {
+  if (!(await activeIdentityExists(userId))) return [];
   const prisma = getPrisma();
   const rows = await prisma.userRole.findMany({
     where: { userId },
@@ -21,6 +23,7 @@ export async function loadPermissionKeys(userId: string): Promise<readonly Permi
 }
 
 export async function loadRoleNames(userId: string): Promise<readonly AppRoleName[]> {
+  if (!(await activeIdentityExists(userId))) return [];
   const prisma = getPrisma();
   const rows = await prisma.userRole.findMany({
     where: { userId },

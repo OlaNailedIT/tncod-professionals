@@ -5,7 +5,8 @@ import { logger } from "@/lib/logger";
 import { getPrisma } from "@/lib/prisma/client";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { trackRegistrationEvent } from "./analytics";
-import { DUPLICATE_USER_MESSAGE, findRegistrationDuplicate } from "./duplicate";
+import { verifyRegistrationCaptcha } from "./captcha";
+import { findRegistrationDuplicate } from "./duplicate";
 import { normalizePhone } from "./phone";
 import { checkRegistrationRateLimit } from "./rate-limit";
 import { registrationSchema, type RegistrationInput } from "./schema";
@@ -23,13 +24,17 @@ function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
+function neutralAcceptedResult(): RegisterResult {
+  return { ok: true, userId: "accepted", profileId: "accepted" };
+}
+
 export async function registerProfessional(
   raw: unknown,
   meta: { clientKey: string; deviceClass?: string },
 ): Promise<RegisterResult> {
   const started = Date.now();
 
-  const rate = checkRegistrationRateLimit(meta.clientKey);
+  const rate = await checkRegistrationRateLimit(meta.clientKey);
   if (!rate.ok) {
     trackRegistrationEvent("registration_failed", {
       error_category: "rate_limited",
@@ -74,6 +79,18 @@ export async function registerProfessional(
     return { ok: true, userId: "spam", profileId: "spam" };
   }
 
+  if (!(await verifyRegistrationCaptcha(data.captchaToken, meta.clientKey))) {
+    trackRegistrationEvent("registration_failed", {
+      error_category: "captcha",
+      device_class: meta.deviceClass,
+    });
+    return {
+      ok: false,
+      code: "SPAM",
+      message: "Complete the security check and try again.",
+    };
+  }
+
   trackRegistrationEvent("registration_submitted", {
     device_class: meta.deviceClass,
     duration_ms: data.clientDurationMs,
@@ -87,7 +104,7 @@ export async function registerProfessional(
       code: "VALIDATION",
       message: "Please check the highlighted fields.",
       fieldErrors: {
-        phone: "Enter a valid phone or WhatsApp number (include country code if outside South Africa).",
+        phone: "Enter a valid phone or WhatsApp number (include country code if outside Nigeria).",
       },
     };
   }
@@ -99,7 +116,7 @@ export async function registerProfessional(
         error_category: dup.kind,
         device_class: meta.deviceClass,
       });
-      return { ok: false, code: "DUPLICATE", message: DUPLICATE_USER_MESSAGE };
+      return neutralAcceptedResult();
     }
 
     trackRegistrationEvent("registration_auth_started", {
@@ -121,7 +138,7 @@ export async function registerProfessional(
           error_category: "email",
           device_class: meta.deviceClass,
         });
-        return { ok: false, code: "DUPLICATE", message: DUPLICATE_USER_MESSAGE };
+        return neutralAcceptedResult();
       }
       logger.error("registration_auth_create_failed", {
         error_category: "auth_create",
@@ -136,107 +153,131 @@ export async function registerProfessional(
 
     const userId = created.user.id;
     const prisma = getPrisma();
-
-    // Trigger may insert public.users asynchronously relative to Admin API response;
-    // upsert identity row then create profile (idempotent).
-    await prisma.user.upsert({
-      where: { id: userId },
-      create: {
-        id: userId,
-        email,
-        phone: phoneNorm,
-      },
-      update: {
-        email,
-        phone: phoneNorm,
-      },
-    });
-
-    // Ensure MEMBER role if trigger missed (seeded roles required).
-    const memberRole = await prisma.role.findUnique({ where: { name: "MEMBER" } });
-    if (memberRole) {
-      await prisma.userRole.upsert({
-        where: { userId_roleId: { userId, roleId: memberRole.id } },
-        create: { userId, roleId: memberRole.id },
-        update: {},
-      });
-    }
-
-    const existingProfile = await prisma.profile.findUnique({ where: { userId } });
-    let profileId = existingProfile?.id;
-
-    if (!profileId) {
-      const profile = await prisma.profile.create({
-        data: {
-          userId,
-          displayName: data.fullName,
-          professionalSituation: data.professionalSituation,
-          profileStatus: "REGISTERED",
-          verificationStatus: "NOT_REVIEWED",
-          visibilityStatus: "PRIVATE",
-          professionalDetails: {
-            create: {
-              profession: data.profession,
-              organisationName: data.organisation,
-              lookingForSummary: data.lookingFor,
-              offeringSummary: data.offering,
-              opportunityPreferences: {},
-            },
-          },
-        },
-        select: { id: true },
-      });
-      profileId = profile.id;
-    } else {
-      await prisma.profile.update({
-        where: { id: profileId },
-        data: {
-          displayName: data.fullName,
-          professionalSituation: data.professionalSituation,
-          professionalDetails: {
-            upsert: {
-              create: {
-                profession: data.profession,
-                organisationName: data.organisation,
-                lookingForSummary: data.lookingFor,
-                offeringSummary: data.offering,
-                opportunityPreferences: {},
-              },
-              update: {
-                profession: data.profession,
-                organisationName: data.organisation,
-                lookingForSummary: data.lookingFor,
-                offeringSummary: data.offering,
-              },
-            },
-          },
-        },
-      });
-    }
-
-    // Passwordless access: send magic link / OTP. Failure must not undo registration.
     try {
-      await admin.auth.signInWithOtp({
-        email,
-        options: {
-          shouldCreateUser: false,
-        },
+      const profileId = await prisma.$transaction(async (tx) => {
+        // The Auth trigger creates DEACTIVATED + MEMBER. Upsert is a recovery
+        // guard if that trigger was temporarily unavailable.
+        await tx.user.upsert({
+          where: { id: userId },
+          create: {
+            id: userId,
+            email,
+            phone: phoneNorm,
+            accountStatus: "DEACTIVATED",
+          },
+          update: { email, phone: phoneNorm },
+        });
+
+        const memberRole = await tx.role.findUnique({ where: { name: "MEMBER" } });
+        if (!memberRole) throw new Error("MEMBER role is not seeded");
+        await tx.userRole.upsert({
+          where: { userId_roleId: { userId, roleId: memberRole.id } },
+          create: { userId, roleId: memberRole.id },
+          update: {},
+        });
+
+        const existingProfile = await tx.profile.findUnique({ where: { userId } });
+        let completedProfileId = existingProfile?.id;
+
+        if (!completedProfileId) {
+          const profile = await tx.profile.create({
+            data: {
+              userId,
+              displayName: data.fullName,
+              professionalSituation: data.professionalSituation,
+              profileStatus: "REGISTERED",
+              verificationStatus: "NOT_REVIEWED",
+              visibilityStatus: "PRIVATE",
+              professionalDetails: {
+                create: {
+                  profession: data.profession,
+                  organisationName: data.organisation,
+                  lookingForSummary: data.lookingFor,
+                  offeringSummary: data.offering,
+                  opportunityPreferences: {},
+                },
+              },
+            },
+            select: { id: true },
+          });
+          completedProfileId = profile.id;
+        } else {
+          await tx.profile.update({
+            where: { id: completedProfileId },
+            data: {
+              displayName: data.fullName,
+              professionalSituation: data.professionalSituation,
+              professionalDetails: {
+                upsert: {
+                  create: {
+                    profession: data.profession,
+                    organisationName: data.organisation,
+                    lookingForSummary: data.lookingFor,
+                    offeringSummary: data.offering,
+                    opportunityPreferences: {},
+                  },
+                  update: {
+                    profession: data.profession,
+                    organisationName: data.organisation,
+                    lookingForSummary: data.lookingFor,
+                    offeringSummary: data.offering,
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // Activation is the final write in the same domain transaction.
+        await tx.user.update({
+          where: { id: userId },
+          data: { accountStatus: "ACTIVE" },
+        });
+        return completedProfileId;
       });
-    } catch (otpError) {
-      logger.warn("registration_otp_send_failed", {
-        error_category: "otp_send",
-        message: otpError instanceof Error ? otpError.message : "unknown",
+
+      // Passwordless access is requested from /sign-in after join.
+      // Do not auto-send OTP here — built-in Auth email has a low hourly rate limit
+      // and a join-time send would burn quota before the member can intentionally sign in.
+
+      const durationMs = data.clientDurationMs ?? Date.now() - started;
+      trackRegistrationEvent("registration_completed", {
+        result: "ok",
+        device_class: meta.deviceClass,
+        duration_ms: durationMs,
       });
+
+      return { ok: true, userId, profileId, durationMs };
+    } catch (dbError) {
+      // Fail closed first. The trigger default remains DEACTIVATED even if any
+      // cleanup call fails, while the domain transaction has already rolled back.
+      try {
+        const { error: banError } = await admin.auth.admin.updateUserById(userId, {
+          ban_duration: "876000h",
+        });
+        if (banError) throw banError;
+
+        const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
+        if (deleteError) throw deleteError;
+      } catch (cleanupError) {
+        logger.error("registration_auth_orphan_cleanup_failed", {
+          error_category: "auth_orphan_cleanup",
+          message: cleanupError instanceof Error ? cleanupError.message : "unknown",
+        });
+      }
+      try {
+        await prisma.$transaction([
+          prisma.userRole.deleteMany({ where: { userId } }),
+          prisma.user.deleteMany({ where: { id: userId, accountStatus: "DEACTIVATED" } }),
+        ]);
+      } catch (cleanupError) {
+        logger.error("registration_domain_orphan_cleanup_failed", {
+          error_category: "domain_orphan_cleanup",
+          message: cleanupError instanceof Error ? cleanupError.message : "unknown",
+        });
+      }
+      throw dbError;
     }
-
-    const durationMs = data.clientDurationMs ?? Date.now() - started;
-    trackRegistrationEvent("registration_completed", {
-      result: "ok",
-      device_class: meta.deviceClass,
-      duration_ms: durationMs,
-    });
-
-    return { ok: true, userId, profileId, durationMs };
   } catch (error) {
     logger.error("registration_unexpected", {
       error_category: "unexpected",
@@ -253,7 +294,7 @@ export async function registerProfessional(
 
     const message = error instanceof Error ? error.message.toLowerCase() : "";
     if (message.includes("unique") || message.includes("duplicate")) {
-      return { ok: false, code: "DUPLICATE", message: DUPLICATE_USER_MESSAGE };
+      return neutralAcceptedResult();
     }
 
     return {
