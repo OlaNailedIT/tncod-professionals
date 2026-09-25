@@ -1,173 +1,108 @@
-# Phase 3 — Privacy, permissions & security architecture gate
+# Phase 3 — Database, RLS and security gate
 
 ## Status
 
-**PASS — LOCKED**
+**PASS — COMPLETED — LOCKED**
 
-This is a **technical security contract**. It is not runtime security implementation and not legal-compliance certification.
+**Closure date:** 2026-09-25
 
-LEGAL REVIEW REQUIRED for PIPEDA, GDPR, POPIA, NDPA, retention, and consent wording.
+**Production Supabase project:** `brpppukzqgpzxjelwwrj`
 
-**Date:** 2026-08-27
+**Authoritative source merge:** PR #1, commit `1645d5daea75c664cc3f15e281cf12f0b46b2df1`
 
----
+This gate certifies the implemented database, RLS and database-security controls listed below. It is not legal-compliance certification. PIPEDA, GDPR, POPIA, NDPA, retention and consent wording still require legal review.
 
-## Scope
+## Closure decision
 
-Phase 3 freezes how authentication identity, RBAC, ownership, visibility, RLS **design**, Storage **design**, API authorization, projections, audit, and negative tests **must** work.
+Phase 3 passed because the required remediation is applied in Production, reconciled to authoritative source control and supported by repeatable negative tests. Phase 3 must not be reopened without a schema, RLS, database privilege or security-boundary change.
 
-It does **not** deploy RLS, Storage, Auth, or APIs. It does **not** approve the Phase 2 database.
+Phase 4 application/Auth closure remains a separate gate. This Phase 3 decision does not authorize Phase 5 by itself.
 
----
+## Authoritative migration state
 
-## Repository security audit
+- Production and source control contain the same 18 migration versions.
+- The previously missing Phase 21 migration is restored as `20260914180000_phase21_directory_postgrest_revoke.sql`.
+- The remediation migration is aligned to the Production history as `20260925125131_phase3_phase4_security_remediation.sql`.
+- A disposable local database rebuilt successfully from zero through all 18 migrations with exit code 0.
+- Production contains all 18 migrations after the source merge and deployment.
 
-**Exists:** Phase 2 schema contract (Prisma, CHECK SQL, seed, docs). Phase 3 security docs, `supabase/policies/` design SQL, `src/security/` catalogue.
+## Implemented controls
 
-**Does not exist:** Auth runtime, live Supabase/Postgres, applied migrations, applied RLS/Storage, executed security tests.  
-**Exists separately:** Phase 4 Next.js **application foundation** (not a substitute for this runtime security gate).
+### Function security
 
-**Git:** no `.git` directory — historical secret scanning **could not** be performed.
+- All 21 `app` functions have an explicit empty `search_path`.
+- No `app` function is executable by `PUBLIC` or `anon`.
+- `authenticated` has exactly 10 explicit helper-function grants.
+- The directory view and directory RPC remain revoked from PostgREST clients.
+- Default function privileges revoke execution from `PUBLIC`.
 
----
+### Identity and authorization
 
-## Security architecture
+- Role and permission helpers require an active, non-deleted application identity.
+- Suspended or deactivated identities lose database role and profile access.
+- The members-only profile policy requires an active requester with a live profile.
+- EXCO access is derived from server/database state, not client claims.
+- Privileged Prisma operations remain behind application authorization guards; RLS is not treated as protection for a bypass-capable database role.
 
-- **Authentication:** Supabase Auth; `auth.uid()` = `public.users.id`; trigger (Phase 4) must not self-elevate.
-- **RBAC:** N:M `user_roles` / `role_permissions`; additive MEMBER, EXCO_VIEWER, EXCO_ADMIN, SUPER_ADMIN.
-- **Permissions:** canonical keys in seed + `src/security/permissions.ts`. Aliases are not extra rows.
-- **Ownership:** `auth.uid()` → `users` → `profiles` → children; businesses via `business_professionals`.
-- **RLS:** default deny; designed, **not deployed**. Prisma privileged connection **bypasses** RLS (SEC-016).
-- **Storage:** private `member-documents`; path `documents/{uid}/{document_id}`; designed, **not deployed**.
-- **API:** domain commands; projections; search = GET rules; not implemented.
-- **Audit:** append-only; actor SET NULL; SUPER_ADMIN remains auditable; not implemented.
+### Data boundaries
 
----
+- Authenticated clients cannot directly insert businesses; the application transaction is the controlled creation boundary.
+- Orphan-business insertion is denied by the executable RLS gate.
+- Privileged profile, user, business and document columns remain trigger-protected.
+- Anonymous access to private tables, storage objects, the directory view and the directory RPC is denied.
 
-## Security invariants
+### Performance and policy remediation
 
-SEC-001 … SEC-020 as listed in `docs/security/security-architecture.md` §5a.
+- All nine foreign-key support indexes identified by the advisor are present.
+- The recorded Auth/RLS initialization-plan findings are cleared.
+- The recorded overlapping permissive-policy findings are cleared.
+- Policies were consolidated without widening access.
 
----
+## Verification evidence
 
-## Permission matrix
-
-Canonical: `docs/security/permission-matrix.md`.
-
-EXCO_ADMIN does **not** receive `professional.edit` (content stay member-owned). EXCO_ADMIN does **not** receive `user.manage_roles` or `configuration.manage`. Viewer has no mutation permissions.
-
----
-
-## Data visibility matrix
-
-Canonical: `docs/security/data-visibility-matrix.md`.
-
-Anonymous directory = `PublicProfessional` columns matching `app.directory_professionals()`. Email/phone/church/docs/notes/keys are not public. EXCO_VIEWER ≠ EXCO_ADMIN.
-
----
-
-## RLS architecture
-
-Designed in `supabase/policies/` (**not applied**). Viewer policies are operation-specific SELECT (no Viewer `FOR ALL`). `users` SELECT is own-row or EXCO_ADMIN+, not Viewer. Directory access is a SECURITY DEFINER function with explicit columns and `search_path = public, pg_temp`.
-
----
-
-## Storage security
-
-Designed in `docs/security/storage-security.md` and `30-storage.sql` (**not applied**). Private bucket; no anon policies. View-only ≠ copy-proof.
-
----
-
-## Threat model
-
-P0: IDOR, user_id/role spoofing, privilege escalation, Prisma/RLS bypass, document leakage, directory/search leakage, service-role in browser, Viewer mutations. See `docs/security/threat-model.md`.
-
----
-
-## Security test plan
-
-**DEFINED** in `docs/security/security-test-plan.md` and `src/security/security-test-cases.ts`.
-
-**EXECUTED later (not in Phase 3 itself):** Database Gate RLS SQL and Phase 4 Storage HTTP / Auth lifecycle. See `docs/data/database-gate-test-report.md` and `docs/architecture/phase-4-runtime-completion-report.md`.
-
----
-
-## Secret handling
-
-Local `.env` is a **placeholder** `postgresql://postgres:postgres@localhost:5432/...` for Prisma validate. `.gitignore` excludes `.env`. `.env.example` documents no `NEXT_PUBLIC_*` secrets. No service-role keys found in source.
-
-No Git history scan (no repository).
-
----
-
-## Validation performed
-
-| Command | Result |
+| Gate | Result |
 | --- | --- |
-| `npx tsc --noEmit` | **PASS** |
-| `npx prisma validate` | **PASS** |
+| Clean rebuild through 18 migrations | **PASS** |
+| Phase 3/4 catalog assertion suite | **PASS** |
+| RLS negative/runtime suite | **42/42 PASS** |
+| Direct Supabase signup denial | **PASS** |
+| Admin-created identity retained and defaults inactive | **PASS** |
+| Existing-user OTP exchange | **PASS** |
+| OTP replay denial | **PASS** |
+| Distributed registration limiter | **PASS** — blocked attempt 9 |
+| TypeScript type-check | **PASS** |
+| ESLint | **PASS** — no errors |
+| Prisma schema validation | **PASS** |
+| Clean-checkout application tests | **224/224 PASS** |
+| Full reconciled-workspace tests | **258/258 PASS** |
+| Clean-checkout production build | **PASS** |
+| Pull-request Vercel preview | **PASS** |
+| Production Vercel deployment | **PASS** |
+| Production health endpoint | **HTTP 200**, `databaseGate: PASS`, `rlsVerified: true` |
 
-No SQL executed (no database).
+## Production post-merge audit
 
----
+| Assertion | Result |
+| --- | --- |
+| Migration count | 18 |
+| Mutable or unset `app` function paths | 0 |
+| `PUBLIC` function execution grants | 0 |
+| `anon` function execution grants | 0 |
+| Explicit `authenticated` function grants | 10 |
+| Required foreign-key indexes | 9/9 |
+| Authenticated business INSERT policies | 0 |
+| Tightened members-only profile policy | Present |
+| Live application users without Auth identity | 0 |
+| Auth identities without application user | 0 |
+| Orphan profiles | 0 |
+| Orphan businesses | 0 |
 
-## Not executed
+## Non-blocking observations
 
-- RLS tests
-- Storage tests
-- API tests
-- Auth tests
-- seed execution
-- integrity probes
-- live database tests
-- Git history secret scan
+- Supabase still reports leaked-password protection as disabled. Enabling it was rejected by Supabase because the feature is not available on the current plan. This is an Auth/Phase 4 plan decision, not an unresolved Phase 3 database control.
+- The performance advisor reports unused-index informational notices. Newly created or low-traffic indexes are expected to appear unused initially. No index should be removed without representative workload evidence.
+- Eight historical application-user tombstones have no Auth identity; all are soft-deleted. There are zero live identity orphans.
 
----
+## Lock rule
 
-## Known limitations
-
-- Orphan `businesses` INSERT possible at RLS layer until Phase 4 domain transaction.
-- Directory SQL projection omits skills/experience/headshot (minimize v1 public surface; headshot not a public object).
-- Seed `business.create` is not fully idempotent.
-- Rate-limit numbers TBD.
-- Legal copy / retention OPEN.
-
-None of these reopen Phase 2 schema.
-
----
-
-## Security architecture
-
-**PASS — LOCKED** (unchanged). This section is the contract, not runtime proof.
-
-## Runtime security
-
-**NOT TESTED** / **BLOCKED** — no live database.
-
-| Control | Designed | Applied | Tested |
-| --- | --- | --- | --- |
-| Schema SQL migrations | Yes | No | No |
-| CHECK constraints | Yes | No | No |
-| RLS helpers + policies | Yes | No | No |
-| Privileged-column triggers | Yes | No | No |
-| Storage bucket + policies | Yes | No | No |
-| Seed | Yes | No | No |
-| Integrity probes | Yes | No | No |
-| RLS negative tests | Yes | No | No |
-| Auth trigger | Phase 4 | No | No |
-
-Do not treat migration **files** as **applied** security.
-
-## Deferred to Phase 4
-
-Unchanged: Auth implementation, Auth trigger SQL, session/CSRF, APIs, Prisma authorization boundary, rate limiting.
-
-**Also remaining:** Phase 4 Auth trigger SQL is **CREATED**, **NOT APPLIED**. Session/CSRF, product APIs, and UI remain out of scope.
-
-Runtime RLS/Storage tests on 2026-09-06: **EXECUTED** — see `docs/data/database-gate-test-report.md`. This does not certify legal compliance.
-
----
-
-## Gate decision
-
-**PASS — LOCKED**
+Any future change to migrations, RLS policies, database function ownership or grants, SECURITY DEFINER functions, privileged Prisma boundaries, Auth-to-application identity synchronization, or storage policies must rerun the migration rebuild, catalog assertions, RLS negative suite and Supabase advisors before this gate can remain locked.
