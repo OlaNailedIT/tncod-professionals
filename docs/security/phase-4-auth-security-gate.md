@@ -1,8 +1,11 @@
 # Phase 4 — Authentication and runtime security gate
 
-**Status:** `REMEDIATION CANDIDATE — PRODUCTION PASS WITHHELD`  
-**Date:** 2026-09-25  
-**Authoritative branch:** `phase4-auth-security-lock`  
+**Status:** `REMEDIATION CANDIDATE — PRODUCTION PASS WITHHELD`
+
+**Date:** 2026-09-25
+
+**Authoritative branch:** `phase4-auth-security-lock`
+
 **Candidate commit:** `771fe74`
 
 This gate supersedes the narrow 2026-09-06 local-foundation completion claim for production-readiness purposes. The historical runtime report remains valid evidence for the scope it tested, but it did not test the later product registration, OTP, account-state, abuse-control, and Production deployment boundaries covered here.
