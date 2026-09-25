@@ -448,9 +448,6 @@ async function main() {
   await ensureDocument(pOwner.id, pOwner.userId, "cv-a.pdf", 1024);
   await ensureDocument(pPartner.id, pPartner.userId, "cv-b.pdf", 2048);
 
-  const adminUser = await prisma.user.findUniqueOrThrow({
-    where: { email: "admin.exco@seed.test" },
-  });
   if (
     !(await prisma.verificationRecord.findFirst({
       where: { profileId: pOwner.id, notes: { contains: "Seed verification note A" } },

@@ -102,7 +102,7 @@ BEGIN
   SELECT id INTO STRICT rid FROM roles WHERE name = 'EXCO_ADMIN';
   SELECT id INTO STRICT owner_profile FROM profiles WHERE user_id = owner;
   SELECT id INTO STRICT partner_profile FROM profiles WHERE user_id = partner;
-  SELECT o.id INTO STRICT oid FROM opportunities o WHERE o.profile_id = owner_profile LIMIT 1;
+  SELECT o.id INTO STRICT oid FROM opportunities o ORDER BY o.created_at LIMIT 1;
 
   SET ROLE anon;
   SELECT count(*) INTO n FROM profiles;
@@ -144,21 +144,20 @@ BEGIN
   RESET ROLE;
   PERFORM pg_temp.record('anon_select_consents', n = 0, 'count=' || n);
 
-  SET ROLE anon;
-  SELECT count(*) INTO n FROM app.directory_professionals();
-  SELECT string_agg(display_name, ',') INTO leaked FROM app.directory_professionals();
-  RESET ROLE;
+  SELECT count(*) INTO n
+  FROM pg_proc p
+  JOIN pg_namespace ns ON ns.oid = p.pronamespace
+  WHERE ns.nspname = 'app'
+    AND p.proname = 'directory_professionals'
+    AND has_function_privilege('anon', p.oid, 'EXECUTE');
   PERFORM pg_temp.record(
-    'anon_directory_projection',
-    n = 1 AND leaked LIKE 'Seed Verified Directory%',
-    'count=' || n || ' names=' || coalesce(leaked, '')
+    'anon_directory_rpc_revoked',
+    n = 0,
+    'executable_functions=' || n
   );
 
-  SET ROLE anon;
-  SELECT count(*) INTO n FROM app.directory_professionals() d
-  WHERE d.display_name ILIKE '%incomplete%' OR d.display_name ILIKE '%pending%';
-  RESET ROLE;
-  PERFORM pg_temp.record('anon_directory_excludes_non_verified_directory', n = 0, 'count=' || n);
+  SELECT has_table_privilege('anon', 'public.directory_professionals', 'SELECT')::int INTO n;
+  PERFORM pg_temp.record('anon_directory_view_revoked', n = 0, 'has_select=' || n);
 
   PERFORM pg_temp.claim(member_a);
   SET ROLE authenticated;
@@ -180,6 +179,16 @@ BEGIN
       $q$UPDATE profiles SET display_name = 'hacked' FROM users u WHERE profiles.user_id = u.id AND u.email = %L$q$,
       'complete.private@seed.test'
     )
+  );
+  RESET ROLE;
+
+  -- Authenticated clients cannot create an orphan business. Creation is a
+  -- trusted server transaction that creates the association atomically.
+  PERFORM pg_temp.claim(member_a);
+  SET ROLE authenticated;
+  PERFORM pg_temp.expect_denied(
+    'member_cannot_insert_orphan_business',
+    $q$INSERT INTO businesses (name, updated_at) VALUES ('orphan-attempt', now())$q$
   );
   RESET ROLE;
 
@@ -395,6 +404,39 @@ BEGIN
   SELECT count(*) INTO n FROM storage.objects WHERE name = slug;
   RESET ROLE;
   PERFORM pg_temp.record('exco_admin_document_review_can_read_storage', n = 1, 'count=' || n);
+
+  -- A valid Auth identity without an active application profile is not a
+  -- "member" for MEMBERS_ONLY visibility.
+  PERFORM set_config('request.jwt.claim.sub', '', false);
+  PERFORM set_config('request.jwt.claims', '{}', false);
+  UPDATE profiles SET deleted_at = now() WHERE user_id = member_a;
+  PERFORM pg_temp.claim(member_a);
+  SET ROLE authenticated;
+  SELECT count(*) INTO n FROM profiles WHERE id = owner_profile;
+  RESET ROLE;
+  PERFORM pg_temp.record('profileless_identity_cannot_read_members_only', n = 0, 'count=' || n);
+  PERFORM set_config('request.jwt.claim.sub', '', false);
+  PERFORM set_config('request.jwt.claims', '{}', false);
+  UPDATE profiles SET deleted_at = NULL WHERE user_id = member_a;
+
+  -- Suspension revokes ordinary and EXCO access even with a still-valid JWT.
+  PERFORM set_config('request.jwt.claim.sub', '', false);
+  PERFORM set_config('request.jwt.claims', '{}', false);
+  UPDATE users SET account_status = 'SUSPENDED' WHERE id = viewer;
+  PERFORM pg_temp.claim(viewer);
+  SET ROLE authenticated;
+  SELECT count(*) INTO n FROM profiles;
+  RESET ROLE;
+  PERFORM pg_temp.record('suspended_exco_has_no_profile_access', n = 0, 'count=' || n);
+
+  PERFORM pg_temp.claim(viewer);
+  SET ROLE authenticated;
+  SELECT count(*) INTO n FROM user_roles;
+  RESET ROLE;
+  PERFORM pg_temp.record('suspended_exco_roles_revoked', n = 0, 'count=' || n);
+  PERFORM set_config('request.jwt.claim.sub', '', false);
+  PERFORM set_config('request.jwt.claims', '{}', false);
+  UPDATE users SET account_status = 'ACTIVE' WHERE id = viewer;
 END $$;
 
 SELECT test, outcome, detail FROM gate_results ORDER BY outcome DESC, test;
