@@ -6,8 +6,8 @@ DECLARE
   names text;
 BEGIN
   SELECT count(*) INTO n FROM supabase_migrations.schema_migrations;
-  IF n <> 18 THEN
-    RAISE EXCEPTION 'expected 18 migrations, found %', n;
+  IF n <> 19 THEN
+    RAISE EXCEPTION 'expected 19 migrations, found %', n;
   END IF;
 
   SELECT count(*) INTO n
@@ -119,6 +119,14 @@ BEGIN
     'EXECUTE'
   ) THEN
     RAISE EXCEPTION 'registration rate-limit function is exposed to authenticated';
+  END IF;
+
+  IF to_regclass('app.registration_provisioning') IS NULL THEN
+    RAISE EXCEPTION 'durable registration provisioning queue is missing';
+  END IF;
+  IF has_table_privilege('authenticated', 'app.registration_provisioning', 'SELECT')
+     OR has_table_privilege('anon', 'app.registration_provisioning', 'SELECT') THEN
+    RAISE EXCEPTION 'registration provisioning queue is exposed to API roles';
   END IF;
 END $$;
 

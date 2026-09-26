@@ -19,6 +19,7 @@ const serverSchema = z.object({
     }
     return emptyToUndefined(current);
   }, z.string().min(1).optional()),
+  CRON_SECRET: z.preprocess(emptyToUndefined, z.string().min(32).optional()),
   NODE_ENV: z.enum(["development", "test", "production"]).optional(),
 });
 
@@ -30,6 +31,7 @@ export function getServerEnv(): ServerEnv {
     DATABASE_URL: process.env.DATABASE_URL,
     DIRECT_URL: process.env.DIRECT_URL,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    CRON_SECRET: process.env.CRON_SECRET,
     NODE_ENV: process.env.NODE_ENV,
   });
 }
@@ -48,4 +50,12 @@ export function requireServiceRoleKey(): string {
     throw new Error("SUPABASE_SERVICE_ROLE_KEY is required for this operation");
   }
   return key;
+}
+
+export function requireCronSecret(): string {
+  const secret = getServerEnv().CRON_SECRET;
+  if (!secret) {
+    throw new Error("CRON_SECRET is required for scheduled maintenance");
+  }
+  return secret;
 }

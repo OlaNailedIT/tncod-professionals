@@ -9,6 +9,7 @@ import { verifyRegistrationCaptcha } from "./captcha";
 import { findRegistrationDuplicate } from "./duplicate";
 import { normalizePhone } from "./phone";
 import { checkRegistrationRateLimit } from "./rate-limit";
+import { cleanupRegistrationIdentity } from "./registration-cleanup";
 import { registrationSchema, type RegistrationInput } from "./schema";
 
 export type RegisterResult =
@@ -128,7 +129,7 @@ export async function registerProfessional(
       email,
       email_confirm: true,
       user_metadata: {},
-      app_metadata: {},
+      app_metadata: { registration_provisioning: true },
     });
 
     if (createError || !created.user) {
@@ -228,7 +229,16 @@ export async function registerProfessional(
           });
         }
 
-        // Activation is the final write in the same domain transaction.
+        // Removing the durable cleanup obligation and activating the identity
+        // share one database commit. If either statement fails, both roll back.
+        const cleared = await tx.$executeRaw`
+          DELETE FROM app.registration_provisioning
+          WHERE user_id = ${userId}::uuid
+            AND state = 'PENDING'
+            AND lease_token IS NULL
+        `;
+        if (cleared !== 1) throw new Error("Registration provisioning record is missing");
+
         await tx.user.update({
           where: { id: userId },
           data: { accountStatus: "ACTIVE" },
@@ -249,33 +259,10 @@ export async function registerProfessional(
 
       return { ok: true, userId, profileId, durationMs };
     } catch (dbError) {
-      // Fail closed first. The trigger default remains DEACTIVATED even if any
-      // cleanup call fails, while the domain transaction has already rolled back.
-      try {
-        const { error: banError } = await admin.auth.admin.updateUserById(userId, {
-          ban_duration: "876000h",
-        });
-        if (banError) throw banError;
-
-        const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
-        if (deleteError) throw deleteError;
-      } catch (cleanupError) {
-        logger.error("registration_auth_orphan_cleanup_failed", {
-          error_category: "auth_orphan_cleanup",
-          message: cleanupError instanceof Error ? cleanupError.message : "unknown",
-        });
-      }
-      try {
-        await prisma.$transaction([
-          prisma.userRole.deleteMany({ where: { userId } }),
-          prisma.user.deleteMany({ where: { id: userId, accountStatus: "DEACTIVATED" } }),
-        ]);
-      } catch (cleanupError) {
-        logger.error("registration_domain_orphan_cleanup_failed", {
-          error_category: "domain_orphan_cleanup",
-          message: cleanupError instanceof Error ? cleanupError.message : "unknown",
-        });
-      }
+      // The Auth trigger persisted a durable cleanup obligation before this
+      // request reached the domain transaction. Attempt it immediately; any
+      // failure remains queued for the protected scheduled worker.
+      await cleanupRegistrationIdentity(userId);
       throw dbError;
     }
   } catch (error) {

@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => ({
   transaction: vi.fn(),
   deleteRoles: vi.fn(),
   deleteUserRow: vi.fn(),
+  cleanupIdentity: vi.fn(),
 }));
 
 vi.mock("@/features/registration/rate-limit", () => ({
@@ -23,6 +24,9 @@ vi.mock("@/features/registration/duplicate", () => ({
 }));
 vi.mock("@/features/registration/analytics", () => ({
   trackRegistrationEvent: vi.fn(),
+}));
+vi.mock("@/features/registration/registration-cleanup", () => ({
+  cleanupRegistrationIdentity: mocks.cleanupIdentity,
 }));
 vi.mock("@/lib/logger", () => ({
   logger: { error: vi.fn(), warn: vi.fn(), info: vi.fn() },
@@ -75,6 +79,7 @@ describe("Phase 4 registration remediation", () => {
     mocks.deleteUser.mockResolvedValue({ data: {}, error: null });
     mocks.deleteRoles.mockResolvedValue({ count: 1 });
     mocks.deleteUserRow.mockResolvedValue({ count: 1 });
+    mocks.cleanupIdentity.mockResolvedValue(true);
   });
 
   it("neutralizes duplicate membership without invoking Auth admin creation", async () => {
@@ -86,7 +91,7 @@ describe("Phase 4 registration remediation", () => {
     expect(mocks.createUser).not.toHaveBeenCalled();
   });
 
-  it("fails closed and compensates Auth plus domain rows after a domain transaction failure", async () => {
+  it("fails closed and invokes durable compensation after a domain transaction failure", async () => {
     mocks.transaction.mockImplementation(async (input: unknown) => {
       if (typeof input === "function") throw new Error("forced domain failure");
       return [];
@@ -95,12 +100,26 @@ describe("Phase 4 registration remediation", () => {
     const result = await registerProfessional(valid, { clientKey: "203.0.113.10" });
 
     expect(result.ok).toBe(false);
-    expect(mocks.updateUserById).toHaveBeenCalledWith(
-      "11111111-1111-4111-8111-111111111111",
-      { ban_duration: "876000h" },
+    expect(mocks.createUser).toHaveBeenCalledWith(
+      expect.objectContaining({
+        app_metadata: { registration_provisioning: true },
+      }),
     );
-    expect(mocks.deleteUser).toHaveBeenCalledWith("11111111-1111-4111-8111-111111111111");
-    expect(mocks.deleteRoles).toHaveBeenCalled();
-    expect(mocks.deleteUserRow).toHaveBeenCalled();
+    expect(mocks.cleanupIdentity).toHaveBeenCalledWith(
+      "11111111-1111-4111-8111-111111111111",
+    );
+  });
+
+  it("returns failure while leaving retry responsibility durable when immediate cleanup fails", async () => {
+    mocks.transaction.mockImplementation(async (input: unknown) => {
+      if (typeof input === "function") throw new Error("forced domain failure");
+      return [];
+    });
+    mocks.cleanupIdentity.mockResolvedValue(false);
+
+    const result = await registerProfessional(valid, { clientKey: "203.0.113.10" });
+
+    expect(result.ok).toBe(false);
+    expect(mocks.cleanupIdentity).toHaveBeenCalledOnce();
   });
 });

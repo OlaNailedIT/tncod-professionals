@@ -31,6 +31,7 @@ export function JoinRegistrationForm() {
   const openedAt = React.useRef(Date.now());
   const [formError, setFormError] = React.useState<string | null>(null);
   const [submitting, setSubmitting] = React.useState(false);
+  const [captchaResetKey, setCaptchaResetKey] = React.useState(0);
 
   const {
     register,
@@ -68,6 +69,8 @@ export function JoinRegistrationForm() {
       });
 
       if (!result.ok) {
+        setValue("captchaToken", "", { shouldValidate: false });
+        setCaptchaResetKey((key) => key + 1);
         if (result.fieldErrors) {
           for (const [key, message] of Object.entries(result.fieldErrors)) {
             setError(key as keyof FormValues, { message });
@@ -85,6 +88,8 @@ export function JoinRegistrationForm() {
 
       router.push("/join/success");
     } catch {
+      setValue("captchaToken", "", { shouldValidate: false });
+      setCaptchaResetKey((key) => key + 1);
       setFormError("We could not complete registration right now. Please try again shortly.");
     } finally {
       setSubmitting(false);
@@ -188,6 +193,7 @@ export function JoinRegistrationForm() {
               </Field>
               <input type="hidden" {...register("captchaToken")} />
               <TurnstileWidget
+                key={captchaResetKey}
                 onToken={(token) => {
                   setValue("captchaToken", token, { shouldValidate: true });
                   if (!token) {
