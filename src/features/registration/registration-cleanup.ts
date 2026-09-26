@@ -57,7 +57,7 @@ async function claimRegistrationCleanup(userId: string): Promise<CleanupClaim | 
     UPDATE app.registration_provisioning
     SET lease_token = gen_random_uuid(),
         lease_expires_at = pg_catalog.clock_timestamp()
-          + pg_catalog.make_interval(mins => ${LEASE_MINUTES}),
+          + pg_catalog.make_interval(mins => ${LEASE_MINUTES}::integer),
         attempt_count = attempt_count + 1,
         updated_at = pg_catalog.clock_timestamp()
     WHERE user_id = ${userId}::uuid
@@ -228,7 +228,7 @@ export async function processRegistrationCleanupJobs(
     UPDATE app.registration_provisioning AS jobs
     SET lease_token = gen_random_uuid(),
         lease_expires_at = pg_catalog.clock_timestamp()
-          + pg_catalog.make_interval(mins => ${LEASE_MINUTES}),
+          + pg_catalog.make_interval(mins => ${LEASE_MINUTES}::integer),
         attempt_count = jobs.attempt_count + 1,
         updated_at = pg_catalog.clock_timestamp()
     FROM candidates
