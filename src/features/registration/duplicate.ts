@@ -18,14 +18,18 @@ export async function findRegistrationDuplicate(input: {
   const phoneNorm = normalizePhone(input.phone);
 
   const byEmail = await prisma.user.findFirst({
-    where: { email, deletedAt: null },
+    // The database email constraint covers every row, including soft-deleted
+    // identities. Treat those rows as duplicates too, otherwise Auth creation
+    // succeeds far enough to invoke the sync trigger and then fails on the
+    // application-side unique email constraint.
+    where: { email },
     select: { id: true },
   });
 
   let byPhone = false;
   if (phoneNorm) {
     const phoneHit = await prisma.user.findFirst({
-      where: { phone: phoneNorm, deletedAt: null },
+      where: { phone: phoneNorm },
       select: { id: true },
     });
     byPhone = Boolean(phoneHit);

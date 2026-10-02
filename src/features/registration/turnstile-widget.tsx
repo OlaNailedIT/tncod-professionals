@@ -26,6 +26,8 @@ declare global {
 export function TurnstileWidget({ onToken }: { onToken: (token: string) => void }) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const widgetIdRef = React.useRef<string | null>(null);
+  const onTokenRef = React.useRef(onToken);
+  onTokenRef.current = onToken;
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim();
 
   const renderWidget = React.useCallback(() => {
@@ -33,11 +35,11 @@ export function TurnstileWidget({ onToken }: { onToken: (token: string) => void 
     widgetIdRef.current = window.turnstile.render(containerRef.current, {
       sitekey: siteKey,
       action: "registration",
-      callback: onToken,
-      "expired-callback": () => onToken(""),
-      "error-callback": () => onToken(""),
+      callback: (token) => onTokenRef.current(token),
+      "expired-callback": () => onTokenRef.current(""),
+      "error-callback": () => onTokenRef.current(""),
     });
-  }, [onToken, siteKey]);
+  }, [siteKey]);
 
   React.useEffect(() => {
     renderWidget();
