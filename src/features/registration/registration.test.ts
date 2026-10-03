@@ -1,10 +1,12 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { normalizePhone, phonesLikelyMatch } from "@/features/registration/phone";
 import { registrationSchema } from "@/features/registration/schema";
-import {
-  checkRegistrationRateLimit,
-  resetRegistrationRateLimitForTests,
-} from "@/features/registration/rate-limit";
+import { checkRegistrationRateLimit } from "@/features/registration/rate-limit";
+
+const rateLimitMocks = vi.hoisted(() => ({ queryRaw: vi.fn() }));
+vi.mock("@/lib/prisma/client", () => ({
+  getPrisma: () => ({ $queryRaw: rateLimitMocks.queryRaw }),
+}));
 
 describe("phone normalization", () => {
   it("normalizes common Nigerian formats to the same canonical digits", () => {
@@ -35,6 +37,7 @@ describe("registration schema", () => {
     lookingFor: "Connections",
     offering: "Mentorship",
     website: "",
+    captchaToken: "test-turnstile-token",
   };
 
   it("accepts a complete Stage 1 payload", () => {
@@ -61,13 +64,21 @@ describe("registration schema", () => {
 
 describe("registration rate limit", () => {
   beforeEach(() => {
-    resetRegistrationRateLimitForTests();
+    rateLimitMocks.queryRaw.mockReset();
   });
 
-  it("allows a burst then blocks", () => {
-    for (let i = 0; i < 8; i += 1) {
-      expect(checkRegistrationRateLimit("test-ip").ok).toBe(true);
-    }
-    expect(checkRegistrationRateLimit("test-ip").ok).toBe(false);
+  it("uses the shared database decision and never stores the raw client key", async () => {
+    rateLimitMocks.queryRaw
+      .mockResolvedValueOnce([{ allowed: true, retry_after_seconds: 0 }])
+      .mockResolvedValueOnce([{ allowed: false, retry_after_seconds: 120 }]);
+
+    expect((await checkRegistrationRateLimit("203.0.113.10")).ok).toBe(true);
+    expect(await checkRegistrationRateLimit("203.0.113.10")).toEqual({
+      ok: false,
+      retryAfterSec: 120,
+    });
+
+    const firstCall = rateLimitMocks.queryRaw.mock.calls[0];
+    expect(JSON.stringify(firstCall)).not.toContain("203.0.113.10");
   });
 });

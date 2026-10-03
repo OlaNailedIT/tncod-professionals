@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Container, Section, Stack } from "@/components/layout";
 import { ProductPublicShell } from "@/components/shell/product-public-shell";
 import { Alert } from "@/components/ui";
-import { AuthHashSessionHandler } from "@/features/auth/hash-session-handler";
 import { SignInForm } from "@/features/auth/sign-in-form";
 import { sanitizeNextPath } from "@/lib/auth/safe-redirect";
 
@@ -22,7 +21,6 @@ export default async function SignInPage({
 
   return (
     <ProductPublicShell pathname="/sign-in">
-      <AuthHashSessionHandler nextPath={nextPath} />
       {authError ? (
         <Container width="narrow" className="pt-10">
           <Section density="member">

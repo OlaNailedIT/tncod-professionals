@@ -4,7 +4,6 @@ import { BrandLogo } from "@/components/brand/logo";
 import { Container, Section, Stack } from "@/components/layout";
 import { ProductPublicShell } from "@/components/shell/product-public-shell";
 import { Button } from "@/components/ui/button";
-import { AuthHashSessionHandler } from "@/features/auth/hash-session-handler";
 
 export const metadata: Metadata = {
   title: "TNCOD Professionals",
@@ -15,7 +14,6 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <ProductPublicShell pathname="/">
-      <AuthHashSessionHandler nextPath="/dashboard" />
       <div className="relative overflow-hidden border-b border-border-subtle bg-gradient-to-b from-surface via-background to-background">
         <Container width="standard" className="py-16 md:py-24">
           <Stack gap="comfortable">

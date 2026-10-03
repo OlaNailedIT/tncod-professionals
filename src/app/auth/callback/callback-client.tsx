@@ -3,12 +3,12 @@
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
-import { sanitizeNextPath } from "@/lib/auth/safe-redirect";
 import { Container, Section, Stack } from "@/components/layout";
 import { Alert, Spinner } from "@/components/ui";
+import { completePkceCallback } from "./pkce-callback";
 
 /**
- * Completes passwordless Auth: PKCE `code` query and/or hash session tokens.
+ * Completes passwordless Auth using the verifier-bound PKCE `code` query.
  */
 export default function AuthCallbackPage() {
   const router = useRouter();
@@ -19,7 +19,6 @@ export default function AuthCallbackPage() {
     let cancelled = false;
 
     async function complete() {
-      const next = sanitizeNextPath(searchParams.get("next"));
       let supabase;
       try {
         supabase = createBrowserSupabaseClient();
@@ -28,44 +27,17 @@ export default function AuthCallbackPage() {
         return;
       }
 
-      const code = searchParams.get("code");
-      if (code) {
-        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-        if (cancelled) return;
-        if (exchangeError) {
-          setError("That sign-in link is invalid or has expired.");
-          return;
-        }
-        router.replace(next);
-        router.refresh();
+      const result = await completePkceCallback(searchParams, (code) =>
+        supabase.auth.exchangeCodeForSession(code),
+      );
+      if (cancelled) return;
+      if (!result.ok) {
+        setError(result.message);
         return;
       }
 
-      const hash = typeof window !== "undefined" ? window.location.hash : "";
-      if (hash.includes("access_token")) {
-        const params = new URLSearchParams(hash.replace(/^#/, ""));
-        const access_token = params.get("access_token");
-        const refresh_token = params.get("refresh_token");
-        if (access_token && refresh_token) {
-          const { error: sessionError } = await supabase.auth.setSession({
-            access_token,
-            refresh_token,
-          });
-          if (cancelled) return;
-          window.history.replaceState(null, "", window.location.pathname + window.location.search);
-          if (sessionError) {
-            setError("That sign-in link is invalid or has expired.");
-            return;
-          }
-          router.replace(next);
-          router.refresh();
-          return;
-        }
-      }
-
-      if (!cancelled) {
-        setError("That sign-in link is invalid or has expired.");
-      }
+      router.replace(result.next);
+      router.refresh();
     }
 
     void complete();
