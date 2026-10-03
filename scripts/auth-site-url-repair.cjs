@@ -46,6 +46,7 @@ public class CredMan {
 }
 
 async function main() {
+  const verifyOnly = process.argv.includes("--verify-only");
   const token = getToken();
   if (!token) {
     console.log("TOKEN=ABSENT");
@@ -62,27 +63,29 @@ async function main() {
     `${LEGACY}/**`,
   ].join(",");
 
-  const patch = await fetch(
-    `https://api.supabase.com/v1/projects/${REF}/config/auth`,
-    {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        site_url: `${PROD}/`,
-        uri_allow_list: allow,
-        disable_signup: true,
-      }),
+  if (!verifyOnly) {
+    const patch = await fetch(
+      `https://api.supabase.com/v1/projects/${REF}/config/auth`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          site_url: `${PROD}/`,
+          uri_allow_list: allow,
+          disable_signup: true,
+        }),
+      }
+    );
+    console.log("PATCH", patch.status);
+    if (!patch.ok) {
+      const t = await patch.text();
+      console.log("ERR", t.slice(0, 200));
+      process.exit(1);
     }
-  );
-  console.log("PATCH", patch.status);
-  if (!patch.ok) {
-    const t = await patch.text();
-    console.log("ERR", t.slice(0, 200));
-    process.exit(1);
   }
 
   const get = await fetch(
@@ -95,21 +98,29 @@ async function main() {
     }
   );
   const j = await get.json();
+  if (!get.ok) throw new Error(`Auth config read failed (${get.status})`);
+  const magicLink = j.mailer_templates_magic_link_content || "";
+  const allowed = String(j.uri_allow_list || "").split(",").map((entry) => entry.trim());
   console.log("SITE_URL", j.site_url);
   console.log(
-    "ALLOW_HAS_AZURE",
-    String(j.uri_allow_list || "").includes("tncod-professionals-azure")
+    "ALLOW_HAS_CANONICAL_CALLBACK",
+    allowed.includes(`${PROD}/auth/callback`)
   );
   console.log("DIRECT_SIGNUP_DISABLED", j.disable_signup === true);
   console.log("EMAIL_OTP_PROVIDER_ENABLED", j.external_email_enabled === true);
+  console.log("MAGIC_LINK_TOKEN_PRESENT", magicLink.includes("{{ .Token }}"));
+  console.log("MAGIC_LINK_CONFIRMATION_URL_PRESENT", magicLink.includes("{{ .ConfirmationURL }}"));
   console.log(
     "LEAKED_PASSWORD_PROTECTION",
     j.password_hibp_enabled === true ? "ENABLED" : "PLAN_UNAVAILABLE"
   );
   if (
     j.site_url !== `${PROD}/` ||
+    !allowed.includes(`${PROD}/auth/callback`) ||
     j.disable_signup !== true ||
-    j.external_email_enabled !== true
+    j.external_email_enabled !== true ||
+    !magicLink.includes("{{ .Token }}") ||
+    !magicLink.includes("{{ .ConfirmationURL }}")
   ) {
     throw new Error("Production Auth remediation did not verify");
   }

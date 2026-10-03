@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
   deleteRoles: vi.fn(),
   deleteUserRow: vi.fn(),
   cleanupIdentity: vi.fn(),
+  ensureProvisioning: vi.fn(),
 }));
 
 vi.mock("@/features/registration/rate-limit", () => ({
@@ -44,6 +45,7 @@ vi.mock("@/lib/supabase/admin", () => ({
 }));
 vi.mock("@/lib/prisma/client", () => ({
   getPrisma: () => ({
+    $executeRaw: mocks.ensureProvisioning,
     $transaction: mocks.transaction,
     userRole: { deleteMany: mocks.deleteRoles },
     user: { deleteMany: mocks.deleteUserRow },
@@ -80,6 +82,7 @@ describe("Phase 4 registration remediation", () => {
     mocks.deleteRoles.mockResolvedValue({ count: 1 });
     mocks.deleteUserRow.mockResolvedValue({ count: 1 });
     mocks.cleanupIdentity.mockResolvedValue(true);
+    mocks.ensureProvisioning.mockResolvedValue(0);
   });
 
   it("neutralizes duplicate membership without invoking Auth admin creation", async () => {
@@ -108,6 +111,7 @@ describe("Phase 4 registration remediation", () => {
     expect(mocks.cleanupIdentity).toHaveBeenCalledWith(
       "11111111-1111-4111-8111-111111111111",
     );
+    expect(mocks.ensureProvisioning).toHaveBeenCalledOnce();
   });
 
   it("returns failure while leaving retry responsibility durable when immediate cleanup fails", async () => {
@@ -121,5 +125,17 @@ describe("Phase 4 registration remediation", () => {
 
     expect(result.ok).toBe(false);
     expect(mocks.cleanupIdentity).toHaveBeenCalledOnce();
+  });
+
+  it("tries compensation if the application-side provisioning guard fails", async () => {
+    mocks.ensureProvisioning.mockRejectedValue(new Error("forced provisioning failure"));
+
+    const result = await registerProfessional(valid, { clientKey: "203.0.113.10" });
+
+    expect(result.ok).toBe(false);
+    expect(mocks.transaction).not.toHaveBeenCalled();
+    expect(mocks.cleanupIdentity).toHaveBeenCalledWith(
+      "11111111-1111-4111-8111-111111111111",
+    );
   });
 });

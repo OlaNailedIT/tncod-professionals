@@ -103,6 +103,44 @@ BEGIN
     RAISE EXCEPTION 'untagged Auth identity incorrectly created a provisioning job';
   END IF;
 
+  -- GoTrue admin.createUser sets app_metadata in a second auth.users UPDATE.
+  -- The durable job must exist before that Auth transaction commits.
+  UPDATE auth.users
+  SET raw_app_meta_data = jsonb_build_object('registration_provisioning', true)
+  WHERE id = untagged_id;
+
+  SELECT count(*) INTO n
+  FROM app.registration_provisioning
+  WHERE user_id = untagged_id AND state = 'PENDING';
+  IF n <> 1 THEN
+    RAISE EXCEPTION 'late Auth metadata did not create a provisioning job';
+  END IF;
+
+  UPDATE auth.users
+  SET raw_app_meta_data = raw_app_meta_data || jsonb_build_object('provider', 'email')
+  WHERE id = untagged_id;
+  SELECT count(*) INTO n
+  FROM app.registration_provisioning
+  WHERE user_id = untagged_id;
+  IF n <> 1 THEN
+    RAISE EXCEPTION 'subsequent Auth metadata update duplicated the provisioning job';
+  END IF;
+
+  -- A completed ACTIVE identity must not acquire a new cleanup obligation.
+  UPDATE auth.users
+  SET raw_app_meta_data = '{}'::jsonb
+  WHERE id = tagged_id;
+  UPDATE auth.users
+  SET raw_app_meta_data = jsonb_build_object('registration_provisioning', true)
+  WHERE id = tagged_id;
+  SELECT count(*) INTO n
+  FROM app.registration_provisioning
+  WHERE user_id = tagged_id;
+  IF n <> 0 THEN
+    RAISE EXCEPTION 'ACTIVE identity acquired a new provisioning job';
+  END IF;
+
+  DELETE FROM app.registration_provisioning WHERE user_id = untagged_id;
   DELETE FROM public.user_roles WHERE user_id IN (tagged_id, untagged_id);
   DELETE FROM public.users WHERE id IN (tagged_id, untagged_id);
   DELETE FROM auth.users WHERE id IN (tagged_id, untagged_id);

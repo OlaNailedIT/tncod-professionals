@@ -153,8 +153,17 @@ export async function registerProfessional(
     }
 
     const userId = created.user.id;
-    const prisma = getPrisma();
     try {
+      const prisma = getPrisma();
+      // GoTrue may apply app_metadata after the auth.users INSERT. The
+      // metadata-update trigger creates the durable obligation in Auth's
+      // transaction; this idempotent write is a second application-side guard.
+      await prisma.$executeRaw`
+        INSERT INTO app.registration_provisioning (user_id)
+        VALUES (${userId}::uuid)
+        ON CONFLICT (user_id) DO NOTHING
+      `;
+
       const profileId = await prisma.$transaction(async (tx) => {
         // The Auth trigger creates DEACTIVATED + MEMBER. Upsert is a recovery
         // guard if that trigger was temporarily unavailable.
@@ -259,10 +268,17 @@ export async function registerProfessional(
 
       return { ok: true, userId, profileId, durationMs };
     } catch (dbError) {
-      // The Auth trigger persisted a durable cleanup obligation before this
-      // request reached the domain transaction. Attempt it immediately; any
+      // The Auth trigger persists a durable cleanup obligation before this
+      // request reaches the domain transaction. Attempt it immediately; any
       // failure remains queued for the protected scheduled worker.
-      await cleanupRegistrationIdentity(userId);
+      try {
+        await cleanupRegistrationIdentity(userId);
+      } catch (cleanupError) {
+        logger.error("registration_cleanup_immediate_failed", {
+          error_category: "cleanup_immediate",
+          message: cleanupError instanceof Error ? cleanupError.name : "unknown",
+        });
+      }
       throw dbError;
     }
   } catch (error) {
