@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import { Container, Section, Stack } from "@/components/layout";
 import { Alert, Spinner } from "@/components/ui";
 import { completePkceCallback } from "./pkce-callback";
+import { exchangeSignInCodeAction } from "./exchange-action";
 
 /**
  * Completes passwordless Auth using the verifier-bound PKCE `code` query.
@@ -14,22 +14,22 @@ export default function AuthCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = React.useState<string | null>(null);
+  const attemptedCode = React.useRef<string | null>(null);
 
   React.useEffect(() => {
+    const code = searchParams.get("code");
+    if (code && attemptedCode.current === code) return;
+    attemptedCode.current = code;
     let cancelled = false;
 
     async function complete() {
-      let supabase;
+      let result;
       try {
-        supabase = createBrowserSupabaseClient();
+        result = await completePkceCallback(searchParams, exchangeSignInCodeAction);
       } catch {
-        if (!cancelled) setError("Sign-in is not configured.");
+        if (!cancelled) setError("That sign-in link is invalid or has expired.");
         return;
       }
-
-      const result = await completePkceCallback(searchParams, (code) =>
-        supabase.auth.exchangeCodeForSession(code),
-      );
       if (cancelled) return;
       if (!result.ok) {
         setError(result.message);

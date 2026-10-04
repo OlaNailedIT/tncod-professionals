@@ -88,17 +88,22 @@ async function main() {
     }
   }
 
-  const get = await fetch(
-    `https://api.supabase.com/v1/projects/${REF}/config/auth`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }
-  );
-  const j = await get.json();
-  if (!get.ok) throw new Error(`Auth config read failed (${get.status})`);
+  let j;
+  for (let attempt = 0; attempt < (verifyOnly ? 1 : 5); attempt += 1) {
+    const get = await fetch(
+      `https://api.supabase.com/v1/projects/${REF}/config/auth`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+    if (!get.ok) throw new Error(`Auth config read failed (${get.status})`);
+    j = await get.json();
+    if (j.site_url === `${PROD}/` || verifyOnly) break;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
   const magicLink = j.mailer_templates_magic_link_content || "";
   const allowed = String(j.uri_allow_list || "").split(",").map((entry) => entry.trim());
   console.log("SITE_URL", j.site_url);
@@ -110,6 +115,8 @@ async function main() {
   console.log("EMAIL_OTP_PROVIDER_ENABLED", j.external_email_enabled === true);
   console.log("MAGIC_LINK_TOKEN_PRESENT", magicLink.includes("{{ .Token }}"));
   console.log("MAGIC_LINK_CONFIRMATION_URL_PRESENT", magicLink.includes("{{ .ConfirmationURL }}"));
+  console.log("MAGIC_LINK_ANCHOR_PRESENT", /<a\b[^>]*href=["']{{\s*\.ConfirmationURL\s*}}["'][^>]*>/i.test(magicLink));
+  console.log("EMAIL_OTP_EXPIRY_SECONDS", j.mailer_otp_exp);
   console.log(
     "LEAKED_PASSWORD_PROTECTION",
     j.password_hibp_enabled === true ? "ENABLED" : "PLAN_UNAVAILABLE"

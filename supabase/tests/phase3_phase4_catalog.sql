@@ -6,8 +6,8 @@ DECLARE
   names text;
 BEGIN
   SELECT count(*) INTO n FROM supabase_migrations.schema_migrations;
-  IF n <> 19 THEN
-    RAISE EXCEPTION 'expected 19 migrations, found %', n;
+  IF n <> 20 THEN
+    RAISE EXCEPTION 'expected 20 migrations, found %', n;
   END IF;
 
   SELECT count(*) INTO n
