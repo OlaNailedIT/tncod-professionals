@@ -17,7 +17,18 @@ export async function exchangeSignInCodeAction(
 
   const { data, error } = await supabase.auth.exchangeCodeForSession(code);
   if (error || !data.user) {
-    logger.info("auth_link_exchange_failed", { error_category: "pkce_exchange" });
+    const raw = (error?.message || "").toLowerCase();
+    const providerClass = raw.includes("code verifier") || raw.includes("code_verifier")
+      ? "bad_code_verifier"
+      : raw.includes("expired") || raw.includes("already been used") || raw.includes("otp_expired")
+        ? "code_consumed_or_expired"
+        : raw.includes("flow state")
+          ? "flow_state"
+          : "pkce_exchange";
+    logger.info("auth_link_exchange_failed", {
+      error_category: "pkce_exchange",
+      provider_class: providerClass,
+    });
     return { error: "invalid" };
   }
   if (!(await activeIdentityExists(data.user.id))) {

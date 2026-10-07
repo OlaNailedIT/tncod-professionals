@@ -3,10 +3,7 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { sanitizeNextPath } from "@/lib/auth/safe-redirect";
-import {
-  classifyAuthErrorMessage,
-  type AuthErrorClass,
-} from "@/lib/auth/classify-auth-error";
+import { type AuthErrorClass } from "@/lib/auth/classify-auth-error";
 import { logger } from "@/lib/logger";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { activeIdentityExists } from "@/server/auth/active-identity";
@@ -14,16 +11,21 @@ import { activeIdentityExists } from "@/server/auth/active-identity";
 const emailSchema = z.string().trim().email().max(254);
 
 export type SignInRequestResult =
-  | { ok: true }
+  | { ok: true; emailRedirectTo: string; skipSend?: boolean }
   | { ok: false; message: string; errorClass: AuthErrorClass };
 
 export type SignInVerifyResult =
   | { ok: true; next: string }
   | { ok: false; message: string };
 
-const GENERIC_REQUEST_FAIL =
-  "We could not send a sign-in code right now. Please wait a moment and try again.";
-
+/**
+ * Prepare a passwordless sign-in request.
+ *
+ * Does **not** call `signInWithOtp` on the server. The PKCE code verifier must be
+ * written by the browser client so the later Magic Link callback can exchange
+ * the auth code in the same cookie jar (Production: `pkce_exchange` when the
+ * verifier was only set in a Server Action cookie context).
+ */
 export async function requestSignInOtpAction(input: {
   email: unknown;
   next?: unknown;
@@ -33,40 +35,17 @@ export async function requestSignInOtpAction(input: {
     return { ok: false, message: "Enter a valid email address.", errorClass: "unknown" };
   }
 
-  const supabase = await createServerSupabaseClient();
-  if (!supabase) {
-    return { ok: false, message: GENERIC_REQUEST_FAIL, errorClass: "config" };
-  }
-
-  const email = parsed.data.toLowerCase();
   const origin = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://127.0.0.1:3000";
   const next = sanitizeNextPath(typeof input.next === "string" ? input.next : null);
   const callbackUrl = new URL("/auth/callback", origin);
   callbackUrl.searchParams.set("next", next);
+  const emailRedirectTo = callbackUrl.toString();
 
   if (process.env.AUTH_E2E_HELPER === "1" && process.env.NODE_ENV !== "production") {
-    return { ok: true };
+    return { ok: true, emailRedirectTo, skipSend: true };
   }
 
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      shouldCreateUser: false,
-      emailRedirectTo: callbackUrl.toString(),
-    },
-  });
-
-  if (error) {
-    const errorClass = classifyAuthErrorMessage(error.message);
-    logger.warn("auth_sign_in_request_failed", {
-      error_category: errorClass,
-    });
-    // Keep the outward response identical for unknown, inactive, banned, and
-    // rate-limited identities. Provider detail remains in structured logs.
-    return { ok: true };
-  }
-
-  return { ok: true };
+  return { ok: true, emailRedirectTo };
 }
 
 export async function verifySignInOtpAction(input: {

@@ -6,7 +6,8 @@ const mocks = vi.hoisted(() => ({
   activeIdentityExists: vi.fn(),
 }));
 
-vi.mock("@/lib/logger", () => ({ logger: { info: vi.fn() } }));
+const loggerInfo = vi.hoisted(() => vi.fn());
+vi.mock("@/lib/logger", () => ({ logger: { info: loggerInfo } }));
 vi.mock("@/lib/supabase/server", () => ({
   createServerSupabaseClient: async () => ({
     auth: {
@@ -51,6 +52,13 @@ describe("Phase 4 PKCE callback exchange", () => {
     });
 
     expect(await exchangeSignInCodeAction("used-code")).toEqual({ error: "invalid" });
+    expect(loggerInfo).toHaveBeenCalledWith(
+      "auth_link_exchange_failed",
+      expect.objectContaining({
+        error_category: "pkce_exchange",
+        provider_class: "bad_code_verifier",
+      }),
+    );
   });
 
   it("signs out and rejects an inactive identity after a valid exchange", async () => {

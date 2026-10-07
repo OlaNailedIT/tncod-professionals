@@ -12,6 +12,7 @@ import {
   verifySignInOtpAction,
 } from "@/features/auth/actions";
 import { maskEmail } from "@/lib/auth/classify-auth-error";
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 const RESEND_COOLDOWN_MS = 60_000;
 
@@ -89,6 +90,19 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
     setResendAvailableAt(Date.now() + RESEND_COOLDOWN_MS);
   }
 
+  async function sendPasswordlessEmail(normalizedEmail: string, emailRedirectTo: string) {
+    const supabase = createBrowserSupabaseClient();
+    // Browser client writes the PKCE code verifier into this browsing context.
+    // Provider errors stay neutral — same outward success path as the server prep.
+    await supabase.auth.signInWithOtp({
+      email: normalizedEmail,
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo,
+      },
+    });
+  }
+
   async function onRequestCode(values: EmailValues) {
     if (busy) return;
     setBusy(true);
@@ -111,6 +125,9 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
         setStep("email");
         setFormError(result.message);
         return;
+      }
+      if (!result.skipSend) {
+        await sendPasswordlessEmail(normalized, result.emailRedirectTo);
       }
       setEmail(normalized);
       setInfoMessage(null);
@@ -166,6 +183,9 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
             : result.message,
         );
         return;
+      }
+      if (!result.skipSend) {
+        await sendPasswordlessEmail(email, result.emailRedirectTo);
       }
       setInfoMessage("If needed, another code was sent. Check your inbox and spam folder.");
       codeForm.reset({ token: "" });

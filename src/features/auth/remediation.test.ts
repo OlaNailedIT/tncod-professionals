@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  signInWithOtp: vi.fn(),
   verifyOtp: vi.fn(),
   signOut: vi.fn(),
   active: vi.fn(),
@@ -17,7 +16,6 @@ vi.mock("@/lib/prisma/client", () => ({
 vi.mock("@/lib/supabase/server", () => ({
   createServerSupabaseClient: async () => ({
     auth: {
-      signInWithOtp: mocks.signInWithOtp,
       verifyOtp: mocks.verifyOtp,
       signOut: mocks.signOut,
     },
@@ -36,40 +34,28 @@ describe("Phase 4 OTP and inactive-account controls", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://tncod-professionals-azure.vercel.app");
-    mocks.signInWithOtp.mockResolvedValue({ error: null });
     mocks.signOut.mockResolvedValue({ error: null });
   });
 
-  it("routes magic links through the PKCE callback before the protected destination", async () => {
+  it("prepares magic-link redirect through the PKCE callback without server signInWithOtp", async () => {
     const result = await requestSignInOtpAction({
       email: "member@example.com",
       next: "/exco?tab=members",
     });
 
-    expect(result).toEqual({ ok: true });
-    expect(mocks.signInWithOtp).toHaveBeenCalledWith({
-      email: "member@example.com",
-      options: {
-        shouldCreateUser: false,
-        emailRedirectTo:
-          "https://tncod-professionals-azure.vercel.app/auth/callback?next=%2Fexco%3Ftab%3Dmembers",
-      },
+    expect(result).toEqual({
+      ok: true,
+      emailRedirectTo:
+        "https://tncod-professionals-azure.vercel.app/auth/callback?next=%2Fexco%3Ftab%3Dmembers",
     });
   });
 
-  it("keeps OTP request responses neutral across account and provider states", async () => {
-    mocks.signInWithOtp
-      .mockResolvedValueOnce({ error: { message: "User not found" } })
-      .mockResolvedValueOnce({ error: { message: "User is banned" } })
-      .mockResolvedValueOnce({ error: { message: "Email rate limit exceeded" } });
-
-    const unknown = await requestSignInOtpAction({ email: "unknown@example.com" });
-    const banned = await requestSignInOtpAction({ email: "banned@example.com" });
-    const throttled = await requestSignInOtpAction({ email: "member@example.com" });
-
-    expect(unknown).toEqual({ ok: true });
-    expect(banned).toEqual(unknown);
-    expect(throttled).toEqual(unknown);
+  it("rejects invalid email before the browser sends OTP", async () => {
+    const result = await requestSignInOtpAction({ email: "not-an-email" });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.message).toMatch(/valid email/i);
+    }
   });
 
   it("rejects a valid OTP when the application identity is suspended or deactivated", async () => {
