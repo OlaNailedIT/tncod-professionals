@@ -156,8 +156,9 @@ function evaluateSafety(input: {
 
   if (alreadyTombstone) {
     // Tombstone email alone is not success — verify resting reclaim state.
+    // Soft-delete is authoritative; stale account_status ACTIVE after soft-delete
+    // does not block an already-released resting state.
     if (input.deletedAt == null) refuse = "NOT_SOFT_DELETED";
-    else if (input.accountStatus === "ACTIVE") refuse = "ACCOUNT_ACTIVE";
     else if (input.authById) refuse = "AUTH_STILL_PRESENT";
     else if (input.profileActive) refuse = "PROFILE_STILL_ACTIVE";
     else if (input.phone) refuse = "RECLAIM_INCOMPLETE";
@@ -166,9 +167,9 @@ function evaluateSafety(input: {
       refuse = "ALREADY_RECLAIMED";
     }
   } else if (input.deletedAt == null) {
-    refuse = "NOT_SOFT_DELETED";
-  } else if (input.accountStatus === "ACTIVE") {
-    refuse = "ACCOUNT_ACTIVE";
+    // Live (non-deleted) ACTIVE rows must never be reclaimed.
+    if (input.accountStatus === "ACTIVE") refuse = "ACCOUNT_ACTIVE";
+    else refuse = "NOT_SOFT_DELETED";
   } else if (input.authById) {
     refuse = "AUTH_STILL_PRESENT";
   } else if (input.authByEmail) {
@@ -182,6 +183,8 @@ function evaluateSafety(input: {
   } else if (input.tombstoneElsewhere) {
     refuse = "EMAIL_HELD_ELSEWHERE";
   }
+  // Soft-deleted rows may still show account_status ACTIVE from historical
+  // cleanup; deleted_at is the reclaim gate, not account_status alone.
 
   return {
     userId: input.userId,
@@ -599,7 +602,6 @@ export async function reclaimSoftDeletedIdentifiers(input: {
           throw new Error("ROW_CHANGED");
         }
         if (row.deleted_at == null) throw new Error("NOT_SOFT_DELETED");
-        if (row.account_status === "ACTIVE") throw new Error("ACCOUNT_ACTIVE");
         if (row.profile_active) throw new Error("PROFILE_STILL_ACTIVE");
 
         const count = await tx.$executeRaw`
@@ -607,10 +609,10 @@ export async function reclaimSoftDeletedIdentifiers(input: {
           SET
             email = ${proposed},
             phone = NULL,
+            account_status = 'DEACTIVATED'::"AccountStatus",
             updated_at = now()
           WHERE id = ${input.userId}::uuid
             AND deleted_at IS NOT NULL
-            AND account_status::text <> 'ACTIVE'
             AND email = ${expectedEmail}
             AND phone IS NOT DISTINCT FROM ${expectedPhone}
         `;
@@ -740,13 +742,13 @@ export async function restoreFromReclaimSnapshot(input: {
     };
   }
 
-  if (preflight.deleted_at == null || preflight.account_status === "ACTIVE") {
+  if (preflight.deleted_at == null) {
     return {
       ok: false,
       mode: apply ? "restore-apply" : "restore-dry-run",
       preflight: publicPre,
       changed: false,
-      message: "Refused: row is no longer a soft-deleted deactivated tombstone",
+      message: "Refused: row is no longer soft-deleted",
       snapshot_path: input.snapshotFile,
     };
   }
@@ -834,48 +836,93 @@ export async function restoreFromReclaimSnapshot(input: {
   }
 
   try {
-    const updatedCount = await prisma.$transaction(async (tx) => {
-      const locked = await tx.$queryRaw<LockedUserRow[]>`
-        SELECT
-          u.id::text AS id,
-          u.email,
-          u.phone,
-          u.deleted_at,
-          u.account_status,
-          EXISTS (
-            SELECT 1 FROM public.profiles p
-            WHERE p.user_id = u.id AND p.deleted_at IS NULL
-          ) AS profile_active
-        FROM public.users u
-        WHERE u.id = ${snapshot.userId}::uuid
-        FOR UPDATE OF u
-      `;
-      if (locked.length !== 1) throw new Error("ROW_CHANGED");
-      const row = locked[0];
-      if (row.email.toLowerCase() !== proposed.toLowerCase()) throw new Error("ROW_CHANGED");
-      if (row.deleted_at == null || row.account_status === "ACTIVE") throw new Error("ROW_CHANGED");
+    // Final Auth + identifier checks run inside the lock via short SQL only
+    // (no Auth Admin HTTP). Keeps the race window closed without RTT timeout.
+    const updatedCount = await prisma.$transaction(
+      async (tx) => {
+        const locked = await tx.$queryRaw<LockedUserRow[]>`
+          SELECT
+            u.id::text AS id,
+            u.email,
+            u.phone,
+            u.deleted_at,
+            u.account_status,
+            EXISTS (
+              SELECT 1 FROM public.profiles p
+              WHERE p.user_id = u.id AND p.deleted_at IS NULL
+            ) AS profile_active
+          FROM public.users u
+          WHERE u.id = ${snapshot.userId}::uuid
+          FOR UPDATE OF u
+        `;
+        if (locked.length !== 1) throw new Error("ROW_CHANGED");
+        const row = locked[0];
+        if (row.email.toLowerCase() !== proposed.toLowerCase()) throw new Error("ROW_CHANGED");
+        if (row.deleted_at == null) throw new Error("ROW_CHANGED");
 
-      const byId = await authExistsById(snapshot.userId);
-      if (!byId.ok) throw new Error("AUTH_CHECK_FAILED");
-      if (byId.exists) throw new Error("AUTH_STILL_PRESENT");
-      const byEmail = await authExistsByEmail(snapshot.email);
-      if (!byEmail.ok) throw new Error("AUTH_CHECK_FAILED");
-      if (byEmail.exists) throw new Error("IDENTIFIERS_ALREADY_CLAIMED");
+        const authById = await tx.$queryRaw<Array<{ id: string }>>`
+          SELECT id::text AS id
+          FROM auth.users
+          WHERE id = ${snapshot.userId}::uuid
+          LIMIT 1
+        `;
+        if (authById.length > 0) throw new Error("AUTH_STILL_PRESENT");
 
-      const count = await tx.$executeRaw`
-        UPDATE public.users
-        SET
-          email = ${snapshot.email},
-          phone = ${snapshot.phone},
-          updated_at = now()
-        WHERE id = ${snapshot.userId}::uuid
-          AND deleted_at IS NOT NULL
-          AND account_status::text <> 'ACTIVE'
-          AND email = ${proposed}
-      `;
-      if (count !== 1) throw new Error("ROW_CHANGED");
-      return Number(count);
-    });
+        const authByEmail = await tx.$queryRaw<Array<{ id: string }>>`
+          SELECT id::text AS id
+          FROM auth.users
+          WHERE lower(email) = lower(${snapshot.email})
+          LIMIT 5
+        `;
+        if (authByEmail.length > 0) {
+          throw new Error(
+            "IDENTIFIERS_ALREADY_CLAIMED (Auth holds original email — point of no return)",
+          );
+        }
+
+        const emailClash = await tx.$queryRaw<Array<{ id: string }>>`
+          SELECT id::text AS id
+          FROM public.users
+          WHERE email = ${snapshot.email}
+            AND id <> ${snapshot.userId}::uuid
+          LIMIT 1
+        `;
+        if (emailClash.length > 0) {
+          throw new Error(
+            "IDENTIFIERS_ALREADY_CLAIMED (domain email held elsewhere — point of no return)",
+          );
+        }
+
+        if (snapshot.phone) {
+          const phoneClash = await tx.$queryRaw<Array<{ id: string }>>`
+            SELECT id::text AS id
+            FROM public.users
+            WHERE phone = ${snapshot.phone}
+              AND id <> ${snapshot.userId}::uuid
+            LIMIT 1
+          `;
+          if (phoneClash.length > 0) {
+            throw new Error(
+              "IDENTIFIERS_ALREADY_CLAIMED (domain phone held elsewhere — point of no return)",
+            );
+          }
+        }
+
+        const count = await tx.$executeRaw`
+          UPDATE public.users
+          SET
+            email = ${snapshot.email},
+            phone = ${snapshot.phone},
+            updated_at = now()
+          WHERE id = ${snapshot.userId}::uuid
+            AND deleted_at IS NOT NULL
+            AND email = ${proposed}
+        `;
+        if (count !== 1) throw new Error("ROW_CHANGED");
+        return Number(count);
+      },
+      { maxWait: 10_000, timeout: 20_000 },
+    );
 
     if (updatedCount !== 1) {
       return {

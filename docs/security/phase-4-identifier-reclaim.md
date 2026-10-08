@@ -1,6 +1,6 @@
 # Phase 4 — soft-deleted identifier reclaim (operator)
 
-**Status:** implementation on branch `phase4-join-reclaim-v2`. **No Production apply until owner confirms the target user id and approves the procedure.**
+**Status:** tool on `main` (PR #4/#5). One-record Production reclaim **executed** for owner-confirmed `df709e23-…` (2026-10-08). Further Production applies still require per-UUID owner confirmation — see `phase-4-remaining-identifier-recovery.md`.
 
 ## Problem
 
@@ -56,7 +56,7 @@ PHASE4_RECLAIM_RESTORE_AUTHORIZED=YES npx tsx "${HOOK[@]}" scripts/phase4-identi
   --restore --snapshot-file <path> --apply
 ```
 
-Preferred candidate (confirm before apply): cleaned controlled identity `df709e23-1a55-4ba4-bfac-dde6740512ff` / `smiley7605+tncodphase4oct03@…`.
+One-record Production reclaim for `df709e23-…` is **done** (2026-10-08). Remaining candidate UUIDs require fresh owner confirmation via the inventory script — do not assume ownership of other addresses.
 
 ## Snapshot vs masked report
 

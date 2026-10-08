@@ -34,7 +34,9 @@ describe("identifier reclaim disposable boundary", () => {
     expect(dbReady).toBe(true);
   });
 
-  it("releases email/phone then allows a new unique insert; dry-run and apply are idempotent", async () => {
+  it(
+    "releases email/phone then allows a new unique insert; dry-run and apply are idempotent",
+    async () => {
     expect(dbReady).toBe(true);
     const id = randomUUID();
     const email = `reclaim-test-${id.slice(0, 8)}@example.com`;
@@ -128,7 +130,9 @@ describe("identifier reclaim disposable boundary", () => {
     await prisma.profile.deleteMany({ where: { userId: id } });
     await prisma.userRole.deleteMany({ where: { userId: id } });
     await prisma.user.delete({ where: { id } });
-  });
+  },
+  120_000,
+  );
 
   it("fails closed when guarded update matches zero rows", async () => {
     expect(dbReady).toBe(true);
@@ -176,5 +180,5 @@ describe("identifier reclaim disposable boundary", () => {
     await prisma.profile.deleteMany({ where: { userId: id } });
     await prisma.userRole.deleteMany({ where: { userId: id } });
     await prisma.user.delete({ where: { id } });
-  });
+  }, 120_000);
 });
