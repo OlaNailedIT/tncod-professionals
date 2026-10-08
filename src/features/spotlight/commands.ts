@@ -382,6 +382,8 @@ export async function listExistingSpotlights(
   actorUserId: string,
 ): Promise<SpotlightRecordProjection[]> {
   await assertExcoDashboardAccess(actorUserId);
+  // Auto-archive is a write — require spotlight.manage (not EXCO_VIEWER list-read alone).
+  const mayManage = await canManageSpotlight(actorUserId);
   const prisma = getPrisma();
 
   const rows = await prisma.spotlight.findMany({
@@ -394,7 +396,7 @@ export async function listExistingSpotlights(
   for (const row of rows) {
     const profile = row.profile as unknown as SpotlightProfileRow;
     let status = row.status;
-    if (status !== "ARCHIVED") {
+    if (mayManage && status !== "ARCHIVED") {
       const archived = await archiveIfIneligible(profile, row.id, status);
       if (archived) status = "ARCHIVED";
     }

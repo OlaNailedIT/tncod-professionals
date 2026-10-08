@@ -9,6 +9,7 @@ import { AppError } from "@/lib/errors";
 import {
   archiveSpotlight,
   createSpotlight,
+  listExistingSpotlights,
   listSpotlightCandidates,
 } from "@/features/spotlight/commands";
 import { updateOwnSpotlightInterest } from "@/features/spotlight/own-interest";
@@ -316,5 +317,77 @@ describe("Phase 15 Spotlight command boundary", () => {
     await expect(updateOwnSpotlightInterest(a.userId, false, b.userId)).rejects.toBeInstanceOf(
       AppError,
     );
+  });
+
+  it("EXCO_VIEWER list of ineligible Spotlight does not persist archive (F-001)", async () => {
+    if (!dbReady || !columnReady) return;
+    const member = await createEligibleMember(`${TAG}-f001-m@example.com`, "P15 F001 Member");
+    const admin = await createEligibleMember(`${TAG}-f001-a@example.com`, "P15 F001 Admin");
+    const viewer = await createEligibleMember(`${TAG}-f001-v@example.com`, "P15 F001 Viewer");
+    await grantRole(admin.userId, "EXCO_ADMIN");
+    await grantRole(viewer.userId, "EXCO_VIEWER");
+
+    const created = await createSpotlight({
+      actorUserId: admin.userId,
+      profileId: member.profileId,
+    });
+    expect(created.ok).toBe(true);
+    if (!created.ok) return;
+
+    // Make Spotlight ineligible while leaving it non-ARCHIVED — the former write path.
+    await prisma.profile.update({
+      where: { id: member.profileId },
+      data: { spotlightInterest: false },
+    });
+
+    const before = await prisma.spotlight.findUniqueOrThrow({ where: { id: created.spotlightId } });
+    expect(before.status).not.toBe("ARCHIVED");
+    const beforeUpdatedAt = before.updatedAt;
+
+    const listed = await listExistingSpotlights(viewer.userId);
+    const hit = listed.find((s) => s.id === created.spotlightId);
+    expect(hit).toBeTruthy();
+    expect(hit!.currentlyEligible).toBe(false);
+    // Projection may still show DRAFT/PUBLISHED; must not have mutated DB.
+    expect(hit!.status).toBe(before.status);
+
+    const after = await prisma.spotlight.findUniqueOrThrow({ where: { id: created.spotlightId } });
+    expect(after.status).toBe(before.status);
+    expect(after.updatedAt.getTime()).toBe(beforeUpdatedAt.getTime());
+  });
+
+  it("EXCO_ADMIN list of ineligible Spotlight auto-archives with spotlight.manage", async () => {
+    if (!dbReady || !columnReady) return;
+    const member = await createEligibleMember(`${TAG}-f001-adm@example.com`, "P15 F001 AdminPath");
+    const admin = await createEligibleMember(`${TAG}-f001-adm-a@example.com`, "P15 F001 AdminActor");
+    await grantRole(admin.userId, "EXCO_ADMIN");
+
+    const created = await createSpotlight({
+      actorUserId: admin.userId,
+      profileId: member.profileId,
+    });
+    expect(created.ok).toBe(true);
+    if (!created.ok) return;
+
+    await prisma.profile.update({
+      where: { id: member.profileId },
+      data: { spotlightInterest: false },
+    });
+
+    const listed = await listExistingSpotlights(admin.userId);
+    const hit = listed.find((s) => s.id === created.spotlightId);
+    expect(hit).toBeTruthy();
+    expect(hit!.status).toBe("ARCHIVED");
+    expect(hit!.currentlyEligible).toBe(false);
+
+    const after = await prisma.spotlight.findUniqueOrThrow({ where: { id: created.spotlightId } });
+    expect(after.status).toBe("ARCHIVED");
+  });
+
+  it("MEMBER and anonymous cannot list Spotlights", async () => {
+    if (!dbReady || !columnReady) return;
+    const member = await createEligibleMember(`${TAG}-f001-deny@example.com`, "P15 F001 Deny");
+    await expect(listExistingSpotlights(member.userId)).rejects.toBeInstanceOf(AppError);
+    await expect(listExistingSpotlights(randomUUID())).rejects.toBeInstanceOf(AppError);
   });
 });
