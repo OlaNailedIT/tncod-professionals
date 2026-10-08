@@ -7,12 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Container, Section, Stack } from "@/components/layout";
 import { Alert, Button, Field, FormActions, FormSection, Input, Spinner } from "@/components/ui";
-import {
-  requestSignInOtpAction,
-  verifySignInOtpAction,
-} from "@/features/auth/actions";
+import { verifySignInOtpAction } from "@/features/auth/actions";
 import { maskEmail } from "@/lib/auth/classify-auth-error";
-import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 const RESEND_COOLDOWN_MS = 60_000;
 
@@ -90,17 +86,31 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
     setResendAvailableAt(Date.now() + RESEND_COOLDOWN_MS);
   }
 
-  async function sendPasswordlessEmail(normalizedEmail: string, emailRedirectTo: string) {
-    const supabase = createBrowserSupabaseClient();
-    // Browser client writes the PKCE code verifier into this browsing context.
-    // Provider errors stay neutral — same outward success path as the server prep.
-    await supabase.auth.signInWithOtp({
-      email: normalizedEmail,
-      options: {
-        shouldCreateUser: false,
-        emailRedirectTo,
-      },
+  /**
+   * Same-origin OTP request so the browser never observes Supabase `/auth/v1/otp`
+   * membership differentials. PKCE verifier cookies are Set-Cookie on this response.
+   */
+  async function requestPasswordlessEmail(normalizedEmail: string) {
+    const res = await fetch("/api/auth/request-otp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ email: normalizedEmail, next: nextPath }),
     });
+    const result = (await res.json()) as {
+      ok?: boolean;
+      message?: string;
+      errorClass?: string;
+      skipSend?: boolean;
+    };
+    if (!res.ok || result.ok === false) {
+      return {
+        ok: false as const,
+        message: result.message || "Enter a valid email address.",
+        errorClass: result.errorClass || "unknown",
+      };
+    }
+    return { ok: true as const, skipSend: Boolean(result.skipSend) };
   }
 
   async function onRequestCode(values: EmailValues) {
@@ -111,7 +121,7 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
     setStep("sending");
     const normalized = values.email.trim().toLowerCase();
     try {
-      const result = await requestSignInOtpAction({ email: normalized, next: nextPath });
+      const result = await requestPasswordlessEmail(normalized);
       if (!result.ok) {
         // Rate-limited users may still have a prior email with a code — open code entry.
         if (result.errorClass === "rate_limit") {
@@ -125,9 +135,6 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
         setStep("email");
         setFormError(result.message);
         return;
-      }
-      if (!result.skipSend) {
-        await sendPasswordlessEmail(normalized, result.emailRedirectTo);
       }
       setEmail(normalized);
       setInfoMessage(null);
@@ -174,18 +181,11 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
     setFormError(null);
     setInfoMessage(null);
     try {
-      const result = await requestSignInOtpAction({ email, next: nextPath });
+      const result = await requestPasswordlessEmail(email);
       startResendCooldown();
       if (!result.ok) {
-        setFormError(
-          result.errorClass === "rate_limit"
-            ? result.message
-            : result.message,
-        );
+        setFormError(result.message);
         return;
-      }
-      if (!result.skipSend) {
-        await sendPasswordlessEmail(email, result.emailRedirectTo);
       }
       setInfoMessage("If needed, another code was sent. Check your inbox and spam folder.");
       codeForm.reset({ token: "" });
