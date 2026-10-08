@@ -167,21 +167,16 @@ describe("identifier reclaim", () => {
 
     mocks.transaction.mockImplementation(async (fn: (tx: unknown) => Promise<number>) => {
       const tx = {
-        $queryRaw: vi
-          .fn()
-          .mockResolvedValueOnce([
-            {
-              id: USER_ID,
-              email: EMAIL,
-              phone: PHONE,
-              deleted_at: soft.deletedAt,
-              account_status: "DEACTIVATED",
-              profile_active: false,
-            },
-          ])
-          // auth by id + auth by email inside transaction
-          .mockResolvedValueOnce([])
-          .mockResolvedValueOnce([]),
+        $queryRaw: vi.fn().mockResolvedValue([
+          {
+            id: USER_ID,
+            email: EMAIL,
+            phone: PHONE,
+            deleted_at: soft.deletedAt,
+            account_status: "DEACTIVATED",
+            profile_active: false,
+          },
+        ]),
         $executeRaw: vi.fn().mockResolvedValue(1),
       };
       return fn(tx);
