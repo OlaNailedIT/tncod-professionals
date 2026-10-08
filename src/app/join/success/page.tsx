@@ -8,6 +8,8 @@ import {
   JOIN_SUCCESS_LEAD,
   JOIN_SUCCESS_NEXT_BODY,
   JOIN_SUCCESS_NEXT_TITLE,
+  JOIN_SUCCESS_SUPPORT_EMAIL,
+  JOIN_SUCCESS_SUPPORT_HREF,
 } from "@/features/registration/join-success-copy";
 
 export const metadata: Metadata = {
@@ -38,6 +40,9 @@ export default function JoinSuccessPage() {
             <div className="flex flex-wrap gap-3">
               <Button asChild>
                 <Link href="/sign-in">Sign in</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <a href={JOIN_SUCCESS_SUPPORT_HREF}>Email {JOIN_SUCCESS_SUPPORT_EMAIL}</a>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/">Back to home</Link>

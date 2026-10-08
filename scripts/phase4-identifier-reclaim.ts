@@ -1,16 +1,22 @@
 /* eslint-disable no-console */
 /**
  * Operator reclaim of soft-deleted identifiers (email/phone) for ONE confirmed user id.
- * Default: dry-run. Apply requires --apply and PHASE4_RECLAIM_AUTHORIZED=YES.
+ * Default: dry-run. Apply requires --apply, --snapshot-file, and PHASE4_RECLAIM_AUTHORIZED=YES.
  *
- * Usage:
- *   npx tsx scripts/phase4-identifier-reclaim.ts --user-id <uuid>
- *   npx tsx scripts/phase4-identifier-reclaim.ts --user-id <uuid> --apply
+ * Usage (always register the server-only shim):
+ *   npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --user-id <uuid>
+ *   npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --user-id <uuid> --write-snapshot
+ *   PHASE4_RECLAIM_AUTHORIZED=YES npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --user-id <uuid> --apply --snapshot-file <path>
+ *   PHASE4_RECLAIM_RESTORE_AUTHORIZED=YES npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --restore --snapshot-file <path>
+ *   PHASE4_RECLAIM_RESTORE_AUTHORIZED=YES npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --restore --snapshot-file <path> --apply
  */
 import fs from "fs";
 import path from "path";
 import {
+  publicReclaimPreflight,
   reclaimSoftDeletedIdentifiers,
+  restoreFromReclaimSnapshot,
+  writeReclaimSnapshot,
   type ReclaimApplyResult,
 } from "../src/features/registration/identifier-reclaim";
 
@@ -24,26 +30,73 @@ function hasFlag(flag: string): boolean {
   return process.argv.includes(flag);
 }
 
-function writeReport(result: ReclaimApplyResult) {
+function writeMaskedReport(result: ReclaimApplyResult) {
   const dir = path.resolve("scripts/reports");
   fs.mkdirSync(dir, { recursive: true });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const file = path.join(dir, `phase4-identifier-reclaim-${stamp}.json`);
   const payload = {
     ...result,
+    preflight: publicReclaimPreflight(result.preflight),
     recorded_at: new Date().toISOString(),
-    // Never persist secrets; preflight already masks phone/email.
   };
   fs.writeFileSync(file, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-  console.log("REPORT", file);
+  console.log("MASKED_REPORT", file);
+}
+
+function printResult(result: ReclaimApplyResult) {
+  console.log("MODE", result.mode);
+  console.log("OK", result.ok);
+  console.log("CHANGED", result.changed);
+  console.log("MESSAGE", result.message);
+  console.log("PREFLIGHT", JSON.stringify(publicReclaimPreflight(result.preflight)));
+  if (result.would_change) {
+    console.log("WOULD_CHANGE", JSON.stringify(result.would_change));
+  }
+  if (result.snapshot_path) {
+    console.log("SNAPSHOT_PATH", result.snapshot_path);
+  }
 }
 
 async function main() {
-  const userId = argValue("--user-id");
+  const restore = hasFlag("--restore");
   const apply = hasFlag("--apply");
+  const writeSnapshot = hasFlag("--write-snapshot");
+  const userId = argValue("--user-id");
+  const snapshotFile = argValue("--snapshot-file");
+
+  if (restore) {
+    if (!snapshotFile) {
+      console.log("USAGE: --restore --snapshot-file <path> [--apply]");
+      process.exit(1);
+    }
+    if (apply && process.env.PHASE4_RECLAIM_RESTORE_AUTHORIZED !== "YES") {
+      console.log("REFUSED restore-apply without PHASE4_RECLAIM_RESTORE_AUTHORIZED=YES");
+      process.exit(2);
+    }
+    const result = await restoreFromReclaimSnapshot({ snapshotFile, apply });
+    printResult(result);
+    writeMaskedReport(result);
+    process.exit(result.ok ? 0 : 10);
+  }
+
   if (!userId || !/^[0-9a-f-]{36}$/i.test(userId)) {
-    console.log("USAGE: npx tsx scripts/phase4-identifier-reclaim.ts --user-id <uuid> [--apply]");
+    console.log(
+      "USAGE: npx tsx scripts/phase4-identifier-reclaim.ts --user-id <uuid> [--write-snapshot | --apply --snapshot-file <path>]",
+    );
     process.exit(1);
+  }
+
+  if (writeSnapshot) {
+    const { path: snapPath, preflight } = await writeReclaimSnapshot({ userId });
+    console.log("MODE write-snapshot");
+    console.log("OK", true);
+    console.log("SNAPSHOT_PATH", snapPath);
+    console.log("PREFLIGHT", JSON.stringify(preflight));
+    console.log(
+      "NOTE Snapshot contains full email/phone — keep offline, never commit. Masked reports are not a rollback.",
+    );
+    process.exit(0);
   }
 
   if (apply && process.env.PHASE4_RECLAIM_AUTHORIZED !== "YES") {
@@ -51,13 +104,18 @@ async function main() {
     process.exit(2);
   }
 
-  const result = await reclaimSoftDeletedIdentifiers({ userId, apply });
-  console.log("MODE", result.mode);
-  console.log("OK", result.ok);
-  console.log("CHANGED", result.changed);
-  console.log("MESSAGE", result.message);
-  console.log("PREFLIGHT", JSON.stringify(result.preflight));
-  writeReport(result);
+  if (apply && !snapshotFile) {
+    console.log("REFUSED apply without --snapshot-file (write one with --write-snapshot first)");
+    process.exit(2);
+  }
+
+  const result = await reclaimSoftDeletedIdentifiers({
+    userId,
+    apply,
+    snapshotFile: snapshotFile ?? undefined,
+  });
+  printResult(result);
+  writeMaskedReport(result);
   process.exit(result.ok ? 0 : 10);
 }
 
