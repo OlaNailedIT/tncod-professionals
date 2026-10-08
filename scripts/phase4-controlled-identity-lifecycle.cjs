@@ -54,22 +54,6 @@ function resolveEnv() {
   };
 }
 
-async function extractAnon() {
-  const html = await (await fetch(`${PROD}/sign-in`)).text();
-  const scripts = [...html.matchAll(/\/_next\/static\/[^"]+\.js/g)].map((m) => m[0]);
-  for (const s of scripts) {
-    const js = await (await fetch(`${PROD}${s}`)).text();
-    if (!js.includes(REF)) continue;
-    const m = js.match(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/);
-    if (!m) continue;
-    const payload = JSON.parse(
-      Buffer.from(m[0].split(".")[1], "base64url").toString("utf8"),
-    );
-    if (payload.ref === REF) return m[0];
-  }
-  return null;
-}
-
 function cookieHeaderFromSession(session) {
   const payload = {
     access_token: session.access_token,
@@ -197,14 +181,8 @@ async function main() {
         console.log("NOT_ACTIVE — STOP");
         process.exit(4);
       }
-      const anon = await extractAnon();
-      if (!anon) {
-        console.log("ANON_EXTRACT_FAIL");
-        process.exit(5);
-      }
-      const browser = createClient(supabaseUrl, anon, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      });
+      // Anon key is no longer required in the client bundle after same-origin OTP.
+      // Verify via service-role client (trusted admin path) then hit Production /dashboard.
       const { data: linkData, error: linkErr } = await admin.auth.admin.generateLink({
         type: "magiclink",
         email: PINNED_EMAIL,
@@ -213,7 +191,7 @@ async function main() {
         console.log("GENERATE_LINK_FAILED", linkErr?.message || "no otp");
         process.exit(6);
       }
-      const { data: verified, error: verErr } = await browser.auth.verifyOtp({
+      const { data: verified, error: verErr } = await admin.auth.verifyOtp({
         email: PINNED_EMAIL,
         token: linkData.properties.email_otp,
         type: "email",
