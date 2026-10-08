@@ -1,23 +1,24 @@
 # Phase 4 — Production evidence ledger (one page)
 
 **Branch:** `phase4-auth-security-lock`  
-**Candidate SHA (pre-enumeration fix):** `66b7d9bfccc4b39dd1629597801641baf0b65fba`  
-**Production deploy exercised for runtime gates below:** `dpl_6qUhLT5YMvHBVVFBEjqQx5YD7VnY` (alias `https://tncod-professionals-azure.vercel.app`, 2026-10-07 ~23:25 SAST)  
-**Controlled identity:** `df709e23-…` / `smiley7605+tncodphase4oct03@…` only  
+**Head SHA:** `140ccbf043a3…` / short `140ccbf`  
+**Current Production (CLI):** `dpl_GwHBNdLQBUArEnNaNCk3KS7roriZ` → alias `https://tncod-professionals-azure.vercel.app` (2026-10-08)  
+**Prior Production (Magic Link / EXCO / sign-out human gates):** `dpl_6qUhLT5YMvHBVVFBEjqQx5YD7VnY`  
+**Controlled identity:** `df709e23-…` / `smiley7605+tncodphase4oct03@…` only — still ACTIVE/MEMBER; cleanup not run  
 
 | # | Control / exact assertion | Result | Evidence | SHA | Deploy |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Fresh Magic Link on current candidate: sign-in → `/auth/callback` exchange succeeds → `/dashboard` 200 (no `auth_link_exchange_failed` / `pkce_exchange`) | **PASS** | Live human session 2026-10-07 after `66b7d9b` deploy; user reported dashboard / signed-in | `66b7d9b` | `dpl_6qUhLT5YMvHBVVFBEjqQx5YD7VnY` |
-| 2a | With `EXCO_VIEWER` assigned, same signed-in session can open `/exco` | **PASS** | Human: opened `/exco` while holding role; DB `ASSIGNMENT=CREATED` via trusted admin script | `66b7d9b` | `dpl_6qUh…` |
-| 2b | After revoking **only** `EXCO_VIEWER` (MEMBER retained, ACTIVE), **same session** reload `/exco` denies (redirect away from EXCO); `/dashboard` still works; no loop/error | **PASS** | DB `ROLES MEMBER`, `HAS_EXCO_VIEWER false`; human: `/exco` → `/dashboard`; `/dashboard` OK; no loops (2026-10-07) | `66b7d9b` | `dpl_6qUh…` |
-| 3 | Protected page denial using a session issued **before** deactivation (stale session): ACTIVE signed-in tab → deactivate/ban → same-tab `/dashboard` fail-closed, no loop/500 | **UNPROVEN** | Only new-OTP-while-inactive was exercised; stale-session protocol not yet run | — | — |
-| 4 | Live POST sign-out then protected-route denial | **PASS** | Human: after UI sign-out, redirect to sign-in; anon probes `/dashboard` `/exco` `/profile` → 307 `/sign-in` (2026-10-07) | `66b7d9b` | `dpl_6qUh…` |
-| 5 | New sign-in denial while inactive (OTP verify path) | **PASS** | Identity `DEACTIVATED`+Auth ban; human: “That code is invalid or has expired”; then restored `ACTIVE` (2026-10-07/08) | `66b7d9b` | `dpl_6qUh…` |
-| 6a | Direct Auth signup denied | **PASS** | `disable_signup=true`; `POST /auth/v1/signup` → 422, `signup_created false` (2026-10-08) | `66b7d9b` | Prod Auth `brpppukzqgpzxjelwwrj` |
-| 6b | Production helper routes 404 | **PASS** | `/api/helpers/*`, `/helpers/*`, `/api/admin/helpers` → 404 | `66b7d9b` | `dpl_6qUh…` |
-| 6c | Sign-out GET 405 | **PASS** | `GET /auth/sign-out` → 405 | `66b7d9b` | `dpl_6qUh…` |
-| E | Browser-visible Auth OTP must not reintroduce membership enumeration after `66b7d9b` moved send to browser | **FAIL → defect** | Probe 2026-10-08: unknown email `422 signup_disabled` vs member `200 opaque` on `POST …/auth/v1/otp` (`create_user:false`). UI copy neutral; **network differential = Phase 4 defect**. Fix: same-origin `POST /api/auth/request-otp` (in working tree; not yet on `66b7d9b` deploy) | `66b7d9b` live = FAIL | `dpl_6qUh…` |
+| 1 | Fresh Magic Link → `/dashboard` on browser-PKCE candidate | **PASS** | Human 2026-10-07 dashboard / signed-in | `66b7d9b` | `dpl_6qUh…` |
+| 1′ | Magic Link after same-origin OTP route | **UNPROVEN** | PKCE cookies now from `POST /api/auth/request-otp`; one live Magic Link required on `dpl_GwHB…` | `140ccbf` | `dpl_GwHB…` |
+| 2a–2b | EXCO grant access + same-session revoke denial | **PASS** | Human + DB role grant/revoke 2026-10-07 | `66b7d9b` | `dpl_6qUh…` |
+| 3 | Stale-session `/dashboard` denial (session before deactivation) | **PASS** | Probe: before **200**; after deactivate **307** `/sign-in`; no 5xx; restored ACTIVE | probe/`140ccbf` | `dpl_6qUh…` middleware |
+| 4 | POST sign-out → protected denial | **PASS** | Human + anon 307s | `66b7d9b` | `dpl_6qUh…` |
+| 5 | New-sign-in denial while inactive | **PASS** | Human neutral OTP message; restored ACTIVE | `66b7d9b` | `dpl_6qUh…` |
+| 6a–6c | Signup deny / helpers 404 / GET sign-out 405 | **PASS** | Auth settings + HTTP probes 2026-10-07/08 | `66b7d9b` | Prod Auth + `dpl_6qUh…` |
+| E | No browser-visible OTP membership enumeration | **PASS** (after fix) | Was FAIL on `66b7d9b` (422 vs 200). On `dpl_GwHB…`: bundle uses `/api/auth/request-otp`, no browser `signInWithOtp`; member/unknown same-origin bodies identical | `140ccbf` | `dpl_GwHB…` |
 
-**Do not treat Phase 4 as PASS/LOCKED** until: (E) fix deployed + re-probed PASS; (3) stale-session PASS; final automated suite on the fix SHA; controlled-identity residue-zero; gate doc + PR updated; merge + Git-linked Production verify.
+**Automated:** non-integration Vitest **48/215 PASS**; full suite **7 FAIL** (no local DB). Seeded full gate still required.
 
-**Next release action:** land enumeration fix → one full automated gate → targeted stale-session (#3) on Production → residue-zero cleanup → update gate/PR → merge #3 only if all PASS → verify Git-linked `main` + azure alias → lock commit. No Phase 5.
+**Blocked for merge/LOCK:** (1′) Magic Link on `dpl_GwHB…`; seeded full Vitest; residue-zero cleanup; gate doc + PR sync; Git-linked `main` verify.
+
+**Next release action:** one Magic Link on azure (`dpl_GwHB…`) → seeded full Vitest → cleanup controlled identity to residue-zero → update gate/PR → merge #3 only if all PASS → verify Git-linked Production → lock commit. No Phase 5.
