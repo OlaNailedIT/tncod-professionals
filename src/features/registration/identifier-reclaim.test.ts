@@ -23,6 +23,13 @@ vi.mock("@/lib/prisma/client", () => ({
   }),
 }));
 
+vi.mock("@/features/registration/snapshot-acl", () => ({
+  assertSecureSnapshotDirectory: ({ dir }: { dir: string }) => ({
+    ok: true as const,
+    resolved: path.resolve(dir),
+  }),
+}));
+
 import {
   maskEmail,
   maskPhone,
@@ -189,6 +196,49 @@ describe("identifier reclaim", () => {
     expect(result.changed).toBe(true);
     expect(result.message).toMatch(/guarded update/);
     expect(mocks.transaction).toHaveBeenCalled();
+  });
+
+  it("reports changed:true after commit even when post-check fails", async () => {
+    const soft = softDeletedRow();
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "reclaim-snap-"));
+    mocks.findUnique.mockResolvedValue(soft);
+    const { path: snapPath } = await writeReclaimSnapshot({ userId: USER_ID, dir });
+
+    // apply preflight OK, then post-check returns incomplete resting state
+    mocks.findUnique
+      .mockResolvedValueOnce(soft)
+      .mockResolvedValueOnce({
+        ...soft,
+        email: reclaimTombstoneEmail(USER_ID),
+        phone: PHONE, // phone still set → RECLAIM_INCOMPLETE
+      });
+
+    mocks.transaction.mockImplementation(async (fn: (tx: unknown) => Promise<number>) => {
+      const tx = {
+        $queryRaw: vi.fn().mockResolvedValue([
+          {
+            id: USER_ID,
+            email: EMAIL,
+            phone: PHONE,
+            deleted_at: soft.deletedAt,
+            account_status: "DEACTIVATED",
+            profile_active: false,
+          },
+        ]),
+        $executeRaw: vi.fn().mockResolvedValue(1),
+      };
+      return fn(tx);
+    });
+
+    const result = await reclaimSoftDeletedIdentifiers({
+      userId: USER_ID,
+      apply: true,
+      snapshotFile: snapPath,
+    });
+    expect(result.ok).toBe(false);
+    expect(result.changed).toBe(true);
+    expect(result.message).toMatch(/post-check failed/);
+    expect(result.message).toMatch(/treat as changed/);
   });
 
   it("already-reclaimed succeeds only in safe resting state", async () => {

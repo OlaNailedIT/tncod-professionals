@@ -2,10 +2,8 @@
  * Disposable-DB reclaim boundary. Requires local DATABASE_URL with migrations applied.
  */
 import { randomUUID } from "crypto";
-import fs from "fs";
 import os from "os";
-import path from "path";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { PrismaClient } from "@prisma/client";
 import {
   reclaimSoftDeletedIdentifiers,
@@ -13,6 +11,7 @@ import {
   restoreFromReclaimSnapshot,
   writeReclaimSnapshot,
 } from "@/features/registration/identifier-reclaim";
+import { createPrivateSnapshotDirectory } from "@/features/registration/snapshot-acl";
 
 const prisma = new PrismaClient();
 let dbReady = false;
@@ -68,7 +67,7 @@ describe("identifier reclaim disposable boundary", () => {
     const dry2 = await reclaimSoftDeletedIdentifiers({ userId: id });
     expect(dry2.ok).toBe(true);
 
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "reclaim-int-"));
+    const dir = createPrivateSnapshotDirectory(os.tmpdir());
     const { path: snapPath } = await writeReclaimSnapshot({ userId: id, dir });
 
     const applied = await reclaimSoftDeletedIdentifiers({
@@ -156,7 +155,7 @@ describe("identifier reclaim disposable boundary", () => {
       },
     });
 
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "reclaim-race-"));
+    const dir = createPrivateSnapshotDirectory(os.tmpdir());
     const { path: snapPath } = await writeReclaimSnapshot({ userId: id, dir });
 
     // Mutate identifiers after snapshot so guarded WHERE fails.

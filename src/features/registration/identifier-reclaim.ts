@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import type { AccountStatus } from "@prisma/client";
 import { getPrisma } from "@/lib/prisma/client";
+import { assertSecureSnapshotDirectory } from "@/features/registration/snapshot-acl";
 
 const TOMBSTONE_HOST = "tombstone.invalid";
 
@@ -339,14 +340,25 @@ export function publicReclaimPreflight(preflight: ReclaimPreflight): ReclaimPref
   return rest;
 }
 
-export function defaultSnapshotDir(): string {
-  return path.resolve("scripts/reports/snapshots");
-}
-
+/**
+ * Write a full-PII snapshot. Requires an explicit directory outside the repo
+ * with a verified private Windows ACL (or POSIX 0700). Never logs contents.
+ */
 export async function writeReclaimSnapshot(input: {
   userId: string;
-  dir?: string;
+  /** Absolute path outside the repository — required. */
+  dir: string;
+  repoRoot?: string;
 }): Promise<{ path: string; preflight: ReclaimPreflight }> {
+  if (!input.dir || !input.dir.trim()) {
+    throw new Error("SNAPSHOT_DIR_REQUIRED");
+  }
+  const repoRoot = input.repoRoot ?? path.resolve(process.cwd());
+  const acl = assertSecureSnapshotDirectory({ dir: input.dir, repoRoot });
+  if (!acl.ok) {
+    throw new Error(`${acl.reason}${acl.detail ? `: ${acl.detail}` : ""}`);
+  }
+
   const preflight = await preflightIdentifierReclaim(input.userId);
   if (preflight.refuse && preflight.refuse !== "ALREADY_RECLAIMED") {
     throw new Error(`Cannot snapshot: ${preflight.refuse}`);
@@ -369,10 +381,9 @@ export async function writeReclaimSnapshot(input: {
   };
   snapshot.integrity = snapshotIntegrity(snapshot);
 
-  const dir = input.dir ?? defaultSnapshotDir();
-  fs.mkdirSync(dir, { recursive: true });
   const token = randomBytes(8).toString("hex");
-  const file = path.join(dir, `reclaim-${input.userId}-${token}.json`);
+  const file = path.join(acl.resolved, `reclaim-${input.userId}-${token}.json`);
+  // mode is best-effort on Windows; ACL on the parent directory is authoritative.
   fs.writeFileSync(file, `${JSON.stringify(snapshot, null, 2)}\n`, {
     encoding: "utf8",
     mode: 0o600,
@@ -592,16 +603,31 @@ export async function reclaimSoftDeletedIdentifiers(input: {
     };
   }
 
-  const after = publicReclaimPreflight(await preflightIdentifierReclaim(input.userId));
+  // Commit succeeded (exactly one row). Always report changed:true even if
+  // post-check fails — otherwise recovery would be misled.
+  let after: ReclaimPreflight;
+  try {
+    after = publicReclaimPreflight(await preflightIdentifierReclaim(input.userId));
+  } catch (e) {
+    return {
+      ok: false,
+      mode: "apply",
+      preflight: publicPre,
+      changed: true,
+      message: `Apply committed but post-check threw (${e instanceof Error ? e.message : "error"}) — treat as changed.`,
+      snapshot_path: input.snapshotFile,
+      would_change,
+    };
+  }
   const ok = after.already_reclaimed && after.refuse === "ALREADY_RECLAIMED";
   return {
     ok,
     mode: "apply",
     preflight: after,
-    changed: ok,
+    changed: true,
     message: ok
       ? "Released email to tombstone and cleared phone (guarded update)."
-      : "Apply wrote but post-check failed.",
+      : "Apply committed but post-check failed — treat as changed; investigate before further mutation.",
     snapshot_path: input.snapshotFile,
     would_change,
   };

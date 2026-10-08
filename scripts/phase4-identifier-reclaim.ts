@@ -5,7 +5,7 @@
  *
  * Usage (always register the server-only shim):
  *   npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --user-id <uuid>
- *   npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --user-id <uuid> --write-snapshot
+ *   npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --user-id <uuid> --write-snapshot --snapshot-dir <outside-repo-dir>
  *   PHASE4_RECLAIM_AUTHORIZED=YES npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --user-id <uuid> --apply --snapshot-file <path>
  *   PHASE4_RECLAIM_RESTORE_AUTHORIZED=YES npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --restore --snapshot-file <path>
  *   PHASE4_RECLAIM_RESTORE_AUTHORIZED=YES npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --restore --snapshot-file <path> --apply
@@ -64,6 +64,7 @@ async function main() {
   const writeSnapshot = hasFlag("--write-snapshot");
   const userId = argValue("--user-id");
   const snapshotFile = argValue("--snapshot-file");
+  const snapshotDir = argValue("--snapshot-dir");
 
   if (restore) {
     if (!snapshotFile) {
@@ -82,21 +83,38 @@ async function main() {
 
   if (!userId || !/^[0-9a-f-]{36}$/i.test(userId)) {
     console.log(
-      "USAGE: npx tsx scripts/phase4-identifier-reclaim.ts --user-id <uuid> [--write-snapshot | --apply --snapshot-file <path>]",
+      "USAGE: npx tsx -r ./scripts/register-server-only.cjs scripts/phase4-identifier-reclaim.ts --user-id <uuid> [--write-snapshot --snapshot-dir <outside-repo> | --apply --snapshot-file <path>]",
     );
     process.exit(1);
   }
 
   if (writeSnapshot) {
-    const { path: snapPath, preflight } = await writeReclaimSnapshot({ userId });
-    console.log("MODE write-snapshot");
-    console.log("OK", true);
-    console.log("SNAPSHOT_PATH", snapPath);
-    console.log("PREFLIGHT", JSON.stringify(preflight));
-    console.log(
-      "NOTE Snapshot contains full email/phone — keep offline, never commit. Masked reports are not a rollback.",
-    );
-    process.exit(0);
+    if (!snapshotDir) {
+      console.log(
+        "REFUSED --write-snapshot without --snapshot-dir (must be outside the repo with a private Windows ACL)",
+      );
+      process.exit(2);
+    }
+    try {
+      const { path: snapPath, preflight } = await writeReclaimSnapshot({
+        userId,
+        dir: snapshotDir,
+      });
+      console.log("MODE write-snapshot");
+      console.log("OK", true);
+      // Path only — never print snapshot file contents or full identifiers.
+      console.log("SNAPSHOT_PATH", snapPath);
+      console.log("PREFLIGHT", JSON.stringify(preflight));
+      console.log(
+        "NOTE Snapshot contains full email/phone. Masked reports are not a rollback. Do not commit the snapshot file.",
+      );
+      process.exit(0);
+    } catch (e) {
+      console.log("MODE write-snapshot");
+      console.log("OK", false);
+      console.log("MESSAGE", e instanceof Error ? e.message : e);
+      process.exit(10);
+    }
   }
 
   if (apply && process.env.PHASE4_RECLAIM_AUTHORIZED !== "YES") {
