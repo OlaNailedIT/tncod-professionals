@@ -523,61 +523,105 @@ export async function reclaimSoftDeletedIdentifiers(input: {
   const expectedEmail = preflight._email!;
   const expectedPhone = preflight._phone ?? null;
 
+  // Auth probes before the lock — Production RTT must not expire the row lock.
+  const authById = await authExistsById(input.userId);
+  if (!authById.ok) {
+    return {
+      ok: false,
+      mode: "apply",
+      preflight: publicPre,
+      changed: false,
+      message: "Refused: AUTH_CHECK_FAILED",
+      snapshot_path: input.snapshotFile,
+      would_change,
+    };
+  }
+  if (authById.exists) {
+    return {
+      ok: false,
+      mode: "apply",
+      preflight: publicPre,
+      changed: false,
+      message: "Refused: AUTH_STILL_PRESENT",
+      snapshot_path: input.snapshotFile,
+      would_change,
+    };
+  }
+  const authByEmail = await authExistsByEmail(expectedEmail);
+  if (!authByEmail.ok) {
+    return {
+      ok: false,
+      mode: "apply",
+      preflight: publicPre,
+      changed: false,
+      message: "Refused: AUTH_CHECK_FAILED",
+      snapshot_path: input.snapshotFile,
+      would_change,
+    };
+  }
+  if (authByEmail.exists) {
+    return {
+      ok: false,
+      mode: "apply",
+      preflight: publicPre,
+      changed: false,
+      message: "Refused: AUTH_EMAIL_STILL_PRESENT",
+      snapshot_path: input.snapshotFile,
+      would_change,
+    };
+  }
+
   try {
-    const updatedCount = await prisma.$transaction(async (tx) => {
-      const locked = await tx.$queryRaw<LockedUserRow[]>`
-        SELECT
-          u.id::text AS id,
-          u.email,
-          u.phone,
-          u.deleted_at,
-          u.account_status,
-          EXISTS (
-            SELECT 1 FROM public.profiles p
-            WHERE p.user_id = u.id AND p.deleted_at IS NULL
-          ) AS profile_active
-        FROM public.users u
-        WHERE u.id = ${input.userId}::uuid
-        FOR UPDATE OF u
-      `;
+    const updatedCount = await prisma.$transaction(
+      async (tx) => {
+        const locked = await tx.$queryRaw<LockedUserRow[]>`
+          SELECT
+            u.id::text AS id,
+            u.email,
+            u.phone,
+            u.deleted_at,
+            u.account_status,
+            EXISTS (
+              SELECT 1 FROM public.profiles p
+              WHERE p.user_id = u.id AND p.deleted_at IS NULL
+            ) AS profile_active
+          FROM public.users u
+          WHERE u.id = ${input.userId}::uuid
+          FOR UPDATE OF u
+        `;
 
-      if (locked.length !== 1) {
-        throw new Error("ROW_CHANGED");
-      }
-      const row = locked[0];
+        if (locked.length !== 1) {
+          throw new Error("ROW_CHANGED");
+        }
+        const row = locked[0];
 
-      if (row.email !== expectedEmail || (row.phone ?? null) !== expectedPhone) {
-        throw new Error("ROW_CHANGED");
-      }
-      if (row.deleted_at == null) throw new Error("NOT_SOFT_DELETED");
-      if (row.account_status === "ACTIVE") throw new Error("ACCOUNT_ACTIVE");
-      if (row.profile_active) throw new Error("PROFILE_STILL_ACTIVE");
+        if (row.email !== expectedEmail || (row.phone ?? null) !== expectedPhone) {
+          throw new Error("ROW_CHANGED");
+        }
+        if (row.deleted_at == null) throw new Error("NOT_SOFT_DELETED");
+        if (row.account_status === "ACTIVE") throw new Error("ACCOUNT_ACTIVE");
+        if (row.profile_active) throw new Error("PROFILE_STILL_ACTIVE");
 
-      const authById = await authExistsById(input.userId);
-      if (!authById.ok) throw new Error("AUTH_CHECK_FAILED");
-      if (authById.exists) throw new Error("AUTH_STILL_PRESENT");
-      const authByEmail = await authExistsByEmail(expectedEmail);
-      if (!authByEmail.ok) throw new Error("AUTH_CHECK_FAILED");
-      if (authByEmail.exists) throw new Error("AUTH_EMAIL_STILL_PRESENT");
+        const count = await tx.$executeRaw`
+          UPDATE public.users
+          SET
+            email = ${proposed},
+            phone = NULL,
+            updated_at = now()
+          WHERE id = ${input.userId}::uuid
+            AND deleted_at IS NOT NULL
+            AND account_status::text <> 'ACTIVE'
+            AND email = ${expectedEmail}
+            AND phone IS NOT DISTINCT FROM ${expectedPhone}
+        `;
 
-      const count = await tx.$executeRaw`
-        UPDATE public.users
-        SET
-          email = ${proposed},
-          phone = NULL,
-          updated_at = now()
-        WHERE id = ${input.userId}::uuid
-          AND deleted_at IS NOT NULL
-          AND account_status::text <> 'ACTIVE'
-          AND email = ${expectedEmail}
-          AND phone IS NOT DISTINCT FROM ${expectedPhone}
-      `;
-
-      if (count !== 1) {
-        throw new Error("ROW_CHANGED");
-      }
-      return Number(count);
-    });
+        if (count !== 1) {
+          throw new Error("ROW_CHANGED");
+        }
+        return Number(count);
+      },
+      { maxWait: 10_000, timeout: 20_000 },
+    );
 
     if (updatedCount !== 1) {
       return {
