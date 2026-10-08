@@ -80,8 +80,10 @@ function cookieHeaderFromSession(projectRef, session) {
     user: session.user,
   };
   const name = `sb-${projectRef}-auth-token`;
-  const value = encodeURIComponent(JSON.stringify(payload));
-  return `${name}=${value}`;
+  // @supabase/ssr stores sessions as base64url JSON with a "base64-" prefix.
+  const encoded =
+    "base64-" + Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
+  return `${name}=${encoded}`;
 }
 
 async function fetchDashboard(cookie) {
