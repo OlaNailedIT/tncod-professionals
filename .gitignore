@@ -23,6 +23,9 @@ dist/
 credentials.json
 service-account*.json
 
+# Phase 4 reclaim operator reports (masked) and snapshots (full PII — never commit)
+scripts/reports/
+
 # Phase 18 — historical PII exports (never commit raw responses)
 scripts/migrations/phase18/raw/
 scripts/migrations/phase18/derived/
