@@ -109,7 +109,20 @@ describe("identifier reclaim", () => {
     );
 
     const pre = await preflightIdentifierReclaim(USER_ID);
-    expect(pre.refuse).toBe("NOT_SOFT_DELETED");
+    expect(pre.refuse).toBe("ACCOUNT_ACTIVE");
+  });
+
+  it("allows soft-deleted Auth-absent rows even if account_status is still ACTIVE", async () => {
+    mocks.findUnique.mockResolvedValue(
+      softDeletedRow({
+        accountStatus: "ACTIVE",
+      }),
+    );
+
+    const result = await reclaimSoftDeletedIdentifiers({ userId: USER_ID });
+    expect(result.ok).toBe(true);
+    expect(result.mode).toBe("dry-run");
+    expect(result.preflight.refuse).toBeNull();
   });
 
   it("refuses when email is held by another identity", async () => {
