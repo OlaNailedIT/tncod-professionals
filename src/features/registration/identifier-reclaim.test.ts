@@ -321,4 +321,54 @@ describe("identifier reclaim", () => {
     expect(result.ok).toBe(false);
     expect(result.message).toContain("IDENTIFIERS_ALREADY_CLAIMED");
   });
+
+  it("restore apply refuses when identifier claimed since preflight (in-tx Auth SQL)", async () => {
+    const soft = softDeletedRow();
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "reclaim-snap-"));
+    mocks.findUnique.mockResolvedValue(soft);
+    const { path: snapPath } = await writeReclaimSnapshot({ userId: USER_ID, dir });
+
+    const tombstone = reclaimTombstoneEmail(USER_ID);
+    // Preflight: tombstone row, Auth absent, domain free
+    mocks.findUnique.mockResolvedValue(
+      softDeletedRow({ email: tombstone, phone: null }),
+    );
+    mocks.queryRaw.mockResolvedValue([]); // auth by id + email at preflight
+    mocks.findFirst.mockResolvedValue(null);
+
+    mocks.transaction.mockImplementation(async (fn: (tx: unknown) => Promise<number>) => {
+      const txQuery = vi
+        .fn()
+        // FOR UPDATE lock
+        .mockResolvedValueOnce([
+          {
+            id: USER_ID,
+            email: tombstone,
+            phone: null,
+            deleted_at: soft.deletedAt,
+            account_status: "DEACTIVATED",
+            profile_active: false,
+          },
+        ])
+        // auth.users by id — still absent
+        .mockResolvedValueOnce([])
+        // auth.users by email — claimed since preflight
+        .mockResolvedValueOnce([{ id: "new-auth-owner" }]);
+
+      const tx = {
+        $queryRaw: txQuery,
+        $executeRaw: vi.fn(),
+      };
+      return fn(tx);
+    });
+
+    const result = await restoreFromReclaimSnapshot({
+      snapshotFile: snapPath,
+      apply: true,
+    });
+    expect(result.ok).toBe(false);
+    expect(result.changed).toBe(false);
+    expect(result.message).toContain("IDENTIFIERS_ALREADY_CLAIMED");
+    expect(result.message).toMatch(/Auth holds original email/);
+  });
 });

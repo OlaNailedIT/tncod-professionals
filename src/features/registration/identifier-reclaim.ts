@@ -836,40 +836,93 @@ export async function restoreFromReclaimSnapshot(input: {
   }
 
   try {
-    const updatedCount = await prisma.$transaction(async (tx) => {
-      const locked = await tx.$queryRaw<LockedUserRow[]>`
-        SELECT
-          u.id::text AS id,
-          u.email,
-          u.phone,
-          u.deleted_at,
-          u.account_status,
-          EXISTS (
-            SELECT 1 FROM public.profiles p
-            WHERE p.user_id = u.id AND p.deleted_at IS NULL
-          ) AS profile_active
-        FROM public.users u
-        WHERE u.id = ${snapshot.userId}::uuid
-        FOR UPDATE OF u
-      `;
-      if (locked.length !== 1) throw new Error("ROW_CHANGED");
-      const row = locked[0];
-      if (row.email.toLowerCase() !== proposed.toLowerCase()) throw new Error("ROW_CHANGED");
-      if (row.deleted_at == null) throw new Error("ROW_CHANGED");
+    // Final Auth + identifier checks run inside the lock via short SQL only
+    // (no Auth Admin HTTP). Keeps the race window closed without RTT timeout.
+    const updatedCount = await prisma.$transaction(
+      async (tx) => {
+        const locked = await tx.$queryRaw<LockedUserRow[]>`
+          SELECT
+            u.id::text AS id,
+            u.email,
+            u.phone,
+            u.deleted_at,
+            u.account_status,
+            EXISTS (
+              SELECT 1 FROM public.profiles p
+              WHERE p.user_id = u.id AND p.deleted_at IS NULL
+            ) AS profile_active
+          FROM public.users u
+          WHERE u.id = ${snapshot.userId}::uuid
+          FOR UPDATE OF u
+        `;
+        if (locked.length !== 1) throw new Error("ROW_CHANGED");
+        const row = locked[0];
+        if (row.email.toLowerCase() !== proposed.toLowerCase()) throw new Error("ROW_CHANGED");
+        if (row.deleted_at == null) throw new Error("ROW_CHANGED");
 
-      const count = await tx.$executeRaw`
-        UPDATE public.users
-        SET
-          email = ${snapshot.email},
-          phone = ${snapshot.phone},
-          updated_at = now()
-        WHERE id = ${snapshot.userId}::uuid
-          AND deleted_at IS NOT NULL
-          AND email = ${proposed}
-      `;
-      if (count !== 1) throw new Error("ROW_CHANGED");
-      return Number(count);
-    }, { maxWait: 10_000, timeout: 20_000 });
+        const authById = await tx.$queryRaw<Array<{ id: string }>>`
+          SELECT id::text AS id
+          FROM auth.users
+          WHERE id = ${snapshot.userId}::uuid
+          LIMIT 1
+        `;
+        if (authById.length > 0) throw new Error("AUTH_STILL_PRESENT");
+
+        const authByEmail = await tx.$queryRaw<Array<{ id: string }>>`
+          SELECT id::text AS id
+          FROM auth.users
+          WHERE lower(email) = lower(${snapshot.email})
+          LIMIT 5
+        `;
+        if (authByEmail.length > 0) {
+          throw new Error(
+            "IDENTIFIERS_ALREADY_CLAIMED (Auth holds original email — point of no return)",
+          );
+        }
+
+        const emailClash = await tx.$queryRaw<Array<{ id: string }>>`
+          SELECT id::text AS id
+          FROM public.users
+          WHERE email = ${snapshot.email}
+            AND id <> ${snapshot.userId}::uuid
+          LIMIT 1
+        `;
+        if (emailClash.length > 0) {
+          throw new Error(
+            "IDENTIFIERS_ALREADY_CLAIMED (domain email held elsewhere — point of no return)",
+          );
+        }
+
+        if (snapshot.phone) {
+          const phoneClash = await tx.$queryRaw<Array<{ id: string }>>`
+            SELECT id::text AS id
+            FROM public.users
+            WHERE phone = ${snapshot.phone}
+              AND id <> ${snapshot.userId}::uuid
+            LIMIT 1
+          `;
+          if (phoneClash.length > 0) {
+            throw new Error(
+              "IDENTIFIERS_ALREADY_CLAIMED (domain phone held elsewhere — point of no return)",
+            );
+          }
+        }
+
+        const count = await tx.$executeRaw`
+          UPDATE public.users
+          SET
+            email = ${snapshot.email},
+            phone = ${snapshot.phone},
+            updated_at = now()
+          WHERE id = ${snapshot.userId}::uuid
+            AND deleted_at IS NOT NULL
+            AND email = ${proposed}
+        `;
+        if (count !== 1) throw new Error("ROW_CHANGED");
+        return Number(count);
+      },
+      { maxWait: 10_000, timeout: 20_000 },
+    );
 
     if (updatedCount !== 1) {
       return {
