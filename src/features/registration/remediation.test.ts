@@ -94,6 +94,38 @@ describe("Phase 4 registration remediation", () => {
     expect(mocks.createUser).not.toHaveBeenCalled();
   });
 
+  it("neutralizes soft-deleted phone collisions the same way as email", async () => {
+    mocks.duplicate.mockResolvedValue({ duplicate: true, kind: "phone" });
+
+    const result = await registerProfessional(valid, { clientKey: "203.0.113.10" });
+
+    expect(result).toEqual({ ok: true, userId: "accepted", profileId: "accepted" });
+    expect(mocks.createUser).not.toHaveBeenCalled();
+  });
+
+  it("returns the same neutral accept for honeypot without creating Auth", async () => {
+    const result = await registerProfessional(
+      { ...valid, website: "https://bot.example" },
+      { clientKey: "203.0.113.10" },
+    );
+
+    expect(result).toEqual({ ok: true, userId: "spam", profileId: "spam" });
+    expect(mocks.duplicate).not.toHaveBeenCalled();
+    expect(mocks.createUser).not.toHaveBeenCalled();
+  });
+
+  it("neutralizes Auth-admin already-exists without leaking provider detail", async () => {
+    mocks.createUser.mockResolvedValue({
+      data: { user: null },
+      error: { message: "A user with this email address has already been registered" },
+    });
+
+    const result = await registerProfessional(valid, { clientKey: "203.0.113.10" });
+
+    expect(result).toEqual({ ok: true, userId: "accepted", profileId: "accepted" });
+    expect(mocks.transaction).not.toHaveBeenCalled();
+  });
+
   it("fails closed and invokes durable compensation after a domain transaction failure", async () => {
     mocks.transaction.mockImplementation(async (input: unknown) => {
       if (typeof input === "function") throw new Error("forced domain failure");
@@ -137,5 +169,34 @@ describe("Phase 4 registration remediation", () => {
     expect(mocks.cleanupIdentity).toHaveBeenCalledWith(
       "11111111-1111-4111-8111-111111111111",
     );
+  });
+
+  it("returns a real user/profile id on genuine successful registration", async () => {
+    mocks.transaction.mockImplementation(async (fn: (tx: unknown) => Promise<string>) => {
+      const tx = {
+        user: {
+          upsert: vi.fn(),
+          update: vi.fn(),
+        },
+        role: { findUnique: vi.fn().mockResolvedValue({ id: "role-member" }) },
+        userRole: { upsert: vi.fn() },
+        profile: {
+          findUnique: vi.fn().mockResolvedValue(null),
+          create: vi.fn().mockResolvedValue({ id: "profile-1" }),
+        },
+        $executeRaw: vi.fn().mockResolvedValue(1),
+      };
+      return fn(tx);
+    });
+
+    const result = await registerProfessional(valid, { clientKey: "203.0.113.10" });
+
+    expect(result).toEqual({
+      ok: true,
+      userId: "11111111-1111-4111-8111-111111111111",
+      profileId: "profile-1",
+      durationMs: expect.any(Number),
+    });
+    expect(mocks.cleanupIdentity).not.toHaveBeenCalled();
   });
 });

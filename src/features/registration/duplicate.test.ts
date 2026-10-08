@@ -31,4 +31,19 @@ describe("registration duplicate boundary", () => {
       select: { id: true },
     });
   });
+
+  it("treats a soft-deleted phone row as a duplicate", async () => {
+    mocks.findFirst.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: "phone-tombstone" });
+
+    const result = await findRegistrationDuplicate({
+      email: "fresh@example.com",
+      phone: "08012345678",
+    });
+
+    expect(result).toEqual({ duplicate: true, kind: "phone" });
+    expect(mocks.findFirst).toHaveBeenNthCalledWith(2, {
+      where: { phone: "2348012345678" },
+      select: { id: true },
+    });
+  });
 });

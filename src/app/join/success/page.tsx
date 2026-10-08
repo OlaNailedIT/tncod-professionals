@@ -3,13 +3,23 @@ import Link from "next/link";
 import { Container, Section, Stack } from "@/components/layout";
 import { ProductPublicShell } from "@/components/shell/product-public-shell";
 import { Alert, Button } from "@/components/ui";
+import {
+  JOIN_SUCCESS_HEADING,
+  JOIN_SUCCESS_LEAD,
+  JOIN_SUCCESS_NEXT_BODY,
+  JOIN_SUCCESS_NEXT_TITLE,
+} from "@/features/registration/join-success-copy";
 
 export const metadata: Metadata = {
   title: "Welcome — TNCOD Professionals",
-  description: "Your TNCOD Professionals registration is complete.",
+  description: "Your TNCOD Professionals join request was received.",
   robots: { index: false, follow: false },
 };
 
+/**
+ * Same public page for genuine registration and intentional neutral accepts.
+ * Copy must not claim Auth or a professional record was created.
+ */
 export default function JoinSuccessPage() {
   return (
     <ProductPublicShell pathname="/join/success">
@@ -17,26 +27,20 @@ export default function JoinSuccessPage() {
         <Section density="member">
           <Stack gap="comfortable">
             <div>
-              <h1 className="text-h1 text-foreground">You are registered</h1>
-              <p className="mt-3 layout-prose text-body text-muted-foreground">
-                Thank you for joining TNCOD Professionals. Your professional record has been created
-                with private defaults.
-              </p>
+              <h1 className="text-h1 text-foreground">{JOIN_SUCCESS_HEADING}</h1>
+              <p className="mt-3 layout-prose text-body text-muted-foreground">{JOIN_SUCCESS_LEAD}</p>
             </div>
 
-            <Alert intent="info" title="What happens next">
-              Your professional record and Auth identity exist, but this page does not sign you in.
-              When you are ready, use Sign in with the same email to receive a secure access code.
-              Joining does not mean you are verified, and it does not list you in the public
-              directory.
+            <Alert intent="info" title={JOIN_SUCCESS_NEXT_TITLE}>
+              {JOIN_SUCCESS_NEXT_BODY}
             </Alert>
 
             <div className="flex flex-wrap gap-3">
               <Button asChild>
-                <Link href="/">Back to home</Link>
+                <Link href="/sign-in">Sign in</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/sign-in">Sign in</Link>
+                <Link href="/">Back to home</Link>
               </Button>
             </div>
           </Stack>
