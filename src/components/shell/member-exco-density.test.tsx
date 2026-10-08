@@ -6,7 +6,7 @@ describe("Phase 5.11 Member vs EXCO differentiation", () => {
     expect(memberNavItems.length).toBeLessThan(excoNavItems.length);
     expect(memberNavItems.length).toBe(6);
     expect(excoNavGroups.length).toBeGreaterThan(1);
-    expect(excoNavItems.length).toBe(8);
+    expect(excoNavItems.length).toBe(9);
   });
 
   it("keeps Member destinations community-oriented (locked IA + Phase 9 + Phase 13 directory)", () => {

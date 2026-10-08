@@ -22,6 +22,7 @@ import {
   type RegistrationInput,
 } from "@/features/registration/schema";
 import { trackRegistrationEvent } from "@/features/registration/analytics-client";
+import { TurnstileWidget } from "@/features/registration/turnstile-widget";
 
 type FormValues = RegistrationInput;
 
@@ -30,11 +31,13 @@ export function JoinRegistrationForm() {
   const openedAt = React.useRef(Date.now());
   const [formError, setFormError] = React.useState<string | null>(null);
   const [submitting, setSubmitting] = React.useState(false);
+  const [captchaResetKey, setCaptchaResetKey] = React.useState(0);
 
   const {
     register,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(registrationSchema),
@@ -48,6 +51,7 @@ export function JoinRegistrationForm() {
       lookingFor: "",
       offering: "",
       website: "",
+      captchaToken: "",
     },
   });
 
@@ -65,6 +69,8 @@ export function JoinRegistrationForm() {
       });
 
       if (!result.ok) {
+        setValue("captchaToken", "", { shouldValidate: false });
+        setCaptchaResetKey((key) => key + 1);
         if (result.fieldErrors) {
           for (const [key, message] of Object.entries(result.fieldErrors)) {
             setError(key as keyof FormValues, { message });
@@ -82,6 +88,8 @@ export function JoinRegistrationForm() {
 
       router.push("/join/success");
     } catch {
+      setValue("captchaToken", "", { shouldValidate: false });
+      setCaptchaResetKey((key) => key + 1);
       setFormError("We could not complete registration right now. Please try again shortly.");
     } finally {
       setSubmitting(false);
@@ -89,17 +97,17 @@ export function JoinRegistrationForm() {
   });
 
   return (
-    <Container width="narrow" className="py-10">
+    <Container width="narrow" className="py-10 sm:py-12">
       <Section density="member">
         <Stack gap="comfortable">
           <div>
             <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">
-              About a minute
+              About a minute · welcome
             </p>
-            <h1 className="mt-1 text-h1 text-foreground">Join TNCOD Professionals</h1>
+            <h1 className="mt-1 text-h1 text-foreground">Join the Professionals community</h1>
             <p className="mt-2 layout-prose text-body-sm text-muted-foreground">
-              Quick professional connection — no password to create. Joining does not mean you are
-              verified or listed in the public directory.
+              Tell us a little about yourself so we can welcome you. No password. Joining does not
+              verify you or list you in the public directory.
             </p>
           </div>
 
@@ -110,13 +118,21 @@ export function JoinRegistrationForm() {
           ) : null}
 
           <form onSubmit={onSubmit} noValidate className="min-w-0">
-            {/* Honeypot — visually hidden; leave empty */}
-            <div className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden" aria-hidden="true">
-              <label htmlFor="website">Website</label>
-              <input id="website" tabIndex={-1} autoComplete="off" {...register("website")} />
+            {/* Honeypot — non-autofill name; excluded from a11y tree and tab order */}
+            <div className="hidden" hidden aria-hidden="true">
+              <label htmlFor="tncod_hp_website">Company website</label>
+              <input
+                id="tncod_hp_website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="new-password"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                {...register("website")}
+              />
             </div>
 
-            <FormSection title="Your details" description="Only what we need to get you connected.">
+            <FormSection title="Tell us about yourself" description="Only what we need to welcome you.">
               <Field label="Full name" required error={errors.fullName?.message}>
                 <Input autoComplete="name" {...register("fullName")} />
               </Field>
@@ -170,14 +186,29 @@ export function JoinRegistrationForm() {
               <Field
                 label="What can you offer?"
                 required
-                description="Skills, services, referrals, collaboration — keep it short."
+                description="How you can contribute — skills, services, referrals, collaboration."
                 error={errors.offering?.message}
               >
                 <Textarea rows={3} {...register("offering")} />
               </Field>
+              <input type="hidden" {...register("captchaToken")} />
+              <TurnstileWidget
+                key={captchaResetKey}
+                onToken={(token) => {
+                  setValue("captchaToken", token, { shouldValidate: true });
+                  if (!token) {
+                    setError("captchaToken", { message: "Complete the security check." });
+                  }
+                }}
+              />
+              {errors.captchaToken?.message ? (
+                <p className="text-body-sm text-danger" role="alert">
+                  {errors.captchaToken.message}
+                </p>
+              ) : null}
               <FormActions>
                 <Button type="submit" loading={submitting} className="min-h-11 w-full sm:w-auto">
-                  Create my professional record
+                  Join the community
                 </Button>
               </FormActions>
             </FormSection>

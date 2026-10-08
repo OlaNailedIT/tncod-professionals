@@ -73,8 +73,31 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname, search } = request.nextUrl;
+  let activeUser = user;
 
-  if (isProtectedPath(pathname) && !user) {
+  if (user) {
+    const [{ data: account }, { data: profile }] = await Promise.all([
+      supabase
+        .from("users")
+        .select("id")
+        .eq("id", user.id)
+        .eq("account_status", "ACTIVE")
+        .is("deleted_at", null)
+        .maybeSingle(),
+      supabase
+        .from("profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .is("deleted_at", null)
+        .maybeSingle(),
+    ]);
+    if (!account || !profile) {
+      activeUser = null;
+      await supabase.auth.signOut({ scope: "local" });
+    }
+  }
+
+  if (isProtectedPath(pathname) && !activeUser) {
     const next = sanitizeNextPath(`${pathname}${search}`);
     const signIn = request.nextUrl.clone();
     signIn.pathname = "/sign-in";
@@ -83,7 +106,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Signed-in users hitting /sign-in go to a safe destination.
-  if (pathname === "/sign-in" && user) {
+  if (pathname === "/sign-in" && activeUser) {
     const next = sanitizeNextPath(request.nextUrl.searchParams.get("next"));
     return NextResponse.redirect(new URL(next, request.nextUrl.origin));
   }

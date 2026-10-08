@@ -46,6 +46,7 @@ export const registrationSchema = z.object({
   offering: trimmed(500),
   /** Honeypot — must stay empty. */
   website: z.string().max(200).optional().default(""),
+  captchaToken: z.string().trim().min(1, "Complete the security check."),
   /** Client-measured ms since form open — KPI instrumentation only. */
   clientDurationMs: z.coerce.number().int().nonnegative().max(3_600_000).optional(),
 });

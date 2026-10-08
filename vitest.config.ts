@@ -1,5 +1,8 @@
 import { defineConfig } from "vitest/config";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   test: {
@@ -16,9 +19,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(rootDir, "./src"),
       // Test-only: allow importing server command modules under Vitest without changing production.
-      "server-only": path.resolve(__dirname, "./scripts/vitest-server-only-shim.cjs"),
+      "server-only": path.resolve(rootDir, "./scripts/vitest-server-only-shim.cjs"),
     },
   },
 });

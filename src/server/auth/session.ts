@@ -3,13 +3,14 @@ import "server-only";
 import { AppError } from "@/lib/errors";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { assertTrustedUserId } from "@/security/authorization";
+import { activeIdentityExists } from "@/server/auth/active-identity";
 
 export type AuthenticatedIdentity = {
   userId: string;
   email: string | undefined;
 };
 
-/** Authentication only. Not authorization. */
+/** Auth session plus the central active application-identity boundary. */
 export async function getAuthenticatedUser(): Promise<AuthenticatedIdentity | null> {
   const supabase = await createServerSupabaseClient();
   if (!supabase) {
@@ -17,6 +18,10 @@ export async function getAuthenticatedUser(): Promise<AuthenticatedIdentity | nu
   }
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) {
+    return null;
+  }
+  if (!(await activeIdentityExists(data.user.id))) {
+    await supabase.auth.signOut({ scope: "local" });
     return null;
   }
   return { userId: data.user.id, email: data.user.email };

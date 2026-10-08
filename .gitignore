@@ -30,3 +30,6 @@ scripts/migrations/phase18/derived/
 # scripts/migrations/phase18/reports/unmasked/
 
 *.tsbuildinfo
+
+.vercel/
+.env.local
