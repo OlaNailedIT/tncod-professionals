@@ -49,7 +49,9 @@ function isBlockedHost(host: string): boolean {
  * Validate opt-in + local-only DATABASE_URL and NEXT_PUBLIC_SUPABASE_URL
  * **before** opening Prisma or Auth clients.
  */
-export function assertDisposableAuthEnv(env: NodeJS.ProcessEnv = process.env): DisposableEnvCheck {
+export function assertDisposableAuthEnv(
+  env: NodeJS.ProcessEnv | Record<string, string | undefined> = process.env,
+): DisposableEnvCheck {
   if (env[DISPOSABLE_AUTH_OPT_IN] !== "1") {
     return {
       ok: false,
