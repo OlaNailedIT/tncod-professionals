@@ -62,7 +62,6 @@ async function assertFullIdentity(userId: string) {
 
 describe("synthetic registration disposable full Auth", () => {
   beforeAll(async () => {
-    process.env.NODE_ENV = "test";
     optedIn = process.env[DISPOSABLE_AUTH_OPT_IN] === "1";
 
     // Fail closed before any Prisma/Auth client is constructed.

@@ -351,21 +351,59 @@ export async function loadProfessionalVerificationHistory(
   profileId: string,
 ): Promise<ProfessionalVerificationHistoryItem[]> {
   await assertExcoDashboardAccess(actorUserId);
+  // Notes are Admin+ (professional.verify). Viewer keeps operational timeline metadata only.
+  const maySeeNotes = await canMutateProfessionalVerification(actorUserId);
   const prisma = getPrisma();
+  const reviewerSelect = {
+    reviewer: {
+      select: {
+        profile: { select: { displayName: true } },
+      },
+    },
+  } as const;
+
+  if (maySeeNotes) {
+    const rows = await prisma.verificationRecord.findMany({
+      where: { profileId },
+      orderBy: { createdAt: "asc" },
+      select: {
+        id: true,
+        processStatus: true,
+        decision: true,
+        notes: true,
+        createdAt: true,
+        completedAt: true,
+        ...reviewerSelect,
+      },
+    });
+    return rows.map((r) => ({
+      id: r.id,
+      processStatus: r.processStatus,
+      decision: r.decision,
+      notes: r.notes,
+      createdAt: r.createdAt,
+      completedAt: r.completedAt,
+      reviewerDisplayName: r.reviewer.profile?.displayName ?? null,
+    }));
+  }
+
   const rows = await prisma.verificationRecord.findMany({
     where: { profileId },
     orderBy: { createdAt: "asc" },
-    include: {
-      reviewer: {
-        include: { profile: { select: { displayName: true } } },
-      },
+    select: {
+      id: true,
+      processStatus: true,
+      decision: true,
+      createdAt: true,
+      completedAt: true,
+      ...reviewerSelect,
     },
   });
   return rows.map((r) => ({
     id: r.id,
     processStatus: r.processStatus,
     decision: r.decision,
-    notes: r.notes,
+    notes: null,
     createdAt: r.createdAt,
     completedAt: r.completedAt,
     reviewerDisplayName: r.reviewer.profile?.displayName ?? null,
