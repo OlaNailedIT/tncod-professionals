@@ -1,19 +1,24 @@
 /**
  * P6-001 — preference-aware directory search/filter/count/facet regression.
- * Requires disposable local DATABASE_URL. Fails hard if DB unavailable (no silent pass).
+ * Fail-closed: requires PHASE6R_DISPOSABLE_DIRECTORY_TESTS=1 and loopback :54322
+ * before any Prisma query or fixture mutation.
  */
 import { randomUUID } from "crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { PrismaClient, type VisibilityPreferenceLevel } from "@prisma/client";
 import {
+  PHASE6R_DISPOSABLE_DIRECTORY_OPT_IN,
+  assertDisposableDirectoryTestEnv,
+} from "@/features/directory/disposable-directory-env";
+import {
   getDirectoryProfessionalBySlug,
   listDirectoryIndustryOptions,
   listDirectoryProfessionals,
 } from "@/features/directory/list";
+import { upsertMyVisibilityPreference } from "@/features/visibility/own-preferences";
 import { getVisibilityGroup } from "@/features/visibility/groups";
 import { assertPublicProfessionalShape } from "@/security/projections";
 
-const prisma = new PrismaClient();
 const TAG = `p6r-${Date.now()}`;
 const empty = {
   q: "",
@@ -24,11 +29,19 @@ const empty = {
   page: 1,
 };
 
+let prisma: PrismaClient | null = null;
 let dbReady = false;
 const createdUserIds: string[] = [];
 const createdSkillIds: string[] = [];
 const createdServiceIds: string[] = [];
 const createdIndustryIds: string[] = [];
+
+function db(): PrismaClient {
+  if (!prisma) {
+    throw new Error("Prisma client not initialized — disposable env gate must pass first");
+  }
+  return prisma;
+}
 
 function deepHas(value: unknown, needle: string): boolean {
   if (value == null) return false;
@@ -41,7 +54,7 @@ function deepHas(value: unknown, needle: string): boolean {
 }
 
 async function forceDirectory(profileId: string, slug: string, location?: string) {
-  await prisma.$transaction(async (tx) => {
+  await db().$transaction(async (tx) => {
     await tx.$executeRawUnsafe(`SET LOCAL session_replication_role = replica`);
     if (location !== undefined) {
       await tx.$executeRawUnsafe(
@@ -74,7 +87,7 @@ async function setPreference(
   groupKey: string,
   preference: VisibilityPreferenceLevel,
 ) {
-  await prisma.profileVisibilityPreference.upsert({
+  await db().profileVisibilityPreference.upsert({
     where: { profileId_groupKey: { profileId, groupKey } },
     create: { profileId, groupKey, preference },
     update: { preference },
@@ -82,7 +95,7 @@ async function setPreference(
 }
 
 async function clearPreference(profileId: string, groupKey: string) {
-  await prisma.profileVisibilityPreference.deleteMany({
+  await db().profileVisibilityPreference.deleteMany({
     where: { profileId, groupKey },
   });
 }
@@ -94,23 +107,31 @@ async function createDirectoryMember(input: {
   location?: string;
   profession?: string;
   industryName?: string;
+  industryActive?: boolean;
   skillName?: string;
   serviceName?: string;
 }) {
   const id = randomUUID();
   let industryId: string | undefined;
   if (input.industryName) {
-    const slug = `ind-${TAG}-${input.industryName}`.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const industry = await prisma.industry.upsert({
-      where: { slug },
-      create: { name: input.industryName, slug, isActive: true },
-      update: { name: input.industryName, isActive: true },
+    const indSlug = `ind-${TAG}-${input.industryName}`.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const industry = await db().industry.upsert({
+      where: { slug: indSlug },
+      create: {
+        name: input.industryName,
+        slug: indSlug,
+        isActive: input.industryActive ?? true,
+      },
+      update: {
+        name: input.industryName,
+        isActive: input.industryActive ?? true,
+      },
     });
     industryId = industry.id;
     createdIndustryIds.push(industry.id);
   }
 
-  await prisma.user.create({
+  await db().user.create({
     data: {
       id,
       email: input.email,
@@ -137,46 +158,53 @@ async function createDirectoryMember(input: {
     },
   });
   createdUserIds.push(id);
-  const profile = await prisma.profile.findUniqueOrThrow({ where: { userId: id } });
+  const profile = await db().profile.findUniqueOrThrow({ where: { userId: id } });
   await forceDirectory(profile.id, input.slug, input.location);
 
   if (input.skillName) {
     const skillSlug = `sk-${TAG}-${input.skillName}`.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const skill = await prisma.skill.upsert({
+    const skill = await db().skill.upsert({
       where: { slug: skillSlug },
       create: { name: input.skillName, slug: skillSlug, isActive: true },
       update: { name: input.skillName, isActive: true },
     });
     createdSkillIds.push(skill.id);
-    await prisma.profileSkill.create({
+    await db().profileSkill.create({
       data: { profileId: profile.id, skillId: skill.id },
     });
   }
 
   if (input.serviceName) {
     const serviceSlug = `sv-${TAG}-${input.serviceName}`.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const service = await prisma.service.upsert({
+    const service = await db().service.upsert({
       where: { slug: serviceSlug },
       create: { name: input.serviceName, slug: serviceSlug, isActive: true },
       update: { name: input.serviceName, isActive: true },
     });
     createdServiceIds.push(service.id);
-    await prisma.profileService.create({
+    await db().profileService.create({
       data: { profileId: profile.id, serviceId: service.id },
     });
   }
 
-  return { userId: id, profileId: profile.id, slug: input.slug };
+  return { userId: id, profileId: profile.id, slug: input.slug, displayName: input.displayName };
 }
 
 function requireDb() {
-  if (!dbReady) {
+  if (!dbReady || !prisma) {
     throw new Error("DATABASE UNAVAILABLE — P6-001 sentinel evidence cannot PASS");
   }
 }
 
 describe("P6-001 preference-aware directory search privacy", () => {
   beforeAll(async () => {
+    // Fail closed before any DB client work.
+    const gate = assertDisposableDirectoryTestEnv(process.env);
+    if (!gate.ok) {
+      throw new Error(`DISPOSABLE ENV GATE FAILED: ${gate.reason}`);
+    }
+
+    prisma = new PrismaClient();
     try {
       await prisma.$queryRaw`SELECT 1`;
       const tables = await prisma.$queryRawUnsafe<Array<{ exists: boolean }>>(
@@ -187,12 +215,19 @@ describe("P6-001 preference-aware directory search privacy", () => {
          ) AS exists`,
       );
       dbReady = tables[0]?.exists === true;
-    } catch {
+      if (!dbReady) {
+        throw new Error("profile_visibility_preferences table missing on disposable database");
+      }
+    } catch (err) {
       dbReady = false;
+      await prisma.$disconnect().catch(() => {});
+      prisma = null;
+      throw err;
     }
   }, 60_000);
 
   afterAll(async () => {
+    if (!prisma) return;
     for (const userId of createdUserIds) {
       const profile = await prisma.profile.findUnique({ where: { userId } });
       if (profile) {
@@ -216,10 +251,12 @@ describe("P6-001 preference-aware directory search privacy", () => {
       await prisma.industry.delete({ where: { id } }).catch(() => {});
     }
     await prisma.$disconnect();
+    prisma = null;
   });
 
-  it("requires disposable preference store", () => {
+  it("requires disposable preference store behind opt-in gate", () => {
     requireDb();
+    expect(process.env[PHASE6R_DISPOSABLE_DIRECTORY_OPT_IN]).toBe("1");
     expect(dbReady).toBe(true);
   });
 
@@ -301,6 +338,32 @@ describe("P6-001 preference-aware directory search privacy", () => {
     expect(facets).toContain(industry);
   });
 
+  it("inactive industry cannot match filter or change totals", async () => {
+    requireDb();
+    const industry = `UNIQUE_INACTIVE_INDUSTRY_${TAG}`;
+    const slug = `p6r-inact-ind-${TAG}`;
+    const m = await createDirectoryMember({
+      email: `${TAG}-inact@example.invalid`,
+      displayName: `Inactive Ind Person ${TAG}`,
+      slug,
+      industryName: industry,
+      industryActive: false,
+    });
+    await setPreference(m.profileId, "professional", "PUBLIC");
+
+    const byInd = await listDirectoryProfessionals({ ...empty, industry });
+    expect(byInd.items.some((i) => i.publicSlug === slug)).toBe(false);
+    expect(byInd.total).toBe(0);
+    expect(byInd.pageCount).toBe(0);
+    const facets = await listDirectoryIndustryOptions();
+    expect(facets).not.toContain(industry);
+    expect(deepHas(byInd, industry)).toBe(false);
+
+    const detail = await getDirectoryProfessionalBySlug(slug);
+    expect(detail).not.toBeNull();
+    expect(detail!.industryName).toBeNull();
+  });
+
   it("skills_services PRIVATE/MEMBERS hides skill/service q and service filter; PUBLIC finds", async () => {
     requireDb();
     const skill = `UNIQUE_PRIVATE_SKILL_${TAG}`;
@@ -368,11 +431,69 @@ describe("P6-001 preference-aware directory search privacy", () => {
     expect(byProf.items.some((i) => i.publicSlug === slug)).toBe(true);
   });
 
+  it("DIRECTORY + identity PRIVATE/MEMBERS is excluded from list, count, detail, facets, and ordering", async () => {
+    requireDb();
+    const industry = `UNIQUE_ID_ORACLE_INDUSTRY_${TAG}`;
+    const uniqueName = `AAA_IDENTITY_ORACLE_${TAG}`;
+    const slug = `p6r-id-oracle-${TAG}`;
+    const m = await createDirectoryMember({
+      email: `${TAG}-id@example.invalid`,
+      displayName: uniqueName,
+      slug,
+      industryName: industry,
+      industryActive: true,
+    });
+    await setPreference(m.profileId, "professional", "PUBLIC");
+
+    // Control: with identity PUBLIC the profile is listed and ordered by raw name.
+    await setPreference(m.profileId, "identity", "PUBLIC");
+    const control = await listDirectoryProfessionals({ ...empty, q: uniqueName });
+    expect(control.items.some((i) => i.publicSlug === slug)).toBe(true);
+    expect(control.total).toBeGreaterThanOrEqual(1);
+
+    for (const level of ["PRIVATE", "MEMBERS"] as const) {
+      // Privileged write — application upsert rejects this while DIRECTORY (asserted below).
+      await setPreference(m.profileId, "identity", level);
+
+      const listed = await listDirectoryProfessionals({ ...empty });
+      expect(listed.items.some((i) => i.publicSlug === slug)).toBe(false);
+      expect(listed.items.some((i) => i.displayName === uniqueName)).toBe(false);
+      expect(deepHas(listed, uniqueName)).toBe(false);
+
+      const byName = await listDirectoryProfessionals({ ...empty, q: uniqueName });
+      expect(byName.items.some((i) => i.publicSlug === slug)).toBe(false);
+      expect(byName.total).toBe(0);
+
+      const detail = await getDirectoryProfessionalBySlug(slug);
+      expect(detail).toBeNull();
+
+      const facets = await listDirectoryIndustryOptions();
+      // Industry must not appear solely from this identity-withheld DIRECTORY row.
+      expect(facets).not.toContain(industry);
+    }
+
+    // Application path cannot create the inconsistent state while DIRECTORY.
+    await setPreference(m.profileId, "identity", "PUBLIC");
+    const denied = await upsertMyVisibilityPreference(m.userId, {
+      groupKey: "identity",
+      preference: "PRIVATE",
+    });
+    expect(denied.ok).toBe(false);
+
+    // Separate evidence: privileged Prisma upsert CAN write identity PRIVATE while DIRECTORY.
+    await setPreference(m.profileId, "identity", "PRIVATE");
+    const row = await db().profileVisibilityPreference.findUniqueOrThrow({
+      where: { profileId_groupKey: { profileId: m.profileId, groupKey: "identity" } },
+    });
+    expect(row.preference).toBe("PRIVATE");
+  });
+
   it("missing preference rows follow locked defaults for searchable groups", async () => {
     requireDb();
     expect(getVisibilityGroup("location").defaultPreference).toBe("PUBLIC");
     expect(getVisibilityGroup("professional").defaultPreference).toBe("PUBLIC");
     expect(getVisibilityGroup("skills_services").defaultPreference).toBe("PUBLIC");
+    expect(getVisibilityGroup("identity").defaultPreference).toBe("PUBLIC");
 
     const loc = `UNIQUE_DEFAULT_LOC_${TAG}`;
     const profession = `UNIQUE_DEFAULT_PROF_${TAG}`;
@@ -389,6 +510,7 @@ describe("P6-001 preference-aware directory search privacy", () => {
     await clearPreference(m.profileId, "location");
     await clearPreference(m.profileId, "professional");
     await clearPreference(m.profileId, "skills_services");
+    await clearPreference(m.profileId, "identity");
 
     const byLoc = await listDirectoryProfessionals({ ...empty, location: loc });
     const byProf = await listDirectoryProfessionals({ ...empty, profession });
@@ -410,7 +532,6 @@ describe("P6-001 preference-aware directory search privacy", () => {
     });
     await setPreference(m.profileId, "location", "PUBLIC");
 
-    // Loader has no actor parameter — two identical calls are the equivalence proof.
     const a = await listDirectoryProfessionals({ ...empty, location: loc });
     const b = await listDirectoryProfessionals({ ...empty, location: loc });
     expect(a).toEqual(b);

@@ -98,12 +98,23 @@ function mapRow(input: {
   return projected;
 }
 
+/**
+ * Public directory eligibility.
+ * Identity must effectively allow public directory exposure so a DIRECTORY row
+ * with identity PRIVATE/MEMBERS cannot influence list, count, ordering, or facets
+ * via raw displayName (P6-001 ordering/name oracle).
+ */
 function eligibilityWhere(): Prisma.ProfileWhereInput {
   return {
-    deletedAt: null,
-    verificationStatus: "VERIFIED",
-    visibilityStatus: "DIRECTORY",
-    publicSlug: { not: null },
+    AND: [
+      {
+        deletedAt: null,
+        verificationStatus: "VERIFIED",
+        visibilityStatus: "DIRECTORY",
+        publicSlug: { not: null },
+      },
+      publicDirectoryGroupWhere("identity"),
+    ],
   };
 }
 
@@ -123,7 +134,10 @@ function buildWhere(query: DirectoryQuery): Prisma.ProfileWhereInput {
     and.push(
       withPublicGroup("professional", {
         professionalDetails: {
-          industry: { name: { equals: query.industry, mode: "insensitive" } },
+          industry: {
+            isActive: true,
+            name: { equals: query.industry, mode: "insensitive" },
+          },
         },
       }),
     );
@@ -305,8 +319,14 @@ export async function getDirectoryProfessionalBySlug(
   const prisma = getPrisma();
   const row = await prisma.profile.findFirst({
     where: {
-      publicSlug: normalized,
-      deletedAt: null,
+      AND: [
+        {
+          publicSlug: normalized,
+          deletedAt: null,
+        },
+        // Same public-directory boundary as list (identity must be publicly exposable).
+        eligibilityWhere(),
+      ],
     },
     include: listInclude,
   });
