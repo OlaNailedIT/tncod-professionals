@@ -1,8 +1,9 @@
 /**
  * Phase 8 — derived profile completion (pure, deterministic).
  *
- * Completion percentage is informational only. It never mutates
- * profile_status, verification_status, or visibility_status.
+ * Completion percentage is the sole authority for REGISTERED / INCOMPLETE / COMPLETE
+ * transitions after a member save. It never drives verification_status, visibility_status,
+ * Spotlight, EXCO roles, or directory publication.
  *
  * Weights (section shares of the applicable denominator):
  *   About You        20  (preferred name, location, bio — headshot deferred/excluded)
@@ -18,6 +19,9 @@
  * - Community areas → church_information.service_area (no separate department column — Phase 2)
  * - Opportunity prefs → looking/offering summaries + opportunity_preferences JSON
  */
+
+/** Completeness lifecycle values Phase 8 may write. SUBMITTED is owned by Phase 12. */
+export type ProfileCompletenessStatus = "REGISTERED" | "INCOMPLETE" | "COMPLETE";
 
 export const COMPLETION_WEIGHTS = {
   about: 20,
@@ -371,4 +375,25 @@ export function toCompletionInput(profile: {
     professionalSituation: profile.professionalSituation,
     businessLinks: profile.businessLinks,
   };
+}
+
+/**
+ * Persistable completeness status from derived completion %.
+ *
+ * - Join leaves REGISTERED until the first member profile save.
+ * - After save: 100% → COMPLETE, else → INCOMPLETE.
+ * - SUBMITTED is never rewritten here (verification submission owns it).
+ * - Does not touch verification or visibility.
+ */
+export function deriveProfileCompletenessStatus(input: {
+  currentStatus: string;
+  completionPercent: number;
+}): ProfileCompletenessStatus | "SUBMITTED" {
+  if (input.currentStatus === "SUBMITTED") {
+    return "SUBMITTED";
+  }
+  if (input.completionPercent >= 100) {
+    return "COMPLETE";
+  }
+  return "INCOMPLETE";
 }

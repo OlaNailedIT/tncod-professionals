@@ -166,7 +166,7 @@ describe("Phase 8 updateOwnMemberProfile authorization and mass-assignment", () 
     expect(parsed.data).not.toHaveProperty("profile_image_storage_key");
   });
 
-  it("persists member fields without mutating status columns", async () => {
+  it("writes derived completeness status without mutating verification or visibility", async () => {
     const result = await updateOwnMemberProfile(AUTH_USER, {
       ...validBody,
       verificationStatus: "VERIFIED",
@@ -175,20 +175,37 @@ describe("Phase 8 updateOwnMemberProfile authorization and mass-assignment", () 
     });
     expect(result).toEqual({ ok: true });
 
-    expect(mocks.profileUpdate).toHaveBeenCalledWith({
-      where: { id: PROFILE_ID },
-      data: {
-        displayName: "Ada Lovelace",
-        professionalSituation: "Employee",
-        location: "Lagos",
-        bio: "Engineer",
-      },
-    });
     const profileData = mocks.profileUpdate.mock.calls[0]?.[0]?.data as Record<string, unknown>;
-    expect(profileData).not.toHaveProperty("profileStatus");
+    expect(profileData.displayName).toBe("Ada Lovelace");
+    expect(profileData.professionalSituation).toBe("Employee");
+    expect(profileData.location).toBe("Lagos");
+    expect(profileData.bio).toBe("Engineer");
+    // Partial canonical fields → INCOMPLETE (client cannot force COMPLETE).
+    expect(profileData.profileStatus).toBe("INCOMPLETE");
     expect(profileData).not.toHaveProperty("verificationStatus");
     expect(profileData).not.toHaveProperty("visibilityStatus");
     expect(profileData).not.toHaveProperty("profileImageStorageKey");
+  });
+
+  it("preserves SUBMITTED and never applies client-forced COMPLETE", async () => {
+    mocks.findFirstUser.mockResolvedValue({
+      ...ownedLoad(),
+      profile: {
+        ...ownedLoad().profile,
+        profileStatus: "SUBMITTED",
+        verificationStatus: "PENDING",
+      },
+    });
+
+    const result = await updateOwnMemberProfile(AUTH_USER, {
+      ...validBody,
+      profileStatus: "COMPLETE",
+      verificationStatus: "VERIFIED",
+    });
+    expect(result).toEqual({ ok: true });
+    const profileData = mocks.profileUpdate.mock.calls[0]?.[0]?.data as Record<string, unknown>;
+    expect(profileData.profileStatus).toBe("SUBMITTED");
+    expect(profileData).not.toHaveProperty("verificationStatus");
   });
 
   it("rejects whitespace-only required fields", async () => {

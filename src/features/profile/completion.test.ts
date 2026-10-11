@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   calculateProfileCompletion,
+  deriveProfileCompletenessStatus,
   isBusinessApplicable,
   isFilledText,
   isValidLinkedInUrl,
@@ -213,5 +214,34 @@ describe("calculateProfileCompletion", () => {
     const full = fullNonBusiness();
     const reduced = calculateProfileCompletion({ ...full, bio: null, industryName: null });
     expect(reduced.percent).toBeLessThan(calculateProfileCompletion(full).percent);
+  });
+});
+
+describe("deriveProfileCompletenessStatus", () => {
+  it("maps REGISTERED + partial completion to INCOMPLETE", () => {
+    expect(
+      deriveProfileCompletenessStatus({ currentStatus: "REGISTERED", completionPercent: 40 }),
+    ).toBe("INCOMPLETE");
+  });
+
+  it("maps INCOMPLETE + 100% to COMPLETE", () => {
+    expect(
+      deriveProfileCompletenessStatus({ currentStatus: "INCOMPLETE", completionPercent: 100 }),
+    ).toBe("COMPLETE");
+  });
+
+  it("maps COMPLETE + missing required data back to INCOMPLETE", () => {
+    expect(
+      deriveProfileCompletenessStatus({ currentStatus: "COMPLETE", completionPercent: 72 }),
+    ).toBe("INCOMPLETE");
+  });
+
+  it("preserves SUBMITTED for Phase 12 verification submission", () => {
+    expect(
+      deriveProfileCompletenessStatus({ currentStatus: "SUBMITTED", completionPercent: 100 }),
+    ).toBe("SUBMITTED");
+    expect(
+      deriveProfileCompletenessStatus({ currentStatus: "SUBMITTED", completionPercent: 20 }),
+    ).toBe("SUBMITTED");
   });
 });

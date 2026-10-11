@@ -2,6 +2,7 @@
 
 **Status:** PASS / COMPLETE / VERIFIED / LOCKED  
 **Forensic reconciliation:** 2026-09-08 — premature lock withdrawn, P2 gaps fixed, then re-locked.  
+**Security closeout remediation:** 2026-10-11 — server writes completeness `profile_status` (`REGISTERED`/`INCOMPLETE`/`COMPLETE`) from derived % on member save; verification/visibility unchanged; `SUBMITTED` preserved for Phase 12. See `phase-8-profile-completion-security-closeout.md`.  
 **Governance:** Phase 5 closed · Phase 6 locked · Phase 7 locked · Phase 8 locked · Phase 9+ not authorized.
 
 ## Purpose
@@ -55,7 +56,7 @@ Phase 8 does **not** implement directory, verification, EXCO, opportunities mark
 
 ## Completion algorithm
 
-Authoritative: `src/features/profile/completion.ts` → `calculateProfileCompletion`.
+Authoritative: `src/features/profile/completion.ts` → `calculateProfileCompletion` (percent) and `deriveProfileCompletenessStatus` (persistable `REGISTERED`/`INCOMPLETE`/`COMPLETE` after save; never writes verification/visibility; preserves `SUBMITTED`).
 
 ```text
 About You        20   preferred name, location, bio
@@ -100,6 +101,7 @@ No Prisma migrations. RLS unchanged (existing `professional_details` owner write
 - Owner write policies on `professional_details` unchanged (select/insert/update/delete — no FOR ALL widen)
 - Migration version `20260908120000` recorded in `supabase_migrations.schema_migrations`
 - Result: **PHASE8_DB_CLOSEOUT_PASS**
+- 2026-10-11: member save may update `profiles.profile_status` for completeness only (`INCOMPLETE`/`COMPLETE`); verification/visibility columns remain untouched by Phase 8
 
 ### Playwright closeout suite (`e2e/phase-8-closeout-evidence.spec.ts`) — 3/3 PASS
 

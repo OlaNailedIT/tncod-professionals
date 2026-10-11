@@ -13,6 +13,7 @@ import {
 } from "@/features/profile/profile-edit-schema";
 import {
   calculateProfileCompletion,
+  deriveProfileCompletenessStatus,
   isValidLinkedInUrl,
   normalizeOpportunityPreferences,
   toCompletionInput,
@@ -263,6 +264,7 @@ export async function updateOwnMemberProfile(
   }
 
   const industryId = resolveIndustryId(parsed.data.industryId);
+  let industryName: string | null = null;
   if (industryId) {
     if (!/^[0-9a-f-]{36}$/i.test(industryId)) {
       return {
@@ -273,7 +275,7 @@ export async function updateOwnMemberProfile(
     }
     const industry = await prisma.industry.findFirst({
       where: { id: industryId, isActive: true },
-      select: { id: true },
+      select: { id: true, name: true },
     });
     if (!industry) {
       return {
@@ -282,6 +284,7 @@ export async function updateOwnMemberProfile(
         fieldErrors: { industryId: "Select a valid industry." },
       };
     }
+    industryName = industry.name;
   }
 
   const skillNames = parseCommaList(parsed.data.skills);
@@ -314,7 +317,38 @@ export async function updateOwnMemberProfile(
     training: parsed.data.training,
   });
 
-  // Never touch verification, visibility, profile_status, or profile_image_storage_key.
+  const nextCompletion = calculateProfileCompletion(
+    toCompletionInput({
+      displayName: parsed.data.displayName,
+      location: parsed.data.location ?? null,
+      bio: parsed.data.bio ?? null,
+      hasHeadshot: existing.hasHeadshot,
+      profession: parsed.data.profession,
+      industryName,
+      yearsExperience,
+      hasExperienceRows: existing.hasExperienceRows,
+      skillNames,
+      serviceNames,
+      linkedinUrl,
+      serviceArea: parsed.data.serviceArea ?? null,
+      lookingForSummary: parsed.data.lookingFor,
+      offeringSummary: parsed.data.offering,
+      opportunityPreferences,
+      professionalSituation: parsed.data.professionalSituation,
+      businessLinks: existing.businessLinks.map((b) => ({
+        name: b.name,
+        industryName: b.industryName,
+        description: b.description,
+      })),
+    }),
+  );
+  const nextProfileStatus = deriveProfileCompletenessStatus({
+    currentStatus: existing.profileStatus,
+    completionPercent: nextCompletion.percent,
+  });
+
+  // Never touch verification, visibility, or profile_image_storage_key.
+  // profile_status is completeness-only (REGISTERED/INCOMPLETE/COMPLETE); SUBMITTED preserved.
   await prisma.$transaction(async (tx) => {
     await tx.user.update({
       where: { id: authUserId },
@@ -327,6 +361,7 @@ export async function updateOwnMemberProfile(
         professionalSituation: parsed.data.professionalSituation,
         location: parsed.data.location ?? null,
         bio: parsed.data.bio ?? null,
+        profileStatus: nextProfileStatus,
       },
     });
     await tx.professionalDetails.upsert({
