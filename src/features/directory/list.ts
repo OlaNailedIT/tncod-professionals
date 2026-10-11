@@ -14,6 +14,7 @@ import {
 import { applyVisibilityPreferencesToPublicProfessional } from "@/features/visibility/apply-projection";
 import {
   defaultPreferenceMap,
+  getVisibilityGroup,
   type VisibilityGroupKey,
   type VisibilityPreferenceLevelValue,
 } from "@/features/visibility/groups";
@@ -29,6 +30,44 @@ function prefsFromRows(
     }
   }
   return merged;
+}
+
+/**
+ * Effective preference permits this group in the public directory.
+ * PUBLIC row → yes; missing row → yes only when locked default is PUBLIC;
+ * PRIVATE/MEMBERS row → no. Uniqueness is (profileId, groupKey).
+ */
+export function publicDirectoryGroupWhere(
+  groupKey: VisibilityGroupKey,
+): Prisma.ProfileWhereInput {
+  const defaultLevel = getVisibilityGroup(groupKey).defaultPreference;
+  const explicitPublic: Prisma.ProfileWhereInput = {
+    visibilityPreferences: {
+      some: { groupKey, preference: "PUBLIC" },
+    },
+  };
+  if (defaultLevel === "PUBLIC") {
+    return {
+      OR: [
+        explicitPublic,
+        {
+          visibilityPreferences: {
+            none: { groupKey },
+          },
+        },
+      ],
+    };
+  }
+  return explicitPublic;
+}
+
+function withPublicGroup(
+  groupKey: VisibilityGroupKey,
+  fieldMatch: Prisma.ProfileWhereInput,
+): Prisma.ProfileWhereInput {
+  return {
+    AND: [publicDirectoryGroupWhere(groupKey), fieldMatch],
+  };
 }
 
 function mapRow(input: {
@@ -72,55 +111,76 @@ function buildWhere(query: DirectoryQuery): Prisma.ProfileWhereInput {
   const and: Prisma.ProfileWhereInput[] = [eligibilityWhere()];
 
   if (query.profession) {
-    and.push({
-      professionalDetails: {
-        profession: { contains: query.profession, mode: "insensitive" },
-      },
-    });
+    and.push(
+      withPublicGroup("professional", {
+        professionalDetails: {
+          profession: { contains: query.profession, mode: "insensitive" },
+        },
+      }),
+    );
   }
   if (query.industry) {
-    and.push({
-      professionalDetails: {
-        industry: { name: { equals: query.industry, mode: "insensitive" } },
-      },
-    });
+    and.push(
+      withPublicGroup("professional", {
+        professionalDetails: {
+          industry: { name: { equals: query.industry, mode: "insensitive" } },
+        },
+      }),
+    );
   }
   if (query.location) {
-    and.push({
-      location: { contains: query.location, mode: "insensitive" },
-    });
+    and.push(
+      withPublicGroup("location", {
+        location: { contains: query.location, mode: "insensitive" },
+      }),
+    );
   }
   if (query.service) {
-    and.push({
-      profileServices: {
-        some: {
-          service: {
-            isActive: true,
-            name: { contains: query.service, mode: "insensitive" },
+    and.push(
+      withPublicGroup("skills_services", {
+        profileServices: {
+          some: {
+            service: {
+              isActive: true,
+              name: { contains: query.service, mode: "insensitive" },
+            },
           },
         },
-      },
-    });
+      }),
+    );
   }
   if (query.q) {
     const q = query.q;
     and.push({
       OR: [
-        { displayName: { contains: q, mode: "insensitive" } },
-        { location: { contains: q, mode: "insensitive" } },
-        { professionalDetails: { profession: { contains: q, mode: "insensitive" } } },
-        {
-          profileSkills: {
-            some: { skill: { isActive: true, name: { contains: q, mode: "insensitive" } } },
+        withPublicGroup("identity", {
+          displayName: { contains: q, mode: "insensitive" },
+        }),
+        withPublicGroup("location", {
+          location: { contains: q, mode: "insensitive" },
+        }),
+        withPublicGroup("professional", {
+          professionalDetails: {
+            profession: { contains: q, mode: "insensitive" },
           },
-        },
-        {
-          profileServices: {
+        }),
+        withPublicGroup("skills_services", {
+          profileSkills: {
             some: {
-              service: { isActive: true, name: { contains: q, mode: "insensitive" } },
+              skill: { isActive: true, name: { contains: q, mode: "insensitive" } },
             },
           },
-        },
+        }),
+        withPublicGroup("skills_services", {
+          profileServices: {
+            some: {
+              service: {
+                isActive: true,
+                name: { contains: q, mode: "insensitive" },
+              },
+            },
+          },
+        }),
       ],
     });
   }
@@ -199,6 +259,7 @@ export type DirectoryListResult = {
 /**
  * Authoritative directory list. Same projection for anonymous and members.
  * Privileged Prisma connection: eligibility + allowlist enforced here.
+ * Search/filter/count require effective PUBLIC preference per field group (P6-001).
  */
 export async function listDirectoryProfessionals(
   query: DirectoryQuery,
@@ -259,7 +320,9 @@ export async function getDirectoryProfessionalBySlug(
 export async function listDirectoryIndustryOptions(): Promise<string[]> {
   const prisma = getPrisma();
   const rows = await prisma.profile.findMany({
-    where: eligibilityWhere(),
+    where: {
+      AND: [eligibilityWhere(), publicDirectoryGroupWhere("professional")],
+    },
     select: {
       professionalDetails: {
         select: { industry: { select: { name: true, isActive: true } } },
