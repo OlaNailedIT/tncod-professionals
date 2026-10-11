@@ -30,11 +30,28 @@ export default async function DashboardPage() {
           </div>
 
           {profile ? (
-            <div className="flex flex-wrap gap-2" aria-label="Profile status summary">
-              <StatusBadge intent="info">Profile: {profile.profileStatus}</StatusBadge>
-              <StatusBadge intent="neutral">Verification: {profile.verificationStatus}</StatusBadge>
-              <StatusBadge intent="neutral">Directory: {profile.visibilityStatus}</StatusBadge>
-            </div>
+            <>
+              <div className="flex flex-wrap gap-2" aria-label="Profile status summary">
+                <StatusBadge intent="info">Profile: {profile.profileStatus}</StatusBadge>
+                <StatusBadge intent="neutral">
+                  Completion: {profile.completion.percent}%
+                </StatusBadge>
+                <StatusBadge intent="neutral">Verification: {profile.verificationStatus}</StatusBadge>
+                <StatusBadge intent="neutral">Directory: {profile.visibilityStatus}</StatusBadge>
+              </div>
+
+              {profile.completion.percent < 100 ? (
+                <Alert intent="info" title="Continue your professional profile">
+                  Your profile is {profile.completion.percent}% complete. Saving more details does
+                  not verify you or list you in the directory.
+                </Alert>
+              ) : (
+                <Alert intent="success" title="Professional profile details look complete">
+                  Required profile fields are filled. This is not verification and does not publish
+                  you to the directory.
+                </Alert>
+              )}
+            </>
           ) : (
             <Alert intent="warning" title="Profile missing">
               Your account is signed in, but a professional profile record was not found. Contact
@@ -44,7 +61,11 @@ export default async function DashboardPage() {
 
           <div className="flex flex-wrap gap-3">
             <Button asChild>
-              <Link href="/profile">View your profile</Link>
+              <Link href={profile && profile.completion.percent < 100 ? "/profile/edit" : "/profile"}>
+                {profile && profile.completion.percent < 100
+                  ? "Complete your profile"
+                  : "View your profile"}
+              </Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/profile/edit">Edit profile</Link>
