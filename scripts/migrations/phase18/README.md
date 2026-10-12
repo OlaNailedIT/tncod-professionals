@@ -1,14 +1,40 @@
-# Phase 18 migration scripts
+# Phase 18 / 18A migration scripts
 
 Offline / privileged historical Google Form tooling.
 
 ```text
 raw/       — immutable source (GITIGNORED — PII)
 derived/   — cleaned derivatives (GITIGNORED)
-reports/   — masked audit + dry-run outputs
-dry-run.ts — default command (no DB mutation)
-import.ts  — hard abort until production gate
+reports/   — masked audit + dry-run + plan outputs
+dry-run.ts — classification only (no DB mutation)
+import.ts  — plan-only by default; --execute-local / --execute-production gated
 ```
+
+## Phase 18A (Auth-first importer)
+
+Implemented under `src/features/legacy-migration/`:
+
+* `plan.ts` — execution plan from the same dry-run classifier
+* `execute.ts` — Auth → users → MEMBER → legacy profile → provenance
+* `env-safety.ts` — Production mutation DENY unless exact authorization phrase + import credentials + project ref
+* `target-safety.ts` — hosted Supabase project ref `brpppukzqgpzxjelwwrj`
+* `auth-admin.ts` — service-role Auth create (no password; no OTP by default)
+
+```bash
+# Plan only (no mutation) — default
+npx tsx -r ./scripts/register-server-only.cjs scripts/migrations/phase18/import.ts
+
+# Local disposable execute (never Production)
+npx tsx -r ./scripts/register-server-only.cjs scripts/migrations/phase18/import.ts \
+  --execute-local --i-understand-this-mutates-local-db
+
+# Production execute — ONLY with exact PHASE18_PRODUCTION_IMPORT_AUTHORIZED phrase
+# + PHASE18_IMPORT_* credentials + project ref. Do not re-run without new authorization.
+npx tsx -r ./scripts/register-server-only.cjs scripts/migrations/phase18/import.ts \
+  --execute-production
+```
+
+**2026-09-11 Production:** Pass 1 CREATED 18; Pass 2 SKIP_ALREADY_IMPORTED 18; pre-existing orphan soft-deleted under separate authorization. Phase 18 **PASS / COMPLETE / VERIFIED / LOCKED**. See `reports/production-execute-latest.md` and `reports/pre-existing-orphan-disposition.md`.
 
 ## Credential architecture (least privilege)
 
@@ -17,32 +43,21 @@ PHASE 18 READ-ONLY PREFLIGHT
         │
         └── PHASE18_PRODUCTION_DATABASE_URL (or PRODUCTION_DATABASE_URL)
             PostgreSQL READ-ONLY role only
-            NO service_role / Auth admin
-            NO Storage
-            NO write privileges
                     ↓
              Production reconciliation (18 rows)
                     ↓
-             Import plan finalized
+        EXPLICIT: PHASE18_PRODUCTION_IMPORT_AUTHORIZED
+                  = AUTHORIZE PHASE 18 PRODUCTION IMPORT
                     ↓
-        EXPLICIT: AUTHORIZE PHASE 18 PRODUCTION IMPORT
+       PHASE18_IMPORT_DATABASE_URL
+       + PHASE18_IMPORT_SUPABASE_URL
+       + PHASE18_IMPORT_SERVICE_ROLE_KEY
+       + PHASE18_PRODUCTION_PROJECT_REF=brpppukzqgpzxjelwwrj
                     ↓
-       Separate write-capable credentials
-       (PHASE18_IMPORT_DATABASE_URL + Auth admin TBD)
-                    ↓
-             Controlled import
+             Controlled import (separate Phase 18 execution gate)
 ```
 
-| Gate | Credential | Allowed |
-| --- | --- | --- |
-| Preflight | `PHASE18_PRODUCTION_DATABASE_URL` | SELECT only on identity/member/business/status tables needed for match |
-| Preflight | Supabase `service_role` | **FORBIDDEN** as preflight substitute |
-| Preflight | Storage | **NOT REQUIRED / FORBIDDEN** |
-| Import | Separate write DB + Auth admin (minimum TBD after CREATE_NEW count) | Only after explicit import authorization |
-
 Never print, commit, or paste secrets into reports.
-
-Access check (no secret values):
 
 ```bash
 node scripts/migrations/phase18/check-access.mjs
@@ -52,25 +67,18 @@ node scripts/migrations/phase18/classify-env.mjs
 ## Commands
 
 ```bash
-# Masked dry-run (no writes)
 npx tsx -r ./scripts/register-server-only.cjs scripts/migrations/phase18/dry-run.ts
-
-# Dry-run with local member index (still no writes)
 npx tsx -r ./scripts/register-server-only.cjs scripts/migrations/phase18/dry-run.ts --with-db
-
-# Production preflight (READ ONLY) — requires PHASE18_PRODUCTION_DATABASE_URL
+npx tsx -r ./scripts/register-server-only.cjs scripts/migrations/phase18/import.ts
 npx tsx -r ./scripts/register-server-only.cjs scripts/migrations/phase18/production-preflight.ts
-
-# Source audit helpers
 node scripts/migrations/phase18/audit-source.mjs
-node scripts/migrations/phase18/identity-analysis.mjs
 ```
 
 ## Rules
 
 - Never modify `raw/`
-- Never expose via Next.js routes
-- Never create Auth/passwords from these scripts without the import gate
-- Never run production import without `AUTHORIZE PHASE 18 PRODUCTION IMPORT`
-- Never substitute local `DATABASE_URL` or local `SUPABASE_SERVICE_ROLE_KEY` for production
-- Phone normalization default is Nigeria (`+234`) — see `src/features/registration/phone.ts`
+- Never expose via Next.js routes / browser APIs
+- Never run Production import without exact authorization env phrase
+- Never substitute local credentials for Production
+- Phone default Nigeria (`+234`)
+- After 2026-09-11 Production execute: do not re-run without new explicit authorization; do not delete the pre-existing orphan by guesswork

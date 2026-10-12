@@ -1,30 +1,36 @@
 # Phase 18 — Honest closeout reconciliation
 
-**Date:** 2026-09-09  
+**Date:** 2026-09-10 (production import attempt) / prior closeout 2026-09-09  
 **Authoritative detail:** `docs/product/phase-18-historical-google-form-migration-scope.md`  
-**Canonical preflight:** `reports/production-preflight.md`
+**Canonical preflight:** `reports/production-preflight.md`  
+**Production import attempt:** `reports/production-import-blocked-2026-09-10.md`
 
-## Status
+> **Later truth (do not erase this historical blocked window):**  
+> **2026-09-11** Production import **EXECUTED** — Pass 1 `CREATED 18`; Pass 2 `SKIP_ALREADY_IMPORTED 18`.  
+> Post-import reconciliation: `production-post-import-reconciliation.md`.  
+> Current status: **PHASE 18 PRODUCTION IMPORT: VERIFIED COMPLETE** — see `docs/release/RELEASE-STATE.md`.
+
+## Status (historical — 2026-09-10 blocked attempt)
 
 ```text
-PHASE 18 — NOT COMPLETE
+PHASE 18 — NOT COMPLETE / NOT LOCKED   ← historical for this date only
+PHASE 18A — PASS / COMPLETE / VERIFIED / LOCKED
 
 IMPLEMENTATION / DRY-RUN — PASS
-AUTH ARCHITECTURE — DECIDED (CODE/SCHEMA)
-CREDENTIAL ARCHITECTURE — DOCUMENTED (least-privilege RO vs import)
+AUTH-FIRST IMPORTER — IMPLEMENTED (Phase 18A)
+PRODUCTION EXECUTE PATH — WIRED (18A hard-stop removed under execution gate)
 
-PRODUCTION PREFLIGHT — BLOCKED
-Reason: PHASE18_PRODUCTION_DATABASE_URL / PRODUCTION_DATABASE_URL ABSENT
+PRODUCTION PREFLIGHT (RO) — BLOCKED (RO URL ABSENT)
+PRODUCTION IMPORT EXECUTION — BLOCKED
+Reason: PHASE18_IMPORT_DATABASE_URL / PHASE18_IMPORT_SUPABASE_URL /
+        PHASE18_IMPORT_SERVICE_ROLE_KEY / PHASE18_PRODUCTION_IMPORT_AUTHORIZED ABSENT
+Evidence: reports/production-execution-blocked-2026-09-10.md
 
-PRODUCTION IDENTITY MATCHING — NOT TESTED
-PRODUCTION 18-ROW DIFF — NOT AVAILABLE
-PRODUCTION MUTATIONS — 0 (NON-EXECUTION ONLY)
+PRODUCTION MUTATIONS — 0
 
-PRODUCTION IMPORT — NOT AUTHORIZED
-(exact write phrase AUTHORIZE PHASE 18 PRODUCTION IMPORT not issued)
-
-PHASE 19+ — NOT AUTHORIZED
-HARD STOP
+PHASE 19 — PASS / COMPLETE / VERIFIED / LOCKED
+(Phase 20+ status at this historical moment: NOT AUTHORIZED — superseded; see RELEASE-STATE)
+HARD STOP for this blocked attempt only
 ```
 
 ## Credential architecture (summary)

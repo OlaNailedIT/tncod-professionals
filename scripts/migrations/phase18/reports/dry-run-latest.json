@@ -1,7 +1,7 @@
 {
   "mode": "DRY_RUN",
-  "batchKey": "phase18-google-form-dryrun-4EC0A1773D77-1788981328854",
-  "generatedAt": "2026-09-09T19:15:28.854Z",
+  "batchKey": "phase18-google-form-dryrun-4EC0A1773D77-1789072624395",
+  "generatedAt": "2026-09-10T20:37:04.395Z",
   "productionImportAuthorized": false,
   "source": {
     "path": "C:\\Users\\O\\Devs\\tncod-professional\\scripts\\migrations\\phase18\\raw\\TNCOD-PROFESSIONALS-DIRECTORY-Responses.xlsx",
@@ -39,7 +39,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -84,7 +84,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -129,7 +129,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -174,7 +174,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -220,7 +220,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -266,7 +266,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -311,7 +311,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -357,7 +357,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -402,7 +402,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -447,7 +447,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -492,7 +492,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -538,7 +538,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -583,7 +583,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -628,7 +628,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -673,7 +673,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -718,7 +718,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -764,7 +764,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {
@@ -809,7 +809,7 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "manualReviewReason": null,
       "maskedPreview": {

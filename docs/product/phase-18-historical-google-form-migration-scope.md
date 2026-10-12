@@ -1,59 +1,54 @@
 # Phase 18 — Historical Google Form Migration
 
-**Closeout date:** 2026-09-09  
-**Phase 18 completion status:** **NOT COMPLETE** (blocked on production read-only access)  
-**Production read-only preflight gate:** EXPLICITLY AUTHORIZED — still **BLOCKED** on credentials  
-**Phase 19+:** NOT AUTHORIZED  
-**Production import:** NOT AUTHORIZED (`AUTHORIZE PHASE 18 PRODUCTION IMPORT` not issued as an active write grant)
+**Closeout date:** 2026-09-11 (Production import + orphan disposition)  
+**Phase 18 completion status:** **PASS / COMPLETE / VERIFIED / LOCKED**  
+**Phase 18A:** **PASS / COMPLETE / VERIFIED / LOCKED** — see `docs/product/phase-18a-auth-first-importer.md`  
+**Source recovery (2026-09-10):** PASS — primary SHA `4EC0A177…`; recovery twin `BDD21A1C…` identity-equivalent (18/18).  
+**Failed-run reconciliation (2026-09-10):** PASS — clean historical starting state.  
+**Production import (2026-09-11):** EXECUTED — Pass 1 `CREATED 18`; Pass 2 `SKIP_ALREADY_IMPORTED 18`. Evidence: `scripts/migrations/phase18/reports/production-execute-latest.md`  
+**Post-import reconciliation:** HISTORICAL PASS (18 COMPLETE_SAFE).  
+**Pre-existing orphan:** Dispositioned under separate authorization — soft-deleted `p***@e***` (`7df3c2b4…`, created 2026-09-10; Auth/profile/roles/refs = none; not Phase 18). Evidence: `scripts/migrations/phase18/reports/pre-existing-orphan-disposition.md`  
+**Phase 19:** PASS / COMPLETE / VERIFIED / LOCKED (separate)  
+**Phase 20–22:** PASS / COMPLETE / VERIFIED / LOCKED (see `docs/release/RELEASE-STATE.md`)  
+**Current release authority:** `docs/release/RELEASE-STATE.md` (do not treat older “Phase 20+ NOT AUTHORIZED” lines below as current)  
 
 ---
 
 ## 1. Executive Status
 
-> **PHASE 18 — NOT COMPLETE**
+> **PHASE 18 — PASS / COMPLETE / VERIFIED / LOCKED**
 >
-> **PHASE 18 — IMPLEMENTATION / DRY-RUN: PASS**
+> **PHASE 18 — PRODUCTION IMPORT COMPLETE**
 >
-> **PHASE 18 AUTH ARCHITECTURE: DECIDED FROM CODE/SCHEMA EVIDENCE**
+> **PHASE 18 — HISTORICAL DATA VERIFIED** (18/18 Auth + member + profile + provenance; all `NOT_REVIEWED`/`PRIVATE`)
 >
-> **PHASE 18 CREDENTIAL ARCHITECTURE: DOCUMENTED (least-privilege RO vs separate import)**
+> **PRE-EXISTING ORPHAN — DISPOSITIONED** (soft-delete; not created by Phase 18; zero dependencies)
 >
-> **PHASE 18 PRODUCTION READ-ONLY PREFLIGHT GATE: OPENED BY EXPLICIT AUTHORIZATION**
+> **PHASE 18A — PASS / COMPLETE / VERIFIED / LOCKED**
 >
-> **PHASE 18 PRODUCTION PREFLIGHT RESULT: BLOCKED**
+> **PRODUCTION IMPORT PASS 1:** CREATED 18 (batch `phase18-prod-4EC0A1773D77-1789141626246`)
 >
-> Reason: authorized production read-only access unavailable (`PHASE18_PRODUCTION_DATABASE_URL` / `PRODUCTION_DATABASE_URL` ABSENT; workspace DB is local `127.0.0.1:54322` only). Local `SUPABASE_SERVICE_ROLE_KEY` was **not** used as a production substitute.
+> **PRODUCTION IMPORT PASS 2 (idempotency):** SKIP_ALREADY_IMPORTED 18
 >
-> Production identity matching and production diff were **not** performed and therefore **cannot** be reported as successful. Local disposable data was **not** substituted.
+> **PUBLIC-STATE SAFETY:** all 18 profiles `NOT_REVIEWED` + `PRIVATE`; consent/spotlight/business = 0
 >
-> Production mutation count during this work: **0**, because no production connection or production write was attempted. This confirms **non-execution**, not successful validation of a production write guard against the live production environment.
+> **PHASE 18 PRODUCTION IMPORT: VERIFIED COMPLETE**
 >
-> **PRODUCTION IMPORT: NOT AUTHORIZED**
+> Later phases: see `docs/release/RELEASE-STATE.md` (Gate 5). Historical “Phase 20+ NOT AUTHORIZED” language below this closeout window is superseded.
 
 ```text
 PHASE 5–17 — PASS / COMPLETE / VERIFIED / LOCKED
+PHASE 19 — PASS / COMPLETE / VERIFIED / LOCKED
+PHASE 18A — PASS / COMPLETE / VERIFIED / LOCKED
 
-PHASE 18 — NOT COMPLETE
+PHASE 18 — PASS / COMPLETE / VERIFIED / LOCKED
 
-PHASE 18 IMPLEMENTATION / DRY-RUN — PASS
-PHASE 18 AUTH ARCHITECTURE — DECIDED FROM CODE/SCHEMA EVIDENCE
-PHASE 18 CREDENTIAL ARCHITECTURE — DOCUMENTED
+PRODUCTION IMPORT PASS 1 — CREATED 18
+PRODUCTION IMPORT PASS 2 — SKIP_ALREADY_IMPORTED 18
+PRE-EXISTING ORPHAN — SOFT-DELETED (separate authorization)
 
-PHASE 18 PRODUCTION PREFLIGHT — BLOCKED
-Reason: authorized production read-only access unavailable
-
-PRODUCTION IDENTITY MATCHING — NOT TESTED
-PRODUCTION 18-ROW DIFF — NOT AVAILABLE
-
-PRODUCTION MUTATIONS — 0
-NON-EXECUTION ONLY
-
-PRODUCTION IMPORT — NOT AUTHORIZED
-PHASE 19+ — NOT AUTHORIZED
-HARD STOP
+PHASE 18 PRODUCTION IMPORT — VERIFIED COMPLETE (do not re-run without new authorization)
 ```
-
-**18 proposed historical imports ≠ 18 confirmed production inserts.**
 
 ---
 

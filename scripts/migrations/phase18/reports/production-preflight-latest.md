@@ -1,9 +1,8 @@
 # Phase 18 — Production preflight (masked)
 
-Status: **PHASE 18 — PRODUCTION PREFLIGHT BLOCKED — READ-ONLY ACCESS UNAVAILABLE**
-Generated: 2026-09-09T19:14:54.984Z
-Production access: UNAVAILABLE
-Blocker: PRODUCTION PREFLIGHT BLOCKED — READ-ONLY ACCESS UNAVAILABLE (no PRODUCTION_DATABASE_URL / PHASE18_PRODUCTION_DATABASE_URL)
+Status: **PHASE 18 — PRODUCTION PREFLIGHT PASS**
+Generated: 2026-09-10T18:16:01.348Z
+Production access: READ_ONLY_OK
 
 ## Actual production mutations
 
@@ -21,10 +20,10 @@ Blocker: PRODUCTION PREFLIGHT BLOCKED — READ-ONLY ACCESS UNAVAILABLE (no PRODU
 
 ## Accounting
 
-- CREATE: 0
+- CREATE: 18
 - MATCH_EXISTING: 0
 - GAP_ONLY: 0
-- MANUAL_REVIEW: 18
+- MANUAL_REVIEW: 0
 - CONFLICT: 0
 - SKIP: 0
 - TOTAL: 18 (must be 18) → OK
@@ -33,21 +32,21 @@ Blocker: PRODUCTION PREFLIGHT BLOCKED — READ-ONLY ACCESS UNAVAILABLE (no PRODU
 - 6 → MANUAL_REVIEW: 6
 
 ## Rows
-- row 2: MANUAL_REVIEW / MANUAL_REVIEW — M*** m***@g*** business=N/A
-- row 3: MANUAL_REVIEW / MANUAL_REVIEW — O*** O*** o***@g*** business=MANUAL_REVIEW
-- row 4: MANUAL_REVIEW / MANUAL_REVIEW — M*** m***@g*** business=N/A
-- row 5: MANUAL_REVIEW / MANUAL_REVIEW — O*** O*** I*** a***@g*** business=N/A
-- row 6: MANUAL_REVIEW / MANUAL_REVIEW — G*** o***@g*** business=N/A
-- row 7: MANUAL_REVIEW / MANUAL_REVIEW — K*** m***@g*** business=MANUAL_REVIEW
-- row 8: MANUAL_REVIEW / MANUAL_REVIEW — O*** o***@g*** business=MANUAL_REVIEW
-- row 9: MANUAL_REVIEW / MANUAL_REVIEW — D*** b***@g*** business=N/A
-- row 10: MANUAL_REVIEW / MANUAL_REVIEW — C*** k***@g*** business=MANUAL_REVIEW
-- row 11: MANUAL_REVIEW / MANUAL_REVIEW — A*** b***@y*** business=N/A
-- row 12: MANUAL_REVIEW / MANUAL_REVIEW — M*** m***@y*** business=N/A
-- row 13: MANUAL_REVIEW / MANUAL_REVIEW — B*** B*** S*** b***@g*** business=N/A
-- row 14: MANUAL_REVIEW / MANUAL_REVIEW — A*** a***@g*** business=N/A
-- row 15: MANUAL_REVIEW / MANUAL_REVIEW — O*** U*** o***@g*** business=N/A
-- row 16: MANUAL_REVIEW / MANUAL_REVIEW — C*** o***@g*** business=N/A
-- row 17: MANUAL_REVIEW / MANUAL_REVIEW — T*** t***@j*** business=MANUAL_REVIEW
-- row 18: MANUAL_REVIEW / MANUAL_REVIEW — M*** a***@g*** business=N/A
-- row 19: MANUAL_REVIEW / MANUAL_REVIEW — A*** A*** F*** a***@g*** business=MANUAL_REVIEW
+- row 2: CREATE / NEW_MEMBER — M*** m***@g*** business=N/A
+- row 3: CREATE / NEW_MEMBER — O*** O*** o***@g*** business=MANUAL_REVIEW
+- row 4: CREATE / NEW_MEMBER — M*** m***@g*** business=N/A
+- row 5: CREATE / NEW_MEMBER — O*** O*** I*** a***@g*** business=N/A
+- row 6: CREATE / NEW_MEMBER — G*** o***@g*** business=N/A
+- row 7: CREATE / NEW_MEMBER — K*** m***@g*** business=MANUAL_REVIEW
+- row 8: CREATE / NEW_MEMBER — O*** o***@g*** business=MANUAL_REVIEW
+- row 9: CREATE / NEW_MEMBER — D*** b***@g*** business=N/A
+- row 10: CREATE / NEW_MEMBER — C*** k***@g*** business=MANUAL_REVIEW
+- row 11: CREATE / NEW_MEMBER — A*** b***@y*** business=N/A
+- row 12: CREATE / NEW_MEMBER — M*** m***@y*** business=N/A
+- row 13: CREATE / NEW_MEMBER — B*** B*** S*** b***@g*** business=N/A
+- row 14: CREATE / NEW_MEMBER — A*** a***@g*** business=N/A
+- row 15: CREATE / NEW_MEMBER — O*** U*** o***@g*** business=N/A
+- row 16: CREATE / NEW_MEMBER — C*** o***@g*** business=N/A
+- row 17: CREATE / NEW_MEMBER — T*** t***@j*** business=MANUAL_REVIEW
+- row 18: CREATE / NEW_MEMBER — M*** a***@g*** business=N/A
+- row 19: CREATE / NEW_MEMBER — A*** A*** F*** a***@g*** business=MANUAL_REVIEW

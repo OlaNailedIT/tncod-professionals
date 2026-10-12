@@ -6,20 +6,25 @@ The **TNCOD Professionals Directory** is a controlled output of the underlying p
 
 ---
 
-## Current phase
+## Current release state
 
-**Phase 0 — PASS / LOCKED** (product specification)  
-**Phases 3–4:** **COMPLETE**.  
-**Phase 5 — Design system:** **PASS / COMPLETE / CLOSED** (5.1–5.14).  
-**Phase 6 — Quick Registration MVP:** **PASS / COMPLETE / VERIFIED / LOCKED**. See `docs/product/phase-6-quick-registration-mvp.md`.  
-**Phase 7+ / other product modules:** **not** authorized.
+**Authoritative summary:** [`docs/release/RELEASE-STATE.md`](docs/release/RELEASE-STATE.md)
 
-Application product features (registration, login, profile, directory, EXCO) are **not** implemented.
+```text
+Phases 0–22     PASS / COMPLETE / VERIFIED / LOCKED (see release state for carve-outs)
+Phase 18        PRODUCTION IMPORT: VERIFIED COMPLETE (do not re-run)
+Phase 23 pilot  AUTHORIZED / IN PROGRESS
+Phase 23C / 23D NOT LOCKED (human acceptance outstanding)
+Phase 24+       NOT AUTHORIZED
+```
+
+Unrestricted launch remains blocked by known residuals (AUTH-A / AUTH-B, PRIVACY-L1, human acceptance, pilot closeout, ops evidence). Do **not** treat this repository as launch-ready solely because CI is green.
 
 Read:
 
+- [`docs/release/RELEASE-STATE.md`](docs/release/RELEASE-STATE.md) — current verified baseline + remaining gates
 - [`docs/product/product-brief.md`](docs/product/product-brief.md) — master reference
-- [`docs/product/product-scope.md`](docs/product/product-scope.md) — V1 in/out of scope
+- [`docs/product/product-scope.md`](docs/product/product-scope.md) — V1 in/out of scope (incl. PRIVACY-P1 / V1-O1 amendments)
 - [`docs/ux/README.md`](docs/ux/README.md) — Phase 1 UX/IA index
 - [`docs/data/phase-2-data-architecture-gate.md`](docs/data/phase-2-data-architecture-gate.md) — schema contract
 - [`docs/security/phase-3-security-gate.md`](docs/security/phase-3-security-gate.md) — security contract

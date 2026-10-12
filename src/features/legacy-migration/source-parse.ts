@@ -97,7 +97,20 @@ function cleanHeader(h: string): string {
   return h.replace(/\s+/g, " ").trim();
 }
 
-function col(headers: string[], row: string[], re: RegExp): string {
+/**
+ * Header lookup. Prefer exact match when `exact` is set so Google Forms
+ * "Email address" (collector) is not confused with "Email Address" (blank question).
+ */
+function col(
+  headers: string[],
+  row: string[],
+  re: RegExp,
+  opts?: { exact?: string },
+): string {
+  if (opts?.exact !== undefined) {
+    const exactIdx = headers.findIndex((h) => h === opts.exact);
+    if (exactIdx >= 0) return String(row[exactIdx] ?? "").trim();
+  }
   const idx = headers.findIndex((h) => re.test(h));
   if (idx < 0) return "";
   return String(row[idx] ?? "").trim();
@@ -150,7 +163,7 @@ export function parseGoogleFormExport(sourcePath: string): ParsedWorkbook {
       rows.push(
         finalizeCanonicalRow({
           sourceRowNumber: r + 1,
-          emailRaw: col(h, raw, /^Email address$/i),
+          emailRaw: col(h, raw, /^Email address$/, { exact: "Email address" }),
           fullName: col(h, raw, /^Full Name$/i),
           preferredName: col(h, raw, /^Preferred Name/i) || null,
           phoneRaw: col(h, raw, /^Phone Number$/i),
@@ -175,7 +188,8 @@ export function parseGoogleFormExport(sourcePath: string): ParsedWorkbook {
             gender: col(h, raw, /^Gender$/i) || null,
             birthday: col(h, raw, /^Birthday$/i) || null,
             whatsappNumber: col(h, raw, /WhatsApp Number/i) || null,
-            blankEmailAddressColumn: col(h, raw, /^Email Address$/i) || null,
+            // Distinct from collector "Email address" — exact case required.
+            blankEmailAddressColumn: col(h, raw, /^Email Address$/, { exact: "Email Address" }) || null,
             spotlightStatus: col(h, raw, /^Spotlight Status$/i) || null,
             dateFeatured: col(h, raw, /^Date Featured$/i) || null,
             yearsBucket: col(h, raw, /Years of Professional Experience/i) || null,
