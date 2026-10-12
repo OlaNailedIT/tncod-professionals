@@ -1,0 +1,81 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    env:
+      # Disposable loopback placeholders only — never hosted Production.
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      PHASE18_PRODUCTION_DATABASE_URL: ""
+      PHASE18_IMPORT_DATABASE_URL: ""
+      SUPABASE_SERVICE_ROLE_KEY: ""
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+      NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Guard against Production credentials in CI
+        run: |
+          set -euo pipefail
+          for key in DATABASE_URL PHASE18_PRODUCTION_DATABASE_URL PHASE18_IMPORT_DATABASE_URL SUPABASE_SERVICE_ROLE_KEY; do
+            val="${!key:-}"
+            if [ -n "$val" ] && echo "$val" | grep -Eqi 'supabase\.co|pooler\.supabase|amazonaws\.com|brpppukzqgpzxjelwwrj'; then
+              echo "Refusing CI with hosted Production-like $key"
+              exit 1
+            fi
+          done
+          echo "CI credential guard OK"
+
+      # Generate before typecheck so @prisma/client exports exist.
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Prisma validate
+        run: npm run prisma:validate
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit and domain tests (no silent DB integration)
+        run: >
+          npx vitest run
+          --exclude 'src/**/*.integration.test.ts'
+          --exclude 'src/**/*boundary*.test.ts'
+          --exclude 'src/features/registration/synthetic-registration.integration.test.ts'
+
+      - name: Build
+        run: npm run build
+        env:
+          # Next build needs public placeholders only; no Production secrets.
+          NEXT_TELEMETRY_DISABLED: "1"
