@@ -56,16 +56,7 @@ export const excoNavGroups: NavGroup[] = [
     items: [
       { href: "/exco/verification", label: "Verification" },
       { href: "/exco/spotlight", label: "Spotlight" },
-      { href: "/exco/directory", label: "Directory" },
     ],
-  },
-  {
-    label: "Insights",
-    items: [{ href: "/exco/reports", label: "Reports" }],
-  },
-  {
-    label: "System",
-    items: [{ href: "/exco/settings", label: "Settings" }],
   },
 ];
 

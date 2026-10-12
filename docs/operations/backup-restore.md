@@ -1,0 +1,55 @@
+# Operations — Backup / restore (Production)
+
+**Gate 6A status:** **RESTORE EVIDENCE: BLOCKED** (no disposable restore drill executed in this gate)  
+**Date:** 2026-10-12  
+**Production project ref (non-secret):** `brpppukzqgpzxjelwwrj` (us-west-2)  
+**Application origin:** `https://tncod-professionals-azure.vercel.app`
+
+---
+
+## What is known without dashboard secrets
+
+| Item | Evidence class | Notes |
+| --- | --- | --- |
+| Hosted Postgres on Supabase | LIVE / prior infrastructure reports | Production DB is hosted Supabase |
+| Provider backup capability (paid plans) | PROVIDER DOCS | Supabase documents daily backups for Pro+ and optional PITR add-on; Free tier expects self-managed dumps |
+| Restore-to-new-project / PITR restore | PROVIDER DOCS | Available on paid plans with physical backups; restores must not target live Production blindly |
+| Gate 6A disposable restore drill | **NOT EXECUTED** | No operator-confirmed plan tier, backup inventory, or non-Production restore target was available to this execution |
+
+Do **not** claim disaster recovery is proven without an actual restore into a disposable/non-Production environment.
+
+---
+
+## Responsible operator
+
+| Role | Responsibility |
+| --- | --- |
+| Product owner / platform operator | Confirms Supabase plan tier, opens Database → Backups, authorises any restore |
+| Engineering executor | Documents procedure; never overwrites Production without explicit written authorization |
+
+---
+
+## Safe restore drill (when authorised)
+
+1. Confirm Production backup class in Supabase Dashboard (daily backup list and/or PITR window).  
+2. Prefer **Restore to a new project** (or equivalent disposable target) — **never** restore over Production for a drill.  
+3. Record: backup timestamp/class, target project ref, start/end time, basic integrity checks (migration count / row sanity on non-PII tables).  
+4. Decommission the disposable project after evidence is captured.
+
+### Integrity checks (disposable only)
+
+```text
+- supabase migration history / applied migration count matches expectation
+- public.users / profiles counts are non-zero if source had data
+- no Production URL/credentials pointed at the disposable project for app traffic
+```
+
+---
+
+## Missing capability for Gate 6A PASS on restore
+
+```text
+RESTORE EVIDENCE: BLOCKED
+Exact gap: operator confirmation of current backup class/frequency on Production
+           + authorised disposable restore target + completed drill evidence
+```

@@ -142,16 +142,31 @@ V1-O1       Deferred post-launch:
 
 ---
 
+## Gate 6A — technical launch closeout (2026-10-12)
+
+See also:
+
+- `docs/release/auth-a-eapi-closeout.md`
+- `docs/release/auth-b-collision-confirmation-packet.md`
+- `docs/legal/privacy-notice-candidate.md` + `/privacy`
+- `docs/operations/backup-restore.md`
+- `docs/operations/monitoring.md`
+- `docs/operations/incident-rollback.md`
+- `docs/release/phase-23c-human-acceptance-packet.md`
+- `docs/release/phase-23d-comprehension-packet.md`
+- `docs/release/pilot-closeout-packet.md`
+
 ## Remaining launch gates (not complete)
 
-- AUTH-A — E-API residual
-- AUTH-B — identifier collision resolution
-- PRIVACY-L1 — Privacy Notice wording / sign-off
+- AUTH-A — provider-level E-API residual (unrestricted launch blocked)
+- AUTH-B — owner confirmations for remaining reclaim candidates
+- PRIVACY-L1 — Privacy Notice **legal** sign-off
 - Phase 23C — real phone/tablet human acceptance
 - Phase 23D — participant / task comprehension evidence
-- Controlled pilot closeout
-- Operations evidence (restore / monitoring / incident / rollback)
-- Bounded polish (brand parity vs current `main`, dead surfaces, as still applicable)
+- Controlled pilot closeout (human)
+- Backup/restore drill (operator + disposable target)
+- Monitoring alerting (optional; dashboards exist)
+- Phase 23 brand/theme/navigation UI (intentionally deferred)
 
 ---
 
