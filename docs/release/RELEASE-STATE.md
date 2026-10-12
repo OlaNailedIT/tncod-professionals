@@ -57,11 +57,22 @@ Phase 23 pilot  AUTHORIZED / IN PROGRESS
 Phase 24+       NOT AUTHORIZED
 ```
 
+### Phase 21 escape note (Gate 5 follow-up)
+
+Classification follow-up found Phase 21 remediations that were **LOCKED / VERIFIED** but absent from `main` while Production tracked `main`:
+
+- `sanitizeNextPath` path-traversal normalization (`src/lib/auth/safe-redirect.ts`)
+- baseline security headers (`next.config.ts`)
+
+These were restored surgically after Gate 5 (do not treat Gate 5 “implementation NONE” as final for those two paths).
+
 ### Phase 23 source note (important)
 
 Phase 23A–D **product/status documentation** is restored on `main` by Release Gate 5.
 
-Phase 23 **application UI / brand / theme / navigation implementation** historically lived in a divergent local dirty tree. Current Production tracks `main` and may **not** include later Phase 23 visual/navigation remediations. Those implementation paths remain classified under dirty-tree disposition as **deferred / intentionally local** until a future authorized promotion after human acceptance — they are **not** wholesale-promoted by Gate 5.
+Surgical Phase 23B Production `/design-system` → `notFound()` is restored on `main`.
+
+Phase 23 **application UI / brand mark / theme / navigation implementation** historically lived in a divergent local dirty tree. Professionals mark assets + shell/theme wiring remain **deferred / intentionally local** until a future authorized promotion after human acceptance — they are **not** wholesale-promoted by Gate 5.
 
 ---
 

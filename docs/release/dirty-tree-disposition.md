@@ -69,20 +69,25 @@ Exact path groups below.
 | `scripts/phase205-*`, `scripts/phase21-*`, `scripts/phase22-*`, `scripts/phase23-*`, `scripts/prod-*`, `scripts/rbac-*`, `scripts/otp-*`, `scripts/forensic-*`, `scripts/auth-site-url-repair.cjs`, `scripts/set-vercel-supabase-public.cjs`, `scripts/write-prod-anon-legacy.cjs`, … | DANGEROUS OPS TOOL — GOVERNED | Retain locally; any future repo promotion requires explicit ops governance + secret review |
 | `scripts/migrations/phase18/{orphan-cleanup,orphan-disposition,forensic-*,post-import-reconcile,reconcile-failed-run}.ts` | DANGEROUS OPS TOOL — GOVERNED / INTENTIONALLY LOCAL FORENSIC | Do not make accidental Production mutation easy |
 | Dirty-only `.env.example` / `.gitignore` deltas | DEFERRED / GENERATED | Review later; do not hide source via broad ignores |
-| Dirty `prisma/schema.prisma`, `next.config.ts`, `supabase/templates/*` local edits | DEFERRED / SUPERSEDED | Diff against `main` before any future promote |
-| Remaining modified `src/app/**`, `src/components/**`, `src/features/**` (non–Phase-18A) | DEFERRED FUTURE WORK | Mixed Phase 23 / UX; not Gate 5 |
+| Dirty `prisma/schema.prisma`, `supabase/templates/*` local edits | DEFERRED / SUPERSEDED | Diff against `main` before any future promote |
+| Remaining modified `src/app/**`, `src/components/**`, `src/features/**` (non–Phase-18A / non–Phase-21 escape) | DEFERRED FUTURE WORK | Mixed Phase 23 / UX |
+| `public/brand/professionals-mark*`, `professionals-logo.tsx`, `src/app/icon.jpg`, theme/shell wiring | DEFERRED FUTURE WORK | Verified Phase 23A/B brand work; needs clean UI promotion after human acceptance — not UNKNOWN |
 
 ---
 
 ## Verified implementation missing from main
 
 ```text
-VERIFIED IMPLEMENTATION MISSING FROM MAIN (blocking Gate 5): NONE
+After Gate 5 docs PR: Phase 21 sanitizeNextPath + security headers were still missing (classification follow-up).
+After Gate 5 follow-up PR: those Phase 21 escapes + Production /design-system 404 are promoted.
+
+Remaining verified-but-deferred (not blocking UNKNOWN):
+- Professionals mark / logo assets + shell wiring (Phase 23A/B polish)
 ```
 
-Phase 18A importer modules were the only verified, Production-completed implementation gap required for source truth and were promoted.
+Phase 18A importer modules + Phase 21 escape remediations + surgical `/design-system` Production 404 are on `main`.
 
-Phase 23 application implementation is **intentionally deferred** (not UNKNOWN): documentation restored; code remains local until human-acceptance gates authorize a clean promotion.
+Phase 23 brand/theme/navigation application implementation remains **intentionally deferred** (not UNKNOWN).
 
 ---
 

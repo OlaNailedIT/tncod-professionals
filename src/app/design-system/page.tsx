@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { BrandLogo } from "@/components/brand/logo";
 import { Container, Grid, PageFrame, Section, Stack } from "@/components/layout";
 import {
@@ -35,6 +36,16 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+/**
+ * Phase 23B: design laboratory is not a Production product surface.
+ * Available in local/preview; Production returns 404.
+ */
+function assertDesignSystemAllowed() {
+  if (process.env.VERCEL_ENV === "production") {
+    notFound();
+  }
+}
+
 function Swatch({
   name,
   className,
@@ -64,6 +75,7 @@ function DemoBlock({ label }: { label: string }) {
 }
 
 export default function DesignSystemPage() {
+  assertDesignSystemAllowed();
   return (
     <PageFrame className="py-10 font-sans">
       <Container width="wide">

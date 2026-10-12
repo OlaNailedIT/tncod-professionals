@@ -11,12 +11,36 @@ const ALLOWED_PREFIXES = [
   "/exco",
 ] as const;
 
+function normalizePathname(pathname: string): string | null {
+  // Collapse "." / ".." so allowlist cannot be bypassed via /dashboard/../join
+  const parts = pathname.split("/");
+  const stack: string[] = [];
+  for (const part of parts) {
+    if (part === "" || part === ".") continue;
+    if (part === "..") {
+      if (stack.length === 0) return null;
+      stack.pop();
+      continue;
+    }
+    if (part.includes("\\")) return null;
+    stack.push(part);
+  }
+  return `/${stack.join("/")}`;
+}
+
 export function sanitizeNextPath(raw: string | null | undefined, fallback = "/dashboard"): string {
   if (!raw) return fallback;
   let value = raw.trim();
   try {
-    // If a full URL was smuggled in, only keep pathname+search when same-origin intent fails.
-    if (/^https?:\/\//i.test(value) || value.startsWith("//")) {
+    // Absolute URLs (e.g. Supabase RedirectTo): keep pathname+search only — never redirect off-site.
+    if (/^https?:\/\//i.test(value)) {
+      try {
+        const u = new URL(value);
+        value = `${u.pathname}${u.search}`;
+      } catch {
+        return fallback;
+      }
+    } else if (value.startsWith("//")) {
       return fallback;
     }
   } catch {
@@ -30,11 +54,15 @@ export function sanitizeNextPath(raw: string | null | undefined, fallback = "/da
   // Strip hash
   value = value.split("#")[0] ?? value;
 
-  const pathOnly = value.split("?")[0] ?? value;
+  const [pathPart, ...queryParts] = value.split("?");
+  const pathOnly = normalizePathname(pathPart ?? "");
+  if (!pathOnly) return fallback;
+
   const allowed = ALLOWED_PREFIXES.some(
     (prefix) => pathOnly === prefix || pathOnly.startsWith(`${prefix}/`),
   );
   if (!allowed) return fallback;
 
-  return value;
+  const search = queryParts.length > 0 ? `?${queryParts.join("?")}` : "";
+  return `${pathOnly}${search}`;
 }
