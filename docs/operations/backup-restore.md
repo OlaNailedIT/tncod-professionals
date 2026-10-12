@@ -15,9 +15,10 @@
 | Hosted Postgres on Supabase | LIVE / prior infrastructure reports | Production DB is hosted Supabase |
 | Provider backup capability (paid plans) | PROVIDER DOCS | Supabase documents daily backups for Pro+ and optional PITR add-on; Free tier expects self-managed dumps |
 | Restore-to-new-project / PITR restore | PROVIDER DOCS | Available on paid plans with physical backups; restores must not target live Production blindly |
-| Gate 6A disposable restore drill | **NOT EXECUTED** | No operator-confirmed plan tier, backup inventory, or non-Production restore target was available to this execution |
+| Gate 6B schema-only disposable restore drill | **PASS** | See `backup-restore-drill-6b.md` — proves schema materialization only |
+| Protected production-data recovery drill (Dashboard backup → restore-to-new-project) | **NOT EXECUTED** | Requires owner-confirmed backup class + authorised disposable target |
 
-Do **not** claim disaster recovery is proven without an actual restore into a disposable/non-Production environment.
+Do **not** claim production-data disaster recovery is proven from the schema-only drill alone.
 
 ---
 

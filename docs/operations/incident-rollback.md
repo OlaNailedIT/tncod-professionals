@@ -109,6 +109,6 @@ Prefer: branch → PR → CI PASS → merge (keeps Gate 4 CI enforcement).
 
 ```text
 - No intentional Production break/fix drill was run in Gate 6A
-- Backup/restore drill remains BLOCKED (see backup-restore.md)
+- Schema-only disposable restore drill PASS; Dashboard backup class + production-data DR still human (see backup-restore.md)
 - External paging not configured (see monitoring.md)
 ```

@@ -2,8 +2,8 @@
 
 **Authority date:** 2026-10-12  
 **Release Gate 5:** Release hygiene / clean source reconstruction  
-**Authoritative Git SHA (at gate start):** `ba032a6` (`origin/main`)  
-**Authoritative Production:** Git-linked Vercel Production deployment for the current `main` tip
+**Authoritative Git SHA (current `origin/main` tip):** `6618ac87c806e1a58cd027c34c08783bb7ed6567`  
+**Authoritative Production:** GitHub Production deployment `7021555704` · sha `6618ac8` · env URL matches live Vercel Production alias for `https://tncod-professionals-azure.vercel.app`
 
 This document is the **current release-state summary** for humans and agents.  
 It does not replace locked phase contracts. It reconciles verified Production/gate evidence with repository status.
@@ -156,17 +156,23 @@ See also:
 - `docs/release/phase-23d-comprehension-packet.md`
 - `docs/release/pilot-closeout-packet.md`
 
+## Gate 6B — human acceptance board
+
+Consolidated owner board: `docs/release/gate-6b-action-board.md`  
+(AUTH-B / Privacy-L1 / backup class / 23C / 23D / pilot matrix).
+
 ## Remaining launch gates (not complete)
 
-- AUTH-A — provider-level E-API residual (unrestricted launch blocked)
+- AUTH-A — provider-level E-API residual (unrestricted launch blocked; pilot exception remains)
 - AUTH-B — owner confirmations for remaining reclaim candidates
-- PRIVACY-L1 — Privacy Notice **legal** sign-off
+- PRIVACY-L1 — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
 - Phase 23C — real phone/tablet human acceptance
 - Phase 23D — participant / task comprehension evidence
 - Controlled pilot closeout (human)
-- Backup/restore drill (operator + disposable target)
-- Monitoring alerting (optional; dashboards exist)
-- Phase 23 brand/theme/navigation UI (intentionally deferred)
+- Dashboard backup **class** confirmation (schema-only disposable restore drill **PASS**)
+- Protected production-data recovery drill (not executed)
+- Monitoring alerting (optional; dashboards / procedure exist)
+- Phase 23 brand/theme/navigation UI (intentionally deferred from dirty tree)
 
 ---
 
