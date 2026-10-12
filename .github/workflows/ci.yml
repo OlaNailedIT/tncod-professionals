@@ -20,8 +20,8 @@ jobs:
     timeout-minutes: 25
 
     env:
-      # Fail closed: never point CI at hosted Production.
-      DATABASE_URL: ""
+      # Disposable loopback placeholders only — never hosted Production.
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
       PHASE18_PRODUCTION_DATABASE_URL: ""
       PHASE18_IMPORT_DATABASE_URL: ""
       SUPABASE_SERVICE_ROLE_KEY: ""
@@ -54,17 +54,18 @@ jobs:
           done
           echo "CI credential guard OK"
 
+      # Generate before typecheck so @prisma/client exports exist.
+      - name: Prisma generate
+        run: npx prisma generate
+
+      - name: Prisma validate
+        run: npm run prisma:validate
+
       - name: Typecheck
         run: npm run typecheck
 
       - name: Lint
         run: npm run lint
-
-      - name: Prisma validate
-        run: npm run prisma:validate
-
-      - name: Prisma generate
-        run: npx prisma generate
 
       - name: Unit and domain tests (no silent DB integration)
         run: >
