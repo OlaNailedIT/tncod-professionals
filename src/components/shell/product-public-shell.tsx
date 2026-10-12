@@ -21,9 +21,18 @@ export function ProductPublicShell({
       mode="link"
       footer={
         footer ?? (
-          <p className="text-caption text-muted-foreground">
-            TNCOD Professionals — a community professional network. Collection is not publication.
-          </p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-caption text-muted-foreground">
+              TNCOD Professionals — a community professional network. Collection is not
+              publication.
+            </p>
+            <a
+              href="/privacy"
+              className="text-caption text-muted-foreground underline underline-offset-2 hover:text-foreground"
+            >
+              Privacy Notice
+            </a>
+          </div>
         )
       }
     >

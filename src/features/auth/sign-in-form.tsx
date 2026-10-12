@@ -271,6 +271,13 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
                     {...emailForm.register("email")}
                   />
                 </Field>
+                <p className="text-body-sm text-muted-foreground">
+                  See the{" "}
+                  <a href="/privacy" className="underline underline-offset-2">
+                    Privacy Notice
+                  </a>{" "}
+                  for how TNCOD Professionals handles account information.
+                </p>
                 <FormActions>
                   <Button
                     type="submit"

@@ -8,6 +8,15 @@ Format: phase-oriented until releases exist. Application versions will be added 
 
 ## [Unreleased]
 
+### Release Gate 6A — Technical launch closeout (2026-10-12)
+
+- AUTH-A documented as provider-level unrestricted-launch blocker (`docs/release/auth-a-eapi-closeout.md`)
+- AUTH-B Production inventory + owner confirmation packet (`docs/release/auth-b-collision-confirmation-packet.md`)
+- Factual `/privacy` Privacy Notice + join/sign-in/footer links (legal sign-off still pending)
+- Operations docs: backup/restore, monitoring, incident/rollback
+- Human packets: 23C, 23D, pilot closeout
+- Bounded polish: remove dead EXCO nav stubs (`/exco/directory`, `/reports`, `/settings`)
+
 ### Release Gate 5 — Release hygiene / clean source reconstruction (2026-10-12)
 
 - Authoritative release summary: `docs/release/RELEASE-STATE.md`

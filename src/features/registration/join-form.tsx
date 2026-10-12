@@ -206,6 +206,13 @@ export function JoinRegistrationForm() {
                   {errors.captchaToken.message}
                 </p>
               ) : null}
+              <p className="text-body-sm text-muted-foreground">
+                By joining, you create a private professional record. Read the{" "}
+                <a href="/privacy" className="underline underline-offset-2">
+                  Privacy Notice
+                </a>
+                . Joining is not verification or directory publication.
+              </p>
               <FormActions>
                 <Button type="submit" loading={submitting} className="min-h-11 w-full sm:w-auto">
                   Join the community
