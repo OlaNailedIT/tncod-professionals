@@ -1,6 +1,7 @@
 # Operations — Backup / restore (Production)
 
-**Gate 6A status:** **RESTORE EVIDENCE: BLOCKED** (no disposable restore drill executed in this gate)  
+**Gate 6B status:** **OPS — BACKUP/RESTORE: PASS** (schema-only disposable drill — see `backup-restore-drill-6b.md`)  
+**Dashboard backup class confirmation:** still **AWAITING HUMAN** (`docs/release/ops-backup-class-owner-check.md`)  
 **Date:** 2026-10-12  
 **Production project ref (non-secret):** `brpppukzqgpzxjelwwrj` (us-west-2)  
 **Application origin:** `https://tncod-professionals-azure.vercel.app`
@@ -46,10 +47,11 @@ Do **not** claim disaster recovery is proven without an actual restore into a di
 
 ---
 
-## Missing capability for Gate 6A PASS on restore
+## Remaining human item
 
 ```text
-RESTORE EVIDENCE: BLOCKED
-Exact gap: operator confirmation of current backup class/frequency on Production
-           + authorised disposable restore target + completed drill evidence
+Owner confirms Supabase Dashboard backup class/PITR fields
+(see docs/release/ops-backup-class-owner-check.md)
 ```
+
+Engineering disposable schema restore drill: **PASS** (`backup-restore-drill-6b.md`).
