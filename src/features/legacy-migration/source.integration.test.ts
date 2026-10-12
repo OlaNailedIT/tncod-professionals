@@ -23,6 +23,8 @@ describe("Phase 18 live source parse + dry-run (when raw present)", () => {
     expect(parsed.sourceSha256).toBe(
       "4EC0A1773D771F78488169B44DA7DCF424BD0354684A2D42F6C06264E12CE29C",
     );
+    expect(parsed.rows.filter((r) => r.emailNormalized).length).toBe(18);
+    expect(parsed.rows.filter((r) => r.historicalOnly.blankEmailAddressColumn).length).toBe(0);
 
     for (const row of parsed.rows) {
       expect(row.phoneNormalized).toBeTruthy();

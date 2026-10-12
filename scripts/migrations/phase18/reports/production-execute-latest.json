@@ -1,0 +1,216 @@
+{
+  "mode": "EXECUTE_PRODUCTION",
+  "generatedAt": "2026-09-11T15:59:26.832Z",
+  "batchKey": "phase18-prod-4EC0A1773D77-1789142365052",
+  "environment": "production",
+  "stageOrderInvariant": "AUTH_FIRST",
+  "summary": {
+    "CREATED": 0,
+    "SKIP_ALREADY_IMPORTED": 18,
+    "GAP_ONLY_PROVENANCE": 0,
+    "REFUSED": 0,
+    "FAILED": 0,
+    "total": 18
+  },
+  "productionMutationExecuted": true,
+  "rows": [
+    {
+      "sourceRowNumber": 2,
+      "sourceRowHash": "51C6EFCBB1F29F334E38C14A68ADE3B2313239B336968D67C0A889824010DBF0",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 3,
+      "sourceRowHash": "BA9BA65C52B98E80AABD74976FC1D3CCB73C821C881C4BAC16C912F96C45CE03",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": true,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 4,
+      "sourceRowHash": "2D82057B1A3E68FE9E61F8C6B7E27D694E7457D199421FCE4BF2EEC3817B5333",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 5,
+      "sourceRowHash": "605A600FDB4F06FCB8AD605C5883E4FF82A4DB2497F9C28E6978B8AF95502E65",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 6,
+      "sourceRowHash": "B60C1326A64671CE266F153FFF501C3C7610E529D2806E5F428644C743FD464F",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 7,
+      "sourceRowHash": "38C15936069B8A948AE4EA01F97F006DCD46CC5B63D60C1E87581379964D712A",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": true,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 8,
+      "sourceRowHash": "D68CDC8BDE2DE6A089F6ED781A67E786B56564CD1769876EEF9D18585CE06FFB",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": true,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 9,
+      "sourceRowHash": "D8F63370EE4FA4822D0DD2010AF8C17A2E42691F6CB8F08F667A99FD7D6DF673",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 10,
+      "sourceRowHash": "3EC2AF4D5F674E62E042A57CF22D37091C0E28398931206B6A6C656B8511C6E9",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": true,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 11,
+      "sourceRowHash": "5CA095D2C5265911650EC8FF03461EC3AEF8C81A862AE73B3293D8D5BD9500F4",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 12,
+      "sourceRowHash": "EB6F996E6BB9AE719AD8D4C85E3BCD336418BC47E734D202CC9B51F11B193810",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 13,
+      "sourceRowHash": "D7BA8ED630EEA10C76CD0A5D5AF5EEC1CD066B9F653AD0BEBCDF6B0421174030",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 14,
+      "sourceRowHash": "D460F551D4C617570CE893BAC686CE5425E491471A639B79A3F2BC4D96CBD209",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 15,
+      "sourceRowHash": "77001DE370614C7CB6CDB243FE7F2CB497138CE6AF8B9587A28921ACDCAD4482",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 16,
+      "sourceRowHash": "9DCC16C0E94035E359F8B853176A319B0ED72E317705F3C32D4419474DAB04D0",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 17,
+      "sourceRowHash": "FC461310AF04047642CAAC1C93A81E520D8C01957B69C72CA70FB1A0AF5C3ABD",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": true,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 18,
+      "sourceRowHash": "3876B0C7505D6D0CD6ED6D8DB14C8ED0E925959400D7E6D13AD5B1D22E94A34B",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": false,
+      "hasUserId": false,
+      "hasProfileId": false
+    },
+    {
+      "sourceRowNumber": 19,
+      "sourceRowHash": "3EE8733F729B7A0D5B3A516A1FB2DC6C11666AA60A6418F174FED9B524A8D790",
+      "proposedAction": "SKIP_ALREADY_IMPORTED",
+      "outcome": "SKIP_ALREADY_IMPORTED",
+      "stagesCompleted": [],
+      "error": null,
+      "businessCandidate": true,
+      "hasUserId": false,
+      "hasProfileId": false
+    }
+  ]
+}

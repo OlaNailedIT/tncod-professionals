@@ -1,8 +1,25 @@
 # Product scope — V1
 
-**Status:** Locked (Phase 0)  
+**Status:** Locked (Phase 0) with owner amendments recorded 2026-10-12  
 **Applies to:** TNCOD Professionals V1  
-**Does not apply to:** Phases 19–20 and any feature listed under Non-goals
+**Does not apply to:** features listed under Non-goals / post-launch deferrals  
+**Current release status:** see `docs/release/RELEASE-STATE.md`
+
+### Owner amendments (do not erase Phase 0 history)
+
+```text
+PRIVACY-P1  V1 requires clear privacy/data-use explanation, directory/profile
+            visibility controls, and appropriate notice/acknowledgement.
+            A generic consent-management engine is NOT a current V1 requirement.
+
+PRIVACY-L1  A published Privacy Notice is required before unrestricted launch.
+            Final legal wording is a separate sign-off (not invented here).
+
+V1-O1       Deferred post-launch: EXCO export; dedicated job-seeker operations
+            workspace; headshot upload UX; generic CRM-style member notes.
+            Verification-bound Admin+ notes + existing EXCO/reporting suffice
+            for initial launch operations.
+```
 
 ---
 
@@ -47,8 +64,10 @@ V1 is **not** a social network, CRM, payments platform, or AI matching product.
 
 ### Privacy
 
-- Directory visibility preferences
-- Consent management (as designed in Phase 13)
+- Directory visibility preferences (Phase 14 product control)
+- Clear privacy / data-use explanation and appropriate notice / acknowledgement (**PRIVACY-P1**)
+- Published Privacy Notice before unrestricted launch (**PRIVACY-L1** — wording sign-off separate)
+- ~~Generic consent-management engine~~ — **amended:** not a current V1 requirement (**PRIVACY-P1**)
 
 ---
 
@@ -88,10 +107,12 @@ V1 is **not** a social network, CRM, payments platform, or AI matching product.
 
 ### Administration
 
-- Admin notes
-- Export
-- Basic reporting
+- Verification-bound Admin+ notes (sufficient for initial launch — **V1-O1**)
+- Basic reporting / analytics (Phase 10 / Phase 20)
 - Role-based access (Member / EXCO Viewer / EXCO Admin / Super Admin)
+- ~~Generic CRM-style member notes~~ — **deferred post-launch (V1-O1)**
+- ~~EXCO export~~ — **deferred post-launch (V1-O1)**
+- ~~Dedicated job-seeker operations workspace~~ — **deferred post-launch (V1-O1)**
 
 ---
 

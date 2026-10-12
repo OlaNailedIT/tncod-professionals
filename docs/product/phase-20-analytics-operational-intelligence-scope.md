@@ -645,4 +645,161 @@ HARD STOP
 | Legitimate Production EXCO OTP session | **NOT AVAILABLE** — no approved EXCO production credentials / inbox access in this gate; fabricating users or enabling helper in Production is prohibited |
 | Production authenticated render of analytics | **NOT VERIFIED** |
 
-**Why not locked:** Local authenticated E2E ≠ Production authenticated UI. Auth Site URL cutover was not altered to manufacture evidence. Phase 20 implementation remains intact and deployed; lock awaits a separately authorized Production Auth cutover **or** an owner-operated EXCO session evidence capture against the live origin.
+**Why not locked (historical):** Local authenticated E2E ≠ Production authenticated UI. Auth Site URL cutover was not altered to manufacture evidence at that time.
+
+---
+
+## 25. Auth origin repair + RBAC blocker (2026-09-13 — authorized Auth configuration intervention)
+
+### Root cause identified (pre-repair)
+
+| Layer | Actual LIVE state (before repair) | Defect |
+| --- | --- | --- |
+| Canonical Production app origin | `https://tncod-professionals-azure.vercel.app` | — |
+| Vercel Production `NEXT_PUBLIC_SITE_URL` | **empty** (`""`) | App `requestSignInOtpAction` fell back to `http://127.0.0.1:3000` for `emailRedirectTo` |
+| Hosted Auth `site_url` | `https://tncod-professionals-olanailedits-projects.vercel.app/` | Non-canonical project host — **not** azure alias; docs claiming `localhost` were **stale** |
+| Hosted Auth redirect allowlist | olanailedits host + preview wildcards only | Azure canonical origin / `/auth/callback` absent |
+| `AUTH_E2E_HELPER` on Production | correctly unavailable | Not a defect |
+
+Callback path from code (unchanged): `/auth/callback`.
+
+### Corrections applied (Auth configuration only)
+
+| Change | Result |
+| --- | --- |
+| Hosted Auth `site_url` | `https://tncod-professionals-azure.vercel.app/` |
+| Hosted Auth redirect allowlist | Azure origin + `/auth/callback` + `/**`; retained existing olanailedits project-host entries (already live aliases). **No** `*` wildcard. **No** localhost. |
+| Vercel Production `NEXT_PUBLIC_SITE_URL` | `https://tncod-professionals-azure.vercel.app` (Non-sensitive; `--value` — prior Sensitive/empty stdin writes had stored `""`) |
+| Production redeploy | `dpl_4tnnC11syaQGWtWUp2aRXDf6SrQf` → aliased to `https://tncod-professionals-azure.vercel.app` |
+| Application auth architecture | **Unchanged** (passwordless OTP + `/sign-in` + `/auth/callback`) |
+| Database schema / RLS / Phase 18 data | **Unchanged** |
+
+### Production change accounting
+
+```text
+Production application deployment: YES (dpl_4tnnC11syaQGWtWUp2aRXDf6SrQf)
+Production Auth configuration changes: YES (Site URL + redirect allowlist)
+Production Vercel env changes: YES (NEXT_PUBLIC_SITE_URL)
+Production database schema changes: NO
+Production data mutations: NO
+Production RLS changes: NO
+Production application code changes: NO (config/redeploy only)
+```
+
+### Post-repair smoke
+
+| Probe | Result |
+| --- | --- |
+| Production `/` | **200** |
+| Production `/professionals` | **200** |
+| Production `/sign-in` | **200** |
+| Production `/exco/analytics` anonymous | **307** → `/sign-in?next=%2Fexco%2Fanalytics` |
+| Hosted Auth `site_url` (config diff) | azure canonical |
+| Hosted redirects include `/auth/callback` | YES |
+
+### Remaining blocker — Production RBAC catalogue empty
+
+Read-only probe of Production (`brpppukzqgpzxjelwwrj`) after Auth repair:
+
+```text
+public.roles          = 0 rows
+public.permissions    = 0 rows
+public.user_roles     = 0 rows
+public.users          = 19
+public.profiles       = 18
+EXCO_* assignments    = 0
+```
+
+Domain authorization (`loadRoleNames` → `user_roles` / `roles`) therefore cannot recognize any EXCO identity. Passwordless Auth can establish a session, but **no legitimate EXCO role exists to authorize `/exco/analytics`**.
+
+This intervention’s authorization permitted Auth Site URL / redirect repair and forbade inventing EXCO credentials, elevating members, or unrelated DB mutations. Seeding the role/permission catalogue and assigning `EXCO_VIEWER` (or higher) to an owner identity requires a **separate explicit authorization**.
+
+### Final governance state after Auth repair (superseded by §26)
+
+```text
+PHASE 20 — IMPLEMENTATION COMPLETE
+PHASE 20 — AUTH ORIGIN DEFECT CORRECTED
+PHASE 20 — PRODUCTION AUTHENTICATED EXCO UI NOT VERIFIED
+  (blocker at that time: Production roles/permissions/user_roles empty)
+PHASE 20 — NOT LOCKED (historical)
+```
+
+---
+
+## 26. RBAC bootstrap + Production EXCO verification → LOCK (2026-09-13)
+
+### Authorized RBAC bootstrap
+
+Idempotent catalogue upsert from `src/security/permissions.ts` / `ROLE_PERMISSION_KEYS` (not full `prisma/seed.ts`):
+
+| Table | Before | After |
+| --- | --- | --- |
+| `roles` | 0 | **4** (`MEMBER`, `EXCO_VIEWER`, `EXCO_ADMIN`, `SUPER_ADMIN`) |
+| `permissions` | 0 | **18** |
+| `role_permissions` | 0 | **42** |
+| `user_roles` | 0 | **1** |
+| `users` / `profiles` | 19 / 18 | unchanged |
+
+Owner identity (explicitly provided): existing Production Auth/app user `olaoluface@gmail.com` (Phase 18 historical profile; `legacy_import=true`). Assigned **`EXCO_VIEWER` only**. No synthetic users. `loadRoleNames` path returns `EXCO_VIEWER`. Total EXCO assignments = 1.
+
+### Additional Auth/env repair required for session establishment
+
+Built-in Supabase SMTP unset (rate-limited mailer). Magic-link / hash callback path used for verification.
+
+Production client bundle previously embedded **publishable** key (`sb_publishable_…`) while Auth session establish called `/auth/v1/user` → **401**. Corrected Vercel Production:
+
+- `NEXT_PUBLIC_SUPABASE_URL` = `https://brpppukzqgpzxjelwwrj.supabase.co`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` = legacy anon JWT
+
+Redeploy: **`dpl_96isCD4vXqp96UZwUMSig9jperTd`** → `https://tncod-professionals-azure.vercel.app`.
+
+Hosted Auth `site_url` / redirect allowlist re-confirmed for azure + `/auth/callback` (re-applied if drift to olanailedits alias observed; both aliases serve the same Production deployment).
+
+### Production authenticated verification (LIVE)
+
+| Probe | Result |
+| --- | --- |
+| Anonymous `/exco/analytics` | **307** → `/sign-in?next=%2Fexco%2Fanalytics` |
+| EXCO session → `/exco/analytics` | **renders** — Community / Needs / Capacity / System Health |
+| Filter interaction | **YES** — filter select → query string updated → sections still render |
+| `(suppressed)` privacy copy | present in UI when applicable |
+| Email-like PII in analytics body | **0** |
+| MEMBER (non-EXCO Auth user) → `/exco/analytics` | **`/dashboard`** (denied) |
+| Cleared session → `/exco/analytics` | `/sign-in` |
+| `assertExcoDashboardAccess` before compute | CODE REVIEWED (unchanged) |
+| Analytics Vitest | **20/20 PASS** |
+| TypeScript | **PASS** |
+
+### Production change accounting (cumulative for Phase 20 closure)
+
+```text
+Production application deployment: YES (dpl_96isCD4vXqp96UZwUMSig9jperTd; prior Auth SITE_URL redeploy dpl_4tnnC11syaQGWtWUp2aRXDf6SrQf)
+Production Auth configuration changes: YES (site_url + redirect allowlist)
+Production Vercel env changes: YES (NEXT_PUBLIC_SITE_URL; NEXT_PUBLIC_SUPABASE_URL; NEXT_PUBLIC_SUPABASE_ANON_KEY)
+Production RBAC data changes: YES (roles/permissions/role_permissions + one EXCO_VIEWER user_roles)
+Production database schema changes: NO
+Production application data changes: NO (no profile/business/Phase 18 field mutations beyond RBAC)
+Production RLS changes: NO
+Production application code changes: NO (config/RBAC/redeploy only)
+```
+
+### Phase 18 integrity
+
+```text
+profiles = 18 (all legacy_import = true)
+users = 19 (includes soft-deleted orphan)
+No historical verification/visibility mutations in this gate
+```
+
+### Final governance
+
+```text
+PHASE 18 — PASS / COMPLETE / VERIFIED / LOCKED
+PHASE 19 — PASS / COMPLETE / VERIFIED / LOCKED
+
+PHASE 20 — PASS / COMPLETE / VERIFIED / LOCKED
+
+PHASE 21+ — NOT AUTHORIZED
+
+HARD STOP
+```

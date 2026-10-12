@@ -15,9 +15,11 @@ import {
   runDryRunClassification,
 } from "@/features/legacy-migration/dry-run";
 import { AUTHORITATIVE_SHEET, REJECTED_SHEETS } from "@/features/legacy-migration/types";
-import { isRejectedMemberSourceSheet } from "@/features/legacy-migration/source-parse";
+import { isRejectedMemberSourceSheet, parseGoogleFormExport } from "@/features/legacy-migration/source-parse";
 import { normalizePhone } from "@/features/registration/phone";
 import type { CanonicalLegacyRow } from "@/features/legacy-migration/types";
+import fs from "node:fs";
+import path from "node:path";
 
 function baseRow(over: Partial<CanonicalLegacyRow> = {}): CanonicalLegacyRow {
   return finalizeCanonicalRow({
@@ -269,5 +271,21 @@ describe("Phase 18 email normalize", () => {
   it("normalizes and rejects", () => {
     expect(normalizeEmail("  Ada@Example.COM ")).toBe("ada@example.com");
     expect(normalizeEmail("not-an-email")).toBeNull();
+  });
+});
+
+describe("Phase 18 Email address vs Email Address header disambiguation", () => {
+  it("collector Email address populates email; blank Email Address stays empty on live source", () => {
+    const raw = path.resolve(
+      process.cwd(),
+      "scripts/migrations/phase18/raw/TNCOD-PROFESSIONALS-DIRECTORY-Responses.xlsx",
+    );
+    if (!fs.existsSync(raw)) return;
+    const parsed = parseGoogleFormExport(raw);
+    expect(parsed.rows.every((r) => Boolean(r.emailNormalized))).toBe(true);
+    expect(parsed.rows.every((r) => !r.historicalOnly.blankEmailAddressColumn)).toBe(true);
+    const emailHeaders = parsed.headers.filter((h) => /^Email address$/i.test(h));
+    expect(emailHeaders).toContain("Email address");
+    expect(emailHeaders).toContain("Email Address");
   });
 });

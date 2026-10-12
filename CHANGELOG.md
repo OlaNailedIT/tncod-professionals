@@ -8,6 +8,20 @@ Format: phase-oriented until releases exist. Application versions will be added 
 
 ## [Unreleased]
 
+### Release Gate 5 — Release hygiene / clean source reconstruction (2026-10-12)
+
+- Authoritative release summary: `docs/release/RELEASE-STATE.md`
+- Dirty-tree disposition: `docs/release/dirty-tree-disposition.md`
+- Phase 18 final truth reconciled: **PRODUCTION IMPORT VERIFIED COMPLETE** (masked evidence reports restored)
+- Phase 18A auth-first importer source restored to `main` (`execute.ts` / `plan.ts` / related modules)
+- Phase 20.5–23 status docs restored; Cursor rules / README / product-scope aligned to verified gates
+- PRIVACY-P1 / PRIVACY-L1 / V1-O1 owner amendments recorded
+- Phase 23 UI/brand implementation intentionally **not** wholesale-promoted from dirty tree
+
+### Release Gate 4 — Verified release controls (2026-10-12)
+
+- GitHub Actions CI baseline merged (PR #12): typecheck, lint, Prisma generate/validate, unit tests (no DB integration), build; Production credential guard; loopback env only
+
 ### Phase 13 — Professionals Directory (2026-09-09)
 
 - Public/member directory `/professionals` + `/professionals/[slug]`; `VERIFIED`+`DIRECTORY` server projection; search/filter/pagination (25); `noindex`; extends `app.directory_professionals()`. `docs/product/phase-13-public-member-directory-scope.md`. **PASS / COMPLETE / VERIFIED / LOCKED**. Phase 14 **not** authorized.

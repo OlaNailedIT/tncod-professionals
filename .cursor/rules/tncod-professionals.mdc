@@ -7,10 +7,15 @@ alwaysApply: true
 
 This repository has a locked product specification. You implement approved phases. You do not architect the product from scratch.
 
+**Current release authority:** `docs/release/RELEASE-STATE.md`  
+**Dirty-tree disposition:** `docs/release/dirty-tree-disposition.md`  
+Do not treat a local dirty forensic workspace as product authority. Do not promote it wholesale.
+
 ## Before any implementation
 
 Read:
 
+- `docs/release/RELEASE-STATE.md`
 - `docs/product/product-brief.md`
 - `docs/product/product-scope.md`
 - `docs/product/product-principles.md`
@@ -168,27 +173,101 @@ Do not reopen Phase 17 for redesign.
 
 Auth-first executor exists (`execute.ts` / `plan.ts` / `import.ts`). Production mutation **DENY** unless exact `PHASE18_PRODUCTION_IMPORT_AUTHORIZED` phrase + `PHASE18_IMPORT_*` credentials + project ref `brpppukzqgpzxjelwwrj`. **2026-09-11:** Production Pass 1 `CREATED 18`; Pass 2 `SKIP_ALREADY_IMPORTED 18`; post-import historical reconciliation PASS (18 COMPLETE_SAFE, all `NOT_REVIEWED`/`PRIVATE`). Pre-existing Auth-less orphan `p***@e***` soft-deleted under separate explicit authorization (`deleted_at`; references_found=0). Evidence: `scripts/migrations/phase18/reports/production-execute-latest.md`, `production-post-import-reconciliation.md`, `pre-existing-orphan-disposition.md`. Do not invent claim UX. Do not auto VERIFIED/DIRECTORY/consent/Spotlight/business. Phone default Nigeria (`+234`).
 
-Do not re-run Production import without a new explicit authorization. Phase 19 is **PASS / COMPLETE / VERIFIED / LOCKED**. Phase 20 is **IMPLEMENTATION COMPLETE / NOT LOCKED** — Production authenticated EXCO UI remains **NOT VERIFIED** (Auth Site URL cutover deferred; Production auth helper correctly disabled). Phase 21+ remain **NOT AUTHORIZED**.
+Do not re-run Production import without a new explicit authorization. Phase 19 is **PASS / COMPLETE / VERIFIED / LOCKED**. Phase 20 is **PASS / COMPLETE / VERIFIED / LOCKED** (2026-09-13): Auth origin + public Supabase env repaired; RBAC catalogue bootstrapped; owner `EXCO_VIEWER` assigned; Production `/exco/analytics` authenticated verification PASS. Phase 20.5 is **PASS / COMPLETE / VERIFIED / LOCKED** (2026-09-14): Gmail SMTP + `{{ .Token }}` OTP; human new + existing member Production OTP verified; join does not auto-send OTP. Phase 21 is **PASS / COMPLETE / VERIFIED / LOCKED** (2026-09-14): PostgREST directory revoke; Spotlight manage gate; redirect normalization; security headers. Phase 22 is **PASS / COMPLETE / VERIFIED / LOCKED**. See `docs/release/RELEASE-STATE.md` for Phase 23+ and launch residuals.
 
 Phone default is Nigeria (`+234`). Offline tooling under `scripts/migrations/phase18/`. **Credential architecture:** preflight uses dedicated PostgreSQL **read-only** `PHASE18_PRODUCTION_DATABASE_URL` only — never `service_role`/Storage/write creds for preflight; import write/Auth creds are a **separate** gate.
 
 ## Supabase production infrastructure
 
-**PASS / COMPLETE / VERIFIED / LOCKED.** Migrations **16/16** on `tncod-professionals` (`brpppukzqgpzxjelwwrj`, `us-west-2`). Schema/Storage/RLS configuration LIVE VERIFIED; anon write denied (prior). Hosted Auth Site URL / redirects remain localhost/empty — **DEFERRED TO A SEPARATE AUTH ORIGIN GATE** (not Analytics Phase 20); do not invent a production Auth URL; do not `config push` from local localhost templates; do not fabricate production Auth users for IDOR. Authenticated adversarial testing **DEFERRED UNTIL LEGITIMATE AUTHENTICATED DEPLOYMENT**. DB authority = `supabase/migrations/` only — no Prisma migrations. Evidence classes: LIVE VERIFIED / CODE REVIEWED / DEFERRED / NOT VERIFIED. See `docs/infrastructure/SUPABASE-PRODUCTION-READINESS-REPORT.md`. **HISTORICAL IMPORT = EXECUTED 2026-09-11** (Phase 18 LOCKED). Do not reopen this infrastructure gate for redesign or coverage theatre.
+**PASS / COMPLETE / VERIFIED / LOCKED.** Migrations **16/16** on `tncod-professionals` (`brpppukzqgpzxjelwwrj`, `us-west-2`). Schema/Storage/RLS configuration LIVE VERIFIED; anon write denied (prior). Hosted Auth Site URL / redirects **set to** canonical `https://tncod-professionals-azure.vercel.app` (re-apply if drift; do not `config push` full local localhost templates). Production RBAC catalogue bootstrapped 2026-09-13; owner `EXCO_VIEWER` assigned. Do not fabricate production Auth users for IDOR. DB authority = `supabase/migrations/` only — no Prisma migrations. Evidence classes: LIVE VERIFIED / CODE REVIEWED / DEFERRED / NOT VERIFIED. See `docs/infrastructure/SUPABASE-PRODUCTION-READINESS-REPORT.md`. **HISTORICAL IMPORT = EXECUTED 2026-09-11** (Phase 18 LOCKED). Do not reopen this infrastructure gate for redesign or coverage theatre.
 
 ## Phase 19 — Vercel production deployment / origin establishment
 
-**PASS / COMPLETE / VERIFIED / LOCKED.** Access / azure origin / SSO-off confirmed. Owner corrected Production `DATABASE_URL` (password-bearing hosted Supabase URI; secret never in chat/source). One Production redeploy (`fmllbdy82`, aliased to `https://tncod-professionals-azure.vercel.app`). Live smoke (re-verified 2026-09-11): `/` **200**, `/professionals` **200**. Docker = local only — not in Production path. Prisma uses `DATABASE_URL` only. Phase 18 historical import **EXECUTED 2026-09-11** (directory remains non-public unless VERIFIED+DIRECTORY). Supabase Advisor `directory_professionals` SECURITY DEFINER = **SAFE TO REMAIN DEFERRED** (intentional Phase 13 contract). See `docs/infrastructure/VERCEL-PRODUCTION-DEPLOYMENT-REPORT.md` and `docs/product/phase-20-analytics-operational-intelligence-scope.md` §4. Phase 20 analytics **NOT LOCKED** — Production `/exco/analytics` deployed (`a1a6f2e`+); Production authenticated EXCO UI **NOT VERIFIED**.
+**PASS / COMPLETE / VERIFIED / LOCKED.** Access / azure origin / SSO-off confirmed. Owner corrected Production `DATABASE_URL` (password-bearing hosted Supabase URI; secret never in chat/source). Closure redeploy 2026-09-13 (`dpl_96isCD4vXqp96UZwUMSig9jperTd`, aliased to `https://tncod-professionals-azure.vercel.app`) with `NEXT_PUBLIC_SITE_URL` + legacy `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Live smoke: `/` **200**, `/professionals` **200**, `/exco/analytics` anonymous **307**; authenticated EXCO analytics **VERIFIED**. Docker = local only — not in Production path. Prisma uses `DATABASE_URL` only. Phase 18 historical import **EXECUTED 2026-09-11**. Supabase Advisor `directory_professionals` SECURITY DEFINER = **SAFE TO REMAIN DEFERRED**. See `docs/infrastructure/VERCEL-PRODUCTION-DEPLOYMENT-REPORT.md` and `docs/product/phase-20-analytics-operational-intelligence-scope.md` §26.
 
 ## Phase 20 — Analytics & Operational Intelligence
 
-**IMPLEMENTATION COMPLETE — PRODUCTION AUTHENTICATED UI NOT VERIFIED — NOT LOCKED.** See `docs/product/phase-20-analytics-operational-intelligence-scope.md` §24.
+**PASS / COMPLETE / VERIFIED / LOCKED.** See `docs/product/phase-20-analytics-operational-intelligence-scope.md` §26.
 
-EXCO read-only aggregates at `/exco/analytics`; server-side Prisma aggregation; Phase 8 completion + Phase 10 EXCO authz; n&lt;3 composition suppression; `legacy_import` excluded from new platform registrations; deployed to Production (`a1a6f2e`+). Local authenticated Playwright PASS. Production anonymous protection PASS (307). Production authenticated EXCO render **NOT VERIFIED** without Auth Site URL cutover or owner EXCO session. Auth Site URL cutover is **NOT** this Phase 20. Phase 21+ **NOT AUTHORIZED**.
+EXCO read-only aggregates at `/exco/analytics`; server-side Prisma aggregation; Phase 8 completion + Phase 10 EXCO authz; n&lt;3 composition suppression; `legacy_import` excluded from new platform registrations. Production: Auth origin + public Supabase env repaired; RBAC catalogue seeded; owner assigned `EXCO_VIEWER`; authenticated UI verified (sections + filter + anonymous/MEMBER deny). Deploy `dpl_96isCD4vXqp96UZwUMSig9jperTd`. Phase 21 is LOCKED; Phase 22 is the QA gate.
 
-## Phase 21+
+## Phase 20.5 — Authentication & Onboarding Reliability
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** See `docs/product/phase-20.5-authentication-onboarding-reliability-scope.md`.
+
+Passwordless Supabase OTP via Gmail custom SMTP (`cityofdavidprofessionals@gmail.com` / display TNCOD Professionals). Canonical: `/join` (no OTP) → `/sign-in` → `signInWithOtp` (`shouldCreateUser: false`) → email `{{ .Token }}` → `verifyOtp` → SSR session → `/dashboard` | `/exco`. Human Production: existing + new member OTP PASS. Magic-link remains optional/secondary (prefetch risk). Do not reintroduce join-time OTP. Do not store SMTP secrets in source. Phase 21 is LOCKED. Phase 22 is the QA gate — do not reopen Auth architecture during QA.
+
+## Phase 21 — Security Hardening
+
+**PASS / COMPLETE / VERIFIED / LOCKED.** See `docs/product/phase-21-security-hardening.md`.
+
+Forensic audit + adversarial classification; remediations: revoke anon/authenticated PostgREST access to `directory_professionals` (Phase 14 dual-path), Spotlight auto-archive requires `spotlight.manage`, `sanitizeNextPath` traversal fix, baseline security headers. Deploy `dpl_Ax6qeGWGWAiH6KGZTu53AasqzHUM`. Do not reopen Auth/OTP. Security defects found in Phase 22 are classified as Phase 21 escapes — do not casually redesign security during QA.
+
+## Phase 22 — QA / Killcritic
+
+**PASS / COMPLETE / VERIFIED / LOCKED** (2026-09-15). See `docs/product/phase-22-qa-killcritic.md`.
+
+Full-system acceptance: automation layer PASS; H-001 / H-002 / H-003 human gates PASS; Production closure 14/14; Phase 21 PostgREST deny retested; IDOR 403/403. UX-001 (EXCO nav discoverability) and UX-002 (EXCO role-admin UI) are **DEFERRED** — do not implement without new authorization.
+
+## Phase 23A — Brand + Member Experience Refinement
+
+**PASS / COMPLETE / VERIFIED / LOCKED** (2026-09-15). See `docs/product/phase-23a-brand-member-experience.md`.
+
+Dedicated Professionals mark/lockup; warm supporting neutrals; homepage/registration/member messaging refined; shells use Professionals identity; parent church logo for attribution only. UX-001/UX-002 remain deferred under Phase 23A itself. No schema/RBAC/auth/directory contract changes. Production deploy **NONE** under Phase 23A authorization (parity delivered in Phase 23B).
+
+## Phase 23B — Production Experience Remediation & Pilot Readiness
+
+**PASS / COMPLETE / VERIFIED / LOCKED** (2026-09-15). See `docs/product/phase-23b-production-experience-remediation.md`.
+
+Gate A Production parity PASS (`dpl_DgvaDnBcYYdoptVZwmvPF2J867HD` → azure origin). Authoritative Professionals mark; warm member experience; UX-001 EXCO discoverability; dead EXCO stubs removed; `/design-system` Production 404. UX-002 role-admin remains deferred. No schema/RLS/Auth/RBAC/directory contract changes.
+
+## Phase 23C — Visual System, Responsive & Theme Refinement
+
+**IMPLEMENTATION COMPLETE / VERIFICATION INCOMPLETE / NOT LOCKED** (2026-09-16). See `docs/product/phase-23c-visual-responsive-theme-refinement.md`.
+
+Prior automated-only LOCK claim **withdrawn**. Narrow remediation delivered: phone/tablet spacing, shared containers, header composition, landing, authentic image research (no cleared official CoD assets — Unsplash License selected), exact Join/`/join` + Sign In/`/sign-in`, small top-level theme toggle, dark/light polish. **Manual** phone + iPad visual acceptance required before LOCK. No Auth/OTP/schema/RLS/RBAC/directory/privacy changes. Phase 23 Controlled Pilot remains IN PROGRESS.
+
+## Phase 23D — Navigation & Task Clarity Remediation
+
+**IMPLEMENTATION COMPLETE / VERIFICATION INCOMPLETE / NOT LOCKED** (2026-09-18 final lock gate). See `docs/product/phase-23d-navigation-task-clarity-remediation.md`.
+
+Member self-explanatory UX implemented locally. Final lock denied: **REAL-PARTICIPANT ACCEPTANCE — NOT AVAILABLE**; manual phone/iPad not performed; mixed dirty working tree blocks 23D-only Production deploy. Join/Sign In unchanged. Phase 24 architectural inputs recorded as **NOT IMPLEMENTED**. No Help Centre, schema, Auth, RLS, RBAC, or Phase 24.
+
+## Phase 23 — Controlled Pilot
+
+**AUTHORIZED / IN PROGRESS / RESUME** (2026-09-16). See `docs/product/phase-23-controlled-pilot-protocol.md`, `docs/product/phase-23-controlled-pilot-report.md`, and `docs/product/phase-23-new-member-otp-remediation.md`.
+
+Human validation with a controlled cohort (≈10–20). Not implementation. Not public launch. Not Phase 24. New-member OTP authentication blocker remediated 2026-09-16 (Auth architecture unchanged). Do not fabricate participants, directory population, or pilot metrics. Do not reopen locked phases or ship features from feedback without new authorization. Closeout verdict pending real cohort evidence. Phase 23C visual acceptance and Phase 23D usability acceptance remain open until manual/pilot review.
+
+## Phase 24+
 
 **NOT AUTHORIZED.**
+
+## Release controls (Gate 4) + hygiene (Gate 5)
+
+**Gate 4 — VERIFIED RELEASE CONTROLS: PASS.** CI workflow on `pull_request` + `push` to `main` (`.github/workflows/ci.yml`); PR #12 merged; main-push CI PASS; no Production credentials in normal CI.
+
+**Gate 5 — release hygiene:** reconstruct authoritative docs/governance (+ Phase 18A importer source) from `origin/main`. Do not wholesale-commit dirty trees. Phase 23 UI/brand implementation may remain intentionally local until human-acceptance gates authorize promotion.
+
+## Locked Auth residuals (unrestricted launch)
+
+```text
+AUTH-A  E-API provider-level enumeration residual — NOT accepted for unrestricted launch.
+        Controlled pilot may continue. Unrestricted Auth PASS withheld until residual cleared
+        or separately reassessed to PASS.
+AUTH-B  Remaining identifier-collision candidates — individual reclaim before unrestricted launch.
+AUTH-C  Designated working test account retained through controlled-pilot closeout.
+```
+
+Do **not** claim `AUTH PASS` or `UNRESTRICTED LAUNCH READY`.
+
+## Privacy / V1 amendments (owner-locked)
+
+See `docs/product/product-scope.md` and `docs/release/RELEASE-STATE.md`:
+
+- **PRIVACY-P1** — visibility + notice/acknowledgement; generic consent engine not current V1
+- **PRIVACY-L1** — published Privacy Notice required before unrestricted launch (wording sign-off separate)
+- **V1-O1** — export / job-seeker workspace / headshot upload / generic CRM notes deferred post-launch
 
 ## Gated delivery (execution discipline)
 

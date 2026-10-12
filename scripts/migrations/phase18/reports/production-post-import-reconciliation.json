@@ -1,0 +1,248 @@
+{
+  "generatedAt": "2026-09-11T15:58:43.616Z",
+  "gateStatus": "PHASE 18 — POST-IMPORT HISTORICAL PASS — PREEXISTING ORPHAN NOTED",
+  "mode": "READ_ONLY_POST_IMPORT_RECONCILIATION",
+  "productionMutationsPerformed": 0,
+  "historicalImportComplete": true,
+  "absoluteIntegrityClean": false,
+  "source": {
+    "sha256": "4EC0A1773D771F78488169B44DA7DCF424BD0354684A2D42F6C06264E12CE29C",
+    "rows": 18,
+    "emails": 18,
+    "shaMatch": true
+  },
+  "auth": {
+    "listUsers": 18,
+    "sqlCount": 18,
+    "historicalFound": 18,
+    "unexpectedNonHistorical": 0
+  },
+  "postgres": {
+    "usersTotal": 19,
+    "historicalUsers": 18,
+    "profiles": 18,
+    "legacyImportRows": 18,
+    "legacyImportProfiles": 18,
+    "consentRecords": 0,
+    "spotlightRecords": 0,
+    "businesses": 0,
+    "unsafePublicStateProfiles": 0,
+    "directoryLikeProfiles": 0,
+    "duplicateEmails": 0,
+    "nonHistoricalUsers": 1,
+    "preExistingOrphans": [
+      {
+        "maskedEmail": "p***@e***",
+        "hasProfile": false,
+        "legacyImport": null,
+        "createdAt": "2026-09-10T19:42:06.737Z",
+        "idPrefix": "7df3c2b4"
+      }
+    ]
+  },
+  "completeSafe": 18,
+  "notes": [
+    "Pre-existing/non-historical application users (outside Phase 18 historical set)=1",
+    "  · p***@e*** createdAt=2026-09-10T19:42:06.737Z hasProfile=false legacyImport=null"
+  ],
+  "rows": [
+    {
+      "sourceRowNumber": 2,
+      "maskedEmail": "m***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 3,
+      "maskedEmail": "o***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 4,
+      "maskedEmail": "m***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 5,
+      "maskedEmail": "a***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 6,
+      "maskedEmail": "o***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 7,
+      "maskedEmail": "m***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 8,
+      "maskedEmail": "o***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 9,
+      "maskedEmail": "b***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 10,
+      "maskedEmail": "k***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 11,
+      "maskedEmail": "b***@y***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 12,
+      "maskedEmail": "m***@y***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 13,
+      "maskedEmail": "b***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 14,
+      "maskedEmail": "a***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 15,
+      "maskedEmail": "o***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 16,
+      "maskedEmail": "o***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 17,
+      "maskedEmail": "t***@j***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 18,
+      "maskedEmail": "a***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    },
+    {
+      "sourceRowNumber": 19,
+      "maskedEmail": "a***@g***",
+      "auth": true,
+      "member": true,
+      "profile": true,
+      "provenance": true,
+      "verificationStatus": "NOT_REVIEWED",
+      "visibilityStatus": "PRIVATE",
+      "classification": "COMPLETE_SAFE"
+    }
+  ]
+}

@@ -90,7 +90,7 @@ export function runDryRunClassification(input: {
 
     if (proposedAction === "CREATE") {
       warnings.push(
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)",
       );
     }
 

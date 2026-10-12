@@ -1,0 +1,129 @@
+{
+  "generatedAt": "2026-09-11T16:54:38.105Z",
+  "originalDisposition": "REQUIRES_MANUAL_BUSINESS_DECISION",
+  "authorizedAction": "single-record cleanup (soft-delete deleted_at)",
+  "finalDisposition": "REMOVED_PRE_EXISTING_UNSUPPORTED_ORPHAN",
+  "finalStatus": "CLEANUP PASS — ORPHAN REMOVED",
+  "productionMutations": {
+    "orphanCleanupSoftDeletes": 1,
+    "authMutations": 0,
+    "historicalPhase18Mutations": 0,
+    "otherUserMutations": 0,
+    "schemaChanges": 0,
+    "rlsChanges": 0,
+    "deployment": 0
+  },
+  "target": {
+    "maskedEmail": "p***@e***",
+    "idPrefix": "7df3c2b4",
+    "createdAt": "2026-09-10T19:42:06.737Z"
+  },
+  "preDelete": {
+    "assertions": {
+      "TARGET_MATCH": true,
+      "AUTH_MISSING": true,
+      "PROFILE_MISSING": true,
+      "ROLES_MISSING": true,
+      "PROVENANCE_MISSING": true,
+      "REFERENCES_ZERO": true,
+      "PHASE18_MEMBER": false,
+      "CREATED_BEFORE_PHASE18": true,
+      "NO_UNEXPECTED_DEPENDENCY": true,
+      "SAFE_DELETION_SEMANTIC": true,
+      "MASKED_MATCH": true,
+      "CREATED_AT_MATCH": true,
+      "ID_PREFIX_MATCH": true,
+      "STILL_ACTIVE": true
+    },
+    "references_found": 0,
+    "fkCounts": [
+      {
+        "table": "admin_notes",
+        "column": "author_id",
+        "count": 0
+      },
+      {
+        "table": "audit_logs",
+        "column": "actor_id",
+        "count": 0
+      },
+      {
+        "table": "consents",
+        "column": "user_id",
+        "count": 0
+      },
+      {
+        "table": "legacy_import_rows",
+        "column": "user_id",
+        "count": 0
+      },
+      {
+        "table": "notifications",
+        "column": "user_id",
+        "count": 0
+      },
+      {
+        "table": "opportunities",
+        "column": "created_by",
+        "count": 0
+      },
+      {
+        "table": "profiles",
+        "column": "user_id",
+        "count": 0
+      },
+      {
+        "table": "publications",
+        "column": "actor_id",
+        "count": 0
+      },
+      {
+        "table": "spotlights",
+        "column": "created_by",
+        "count": 0
+      },
+      {
+        "table": "user_roles",
+        "column": "user_id",
+        "count": 0
+      },
+      {
+        "table": "verification_records",
+        "column": "reviewer_id",
+        "count": 0
+      }
+    ],
+    "auth": "NONE",
+    "profile": "NONE",
+    "roles": "NONE",
+    "provenance": "NONE"
+  },
+  "deletionMechanism": "soft-delete via public.users.deleted_at UPDATE scoped to exact users.id (deletedAt:null)",
+  "postDelete": {
+    "orphanActiveSameId": 0,
+    "activeNonHistoricalUsers": 0,
+    "authUsers": 18,
+    "authSqlCount": 18,
+    "historicalUsers": 18,
+    "legacyProfiles": 18,
+    "legacyRows": 18,
+    "completeSafe": 18,
+    "historicalPartial": 0,
+    "unsafePublic": 0,
+    "consent": 0,
+    "spotlight": 0,
+    "business": 0,
+    "orphanDeletedAt": "2026-09-11T16:54:14.895Z"
+  },
+  "historicalOk": true,
+  "phase18LockEligible": true,
+  "facts": [
+    "Soft-deleted exactly one public.users row by exact id",
+    "Established deletion semantic = deleted_at soft-delete",
+    "Auth users after = 18",
+    "Historical COMPLETE_SAFE = 18"
+  ],
+  "unknowns": [
+    "Original creator/cause of the orphan remains unknown"
+  ]
+}

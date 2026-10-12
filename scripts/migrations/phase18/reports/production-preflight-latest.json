@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-09-09T19:14:54.984Z",
-  "status": "PHASE 18 — PRODUCTION PREFLIGHT BLOCKED — READ-ONLY ACCESS UNAVAILABLE",
-  "productionAccess": "UNAVAILABLE",
-  "productionError": "PRODUCTION PREFLIGHT BLOCKED — READ-ONLY ACCESS UNAVAILABLE (no PRODUCTION_DATABASE_URL / PHASE18_PRODUCTION_DATABASE_URL)",
-  "productionUserCount": null,
+  "generatedAt": "2026-09-10T18:16:01.348Z",
+  "status": "PHASE 18 — PRODUCTION PREFLIGHT PASS",
+  "productionAccess": "READ_ONLY_OK",
+  "productionError": null,
+  "productionUserCount": 0,
   "actualProductionMutations": {
     "insert": 0,
     "update": 0,
@@ -12,12 +12,12 @@
     "storage": 0
   },
   "actualMutationTotal": 0,
-  "mutationGuardTriggered": false,
+  "mutationGuardTriggered": true,
   "accounting": {
-    "CREATE": 0,
+    "CREATE": 18,
     "MATCH_EXISTING": 0,
     "GAP_ONLY": 0,
-    "MANUAL_REVIEW": 18,
+    "MANUAL_REVIEW": 0,
     "CONFLICT": 0,
     "SKIP": 0
   },
@@ -44,11 +44,11 @@
     ]
   },
   "proposedFutureMutations": {
-    "note": "Cannot estimate CREATE vs GAP until production match completes",
-    "authUsers": "UNKNOWN",
-    "users": "UNKNOWN",
-    "profiles": "UNKNOWN",
-    "profileUpdates": "UNKNOWN",
+    "note": "Estimates only — not executed",
+    "authUsers": 18,
+    "users": 18,
+    "profiles": 18,
+    "profileUpdates": 0,
     "businesses": 0,
     "businessRelationships": 0,
     "verification": 0,
@@ -70,9 +70,14 @@
         "email": "m***@g***",
         "phone": "***5949"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -102,20 +107,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -126,9 +129,14 @@
         "email": "o***@g***",
         "phone": "***5545"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -158,20 +166,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "MANUAL_REVIEW",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -182,9 +188,14 @@
         "email": "m***@g***",
         "phone": "***1961"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -214,20 +225,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -238,9 +247,14 @@
         "email": "a***@g***",
         "phone": "***6386"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -270,20 +284,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -294,9 +306,14 @@
         "email": "o***@g***",
         "phone": "***2251"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -327,20 +344,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -351,9 +366,14 @@
         "email": "m***@g***",
         "phone": "***4169"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -384,20 +404,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "MANUAL_REVIEW",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -408,9 +426,14 @@
         "email": "o***@g***",
         "phone": "***0441"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -440,20 +463,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "MANUAL_REVIEW",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -464,9 +485,14 @@
         "email": "b***@g***",
         "phone": "***2974"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -497,20 +523,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -521,9 +545,14 @@
         "email": "k***@g***",
         "phone": "***5501"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -553,20 +582,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "MANUAL_REVIEW",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -577,9 +604,14 @@
         "email": "b***@y***",
         "phone": "***6968"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -609,20 +641,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -633,9 +663,14 @@
         "email": "m***@y***",
         "phone": "***9115"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -665,20 +700,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -689,9 +722,14 @@
         "email": "b***@g***",
         "phone": "***9019"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -722,20 +760,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -746,9 +782,14 @@
         "email": "a***@g***",
         "phone": "***5824"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -778,20 +819,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -802,9 +841,14 @@
         "email": "o***@g***",
         "phone": "***0927"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -834,20 +878,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -858,9 +900,14 @@
         "email": "o***@g***",
         "phone": "***7929"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -890,20 +937,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -914,9 +959,14 @@
         "email": "t***@j***",
         "phone": "***8456"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -946,20 +996,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "MANUAL_REVIEW",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -970,9 +1018,14 @@
         "email": "a***@g***",
         "phone": "***6171"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -1003,20 +1056,18 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Skills free-text requires controlled vocabulary review",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "NO-OP",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     },
     {
@@ -1027,9 +1078,14 @@
         "email": "a***@g***",
         "phone": "***1622"
       },
-      "identityClassification": "MANUAL_REVIEW",
-      "proposedAction": "MANUAL_REVIEW",
-      "fieldsToCreate": [],
+      "identityClassification": "NEW_MEMBER",
+      "proposedAction": "CREATE",
+      "fieldsToCreate": [
+        "auth.users (at authorized import — not this gate)",
+        "public.users",
+        "profiles (legacy flags)",
+        "professional_details (mapped subset)"
+      ],
       "fieldsGapFill": [],
       "fieldsIgnore": [
         "Gender",
@@ -1059,26 +1115,24 @@
         "Historical WhatsApp consent ignored for current platform state",
         "Industry free-text requires controlled vocabulary review",
         "Business candidate — no automatic business/OWNER creation",
-        "AUTH_REQUIRED: actual import cannot create public.users without auth.users — Auth strategy still OPEN DECISION",
-        "PRODUCTION_MATCH_UNAVAILABLE — cannot classify create vs existing without production read",
-        "PRODUCTION_MATCH_UNAVAILABLE — row held at MANUAL_REVIEW until production read-only preflight succeeds"
+        "AUTH_FIRST: import creates auth.users then public.users then legacy-marked profile (same foundation as /join; no OTP by default)"
       ],
       "fieldOutcomes": {
-        "verificationStatus": "NO-OP",
-        "visibilityStatus": "NO-OP",
+        "verificationStatus": "CREATE",
+        "visibilityStatus": "CREATE",
         "consent": "NO-OP",
         "directoryPublication": "NO-OP",
         "business": "MANUAL_REVIEW",
         "yearsExperience": "NO-OP",
-        "displayName": "MANUAL_REVIEW",
-        "email": "NO-OP",
-        "phone": "NO-OP"
+        "displayName": "CREATE",
+        "email": "CREATE",
+        "phone": "CREATE"
       }
     }
   ],
   "evidenceClassification": {
     "authArchitecture": "CODE REVIEWED",
-    "productionMatches": "NOT TESTED — production access unavailable",
+    "productionMatches": "PRODUCTION READ-ONLY OBSERVATION",
     "zeroMutation": "DIRECTLY TESTED (no write API called; mutation SQL guard unit-checked)",
     "mappingInvariants": "PREVIOUSLY EVIDENCED + DIRECTLY TESTED (dry-run)"
   }
