@@ -9,17 +9,17 @@ const DESTINATIONS = [
   {
     label: "Professionals",
     path: "/professionals",
-    content: /Professionals Directory|verified|publish/i,
+    mainHeading: "Professionals Directory",
   },
   {
     label: "Join",
     path: "/join",
-    content: /Join|Full name|Email|Professional/i,
+    mainHeading: "Join the Professionals community",
   },
   {
     label: "Sign in",
     path: "/sign-in",
-    content: /Sign in|email|OTP|code/i,
+    mainHeading: "Sign in",
   },
 ] as const;
 
@@ -31,6 +31,14 @@ async function assertDrawerClosed(page: Page) {
 async function openPublicMenu(page: Page) {
   const menu = page.getByRole("button", { name: /^Menu$/i });
   await expect(menu).toBeVisible();
+  // Client shell: wait until React has attached the click handler.
+  await page.waitForFunction(() => {
+    const button = document.querySelector("header button");
+    if (!button) return false;
+    return Object.keys(button).some(
+      (key) => key.startsWith("__reactFiber") || key.startsWith("__reactProps"),
+    );
+  });
   await menu.click();
   await expect(page.locator("dialog[open]")).toBeVisible();
 }
@@ -58,7 +66,8 @@ test.describe("DEF-23C-01 public mobile menu navigation", () => {
 
       await expect(page).toHaveURL(new RegExp(`${dest.path.replace("/", "\\/")}\\/?$`));
       await assertDrawerClosed(page);
-      await expect(page.locator("body")).toContainText(dest.content);
+      const main = page.locator("#main-content");
+      await expect(main.getByRole("heading", { name: dest.mainHeading, level: 1 })).toBeVisible();
     });
   }
 
@@ -70,19 +79,28 @@ test.describe("DEF-23C-01 public mobile menu navigation", () => {
 
     const nav = page.getByRole("navigation", { name: "Public" });
     await expect(nav.getByRole("link", { name: "Join" })).toBeVisible();
+    const main = page.locator("#main-content");
     await nav.getByRole("link", { name: "Join" }).click();
     await expect(page).toHaveURL(/\/join\/?$/);
-    await expect(page.locator("body")).toContainText(/Full name|Email|Join/i);
-
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await nav.getByRole("link", { name: "Professionals" }).click();
-    await expect(page).toHaveURL(/\/professionals\/?$/);
-    await expect(page.locator("body")).toContainText(/Professionals Directory|verified/i);
+    await expect(main.getByRole("heading", { name: "Join the Professionals community", level: 1 })).toBeVisible();
+    await expect(main.getByLabel("Full name")).toBeVisible();
 
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await nav.getByRole("link", { name: "Sign in" }).click();
     await expect(page).toHaveURL(/\/sign-in\/?$/);
-    await expect(page.locator("body")).toContainText(/Sign in|email/i);
+    await expect(main.getByRole("heading", { name: "Sign in", level: 1 })).toBeVisible();
+    await expect(main.getByLabel("Email address")).toBeVisible();
+  });
+
+  test("desktop header nav opens Professionals directory content", async ({ page }) => {
+    await page.setViewportSize({ width: 834, height: 1194 });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    const nav = page.getByRole("navigation", { name: "Public" });
+    await nav.getByRole("link", { name: "Professionals" }).click();
+    await expect(page).toHaveURL(/\/professionals\/?$/);
+    await expect(
+      page.locator("#main-content").getByRole("heading", { name: "Professionals Directory", level: 1 }),
+    ).toBeVisible();
   });
 });
 
@@ -102,7 +120,18 @@ test.describe("DEF-23C-01 showcase button-mode drawer (design-system)", () => {
       has: page.getByRole("heading", { name: /Application shells/i }),
     });
 
-    await section.getByRole("button", { name: "Member shell" }).click();
+    const memberShell = section.getByRole("button", { name: "Member shell" });
+    await page.waitForFunction(() => {
+      const button = [...document.querySelectorAll("button")].find((node) =>
+        (node.textContent || "").includes("Member shell"),
+      );
+      if (!button) return false;
+      return Object.keys(button).some(
+        (key) => key.startsWith("__reactFiber") || key.startsWith("__reactProps"),
+      );
+    });
+    await memberShell.click();
+    await expect(memberShell).toHaveAttribute("aria-pressed", "true");
     await section.getByRole("button", { name: "Menu" }).click();
     const dialog = page.locator("dialog[open]");
     await expect(dialog.getByRole("button", { name: "Profile" })).toBeVisible();

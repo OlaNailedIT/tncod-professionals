@@ -32,7 +32,8 @@ const root = process.cwd();
 const localEnv = {
   ...loadEnvFile(path.join(root, ".env")),
   ...loadEnvFile(path.join(root, ".env.local")),
-  // Optional sibling forensic workspace env for local disposable DB (never committed).
+  // Local disposable DB for directory page render. Values stay out of git.
+  ...loadEnvFile(path.join(root, "..", "tncod-professional", ".env")),
   ...loadEnvFile(path.join(root, "..", "tncod-professional", ".env.local")),
 };
 
