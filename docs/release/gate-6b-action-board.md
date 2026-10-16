@@ -31,7 +31,7 @@
 | PR #22 | **MERGED** · head `b80bc5d` · merge `1a69915` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — **Production recovered** (`dpl_DTe6dmsQ…`); signed-in acceptance **pending**. **OPEN:** Git→Vercel automatic Production deploy for `1a69915` never fired (“deployment absent” = symptom; root cause unexplained) |
 | PR #21 | **OPEN** · head `4666248` · checks PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — packet `docs/release/pr-21-release-packet.md` |
 | PR #23 | **OPEN** · head `7f517fb` · CI/preview PASS · directory-publication wording corrected without promising effective listing · https://github.com/OlaNailedIT/tncod-professionals/pull/23 — review `docs/release/pr-23-review.md` |
-| PR #25 | **DRAFT** · head `a5ae4e4` · server-only Auth candidate + redacted hosted/local evidence · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — full authenticated acceptance and Production cutover still pending |
+| PR #25 | **DRAFT** · head `2fc52aa` · server-only Auth candidate + redacted hosted/local evidence · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — first authenticated local journey 19 checks passed; expanded run failed at email delivery; consumer completion and Production cutover pending |
 | Phase 23C | **NOT LOCKED** |
 | Public launch | **BLOCKED** — AUTH-A |
 
@@ -56,7 +56,7 @@ Carry forward completed owner-reported checks; missing device/browser metadata i
 | G | EXCO surface / Member↔EXCO return | **AWAITING HUMAN** — Production azure serves #22 (`dpl_DTe6dmsQ…`). Signed-in Member↔EXCO↔Member on desktop/phone/tablet. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B). Auto-deploy reliability remains **OPEN** (does not block this test) |
 | H | Current interest roster | **IN REVIEW** — #21 head `4666248`; migration **not** applied; cadence **NOT ACCEPTED**. Packet: `docs/release/pr-21-release-packet.md` (LC-B) |
 | J | Dashboard clarity (#23) | **REVIEWED** — no hard dependency on #21. Do **not** merge under AUTH-A auth. Review: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
-| K | AUTH-A hosted non-Production proof | **IN PROGRESS** — provider/local key-isolation PASS on $0 disposable `hyzkearnbhxznkeokacj`; draft #25. 32 provider, 43 unit/domain, 12 build/local and 15 legacy-disabled runtime checks passed (overlapping runs). 141 public artifacts scanned. Full authenticated application/DB, PKCE and Storage acceptance pending. Production `brpppukzqgpzxjelwwrj` excluded. Evidence: `docs/release/auth-a-hosted-proof.md` (LC-C) |
+| K | AUTH-A hosted non-Production proof | **IN PROGRESS** — $0 disposable `hyzkearnbhxznkeokacj`; draft #25. Prior provider/key-isolation checks carried forward; first real local application journey passed 1 test / 19 checks. Expanded run failed at email delivery (HTTP 429 observed; exact code unconfirmed). Numerical-code/refresh/Storage were not reached. Remaining consumer/CAPTCHA/rollback acceptance open; Production excluded. Evidence: `docs/release/auth-a-hosted-proof.md` (LC-C) |
 | L | Git→Vercel Production auto-deploy | **OPEN** — merge `1a69915` produced no automatic Production deployment; recovered via authorized CLI. Targeted diagnosis continues; does not block #22 signed-in acceptance |
 | I | Optional headshot | **DEFERRED** post-launch / proposal only — not a launch dependency |
 
@@ -248,6 +248,6 @@ EXCO navigation includes the existing `/opportunities` page. Creating an opportu
 6. **Backup class** — fill Dashboard fields in `ops-backup-class-owner-check.md`.
 7. **Pilot closeout** — complete `pilot-closeout-packet.md` only after real cohort evidence exists.
 
-**AUTH-A dependency:** hosted GoTrue `/otp` still returns 422 `otp_disabled` for an unknown identifier when `create_user` is false, and 200 when the account exists. The required change is upstream [supabase/auth#1547](https://github.com/supabase/auth/issues/1547). No application rewrite is authorized for it.
+**AUTH-A dependency:** the hosted provider differential remains on Production. Upstream [supabase/auth#1547](https://github.com/supabase/auth/issues/1547) is an alternative path, not the only remediation: the approved non-Production server-only publishable/deactivated-legacy candidate is in draft #25. Its completed hosted/local evidence does not authorize Production cutover or close AUTH-A.
 
 **Next single action:** On the azure origin, sign in and confirm EXCO appears in member navigation, opens, and reaches Opportunities, with profile still available.

@@ -61,18 +61,30 @@ publishable key. No Production data was copied.
   private-configuration health, anonymous route denial, disabled test helper
   and safe sign-out redirect. The initial hosted legacy setting was restored.
 - These are separate, overlapping runs, not a unique acceptance-test total.
+- The first actual local authenticated journey passed **1 test / 19 boundary
+  checks**: real email/PKCE, persisted registration/profile save, reload,
+  identity substitution, MEMBER/EXCO role gates, suspended-session denial and
+  sign-out. Registration used the test CAPTCHA verifier, not real CAPTCHA.
+- The expanded attempt then **failed** at new local email delivery: **1 test,
+  0 passed, 1 failed, 0 skipped**, seven checks completed before the wait.
+  Local Auth logs showed HTTP 429 and the stack is configured for two emails
+  per hour; the exact provider error code was not established. Numerical-code,
+  application-refresh and Storage checks were not reached. Both outcomes are
+  retained in the candidate's `local-application.json`; do not combine them
+  into a false PASS. No mail/config/service reset was performed.
 - Candidate branch: `test/auth-a-hosted-proof`, head
-  `a5ae4e46a938e2eb3795c304264f52a8a3949d03`. Evidence and proposed
+  `2fc52aa6a4da56adcbf3d210d1eb28f47af5c1a4`. Evidence and proposed
   cutover/recovery boundaries are committed in [draft PR #25](https://github.com/OlaNailedIT/tncod-professionals/pull/25).
 
-These are fixture/provider and SSR-SDK checks, **not** full deployed-application
-acceptance or proof that the actual app no longer exposes its key.
+These are hosted provider/SDK and actual **local** application checks, not
+deployed-Production acceptance. Artifact scanning proves only the tested
+candidate build, not that Production no longer exposes a key.
 
 ## Nine-item acceptance map
 
 | # | Proof item | Current evidence |
 | --- | --- | --- |
-| 1 | Registration, existing OTP, verify, refresh, sign-out with server-held publishable | Hosted fixture provisioning/OTP/SSR verify/refresh passed initially; full app path not yet verified |
+| 1 | Registration, existing OTP, verify, refresh, sign-out with server-held publishable | Hosted protocol checks and actual local PKCE/registration/profile/roles/sign-out passed. Numerical-code UI, actual application refresh and Storage remain open after local email delivery failure |
 | 2 | Unknown sign-in creates no account | Passed hosted fixture check |
 | 3 | Legacy works before deactivation and fails afterward | PASS on hosted Auth; no Production change |
 | 4 | Missing/invalid credentials cannot recover enumeration | PASS; known/unknown both 401, including user-JWT-as-key and bearer-only variants |
@@ -84,9 +96,12 @@ acceptance or proof that the actual app no longer exposes its key.
 
 ## Next gate
 
-Complete persisted registration, browser PKCE and full authenticated
-application/DB, role and Storage journeys; inventory legacy credential
-consumers; then review the candidate before any Production proposal. Do not repeat
+Carry forward the passing registration/PKCE/profile/role evidence. Finish
+numerical-code, renewed application session, private Storage, modern-key
+account administration and real CAPTCHA acceptance once email delivery is
+available. A repository consumer inventory is now in the candidate; external
+and deployed consumer configuration still needs confirmation. Then review
+the candidate before any Production proposal. Do not repeat
 the completed hosted-provider proof or irrelevant local Kong probes without
 a concrete regression reason. Do not restore resource/cost as a blocker.
 
