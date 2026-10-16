@@ -36,6 +36,17 @@ export const memberAccountItems: NavItem[] = [
   { href: "/auth/sign-out", label: "Sign out" },
 ];
 
+/** Workspace entry. Shown only after the server access check. Not a role claim. */
+export const excoWorkspaceItem: NavItem = { href: "/exco", label: "EXCO" };
+
+export function memberNavigationItems(showExco: boolean): NavItem[] {
+  return showExco ? [...memberNavItems, excoWorkspaceItem] : memberNavItems;
+}
+
+export function memberAccountMenuItems(showExco: boolean): NavItem[] {
+  return showExco ? [excoWorkspaceItem, ...memberAccountItems] : memberAccountItems;
+}
+
 export const excoNavGroups: NavGroup[] = [
   {
     label: "Overview",
@@ -49,6 +60,7 @@ export const excoNavGroups: NavGroup[] = [
     items: [
       { href: "/exco/professionals", label: "Professionals" },
       { href: "/exco/businesses", label: "Businesses" },
+      { href: "/opportunities", label: "Opportunities" },
     ],
   },
   {
