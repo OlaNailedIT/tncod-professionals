@@ -174,14 +174,16 @@ describe("resolveMemberNextAction", () => {
       bodyExcludes: ["listed in the directory"],
     },
     {
-      name: "effectively listed (VERIFIED + DIRECTORY)",
+      name: "published (VERIFIED + DIRECTORY does not prove effective listing)",
       profile: makeProfile(
         { verificationStatus: "VERIFIED", visibilityStatus: "DIRECTORY" },
         complete,
       ),
-      title: "You are listed in the directory",
+      title: "Your profile is published",
       href: "/professionals",
       cta: "Open directory",
+      bodyIncludes: ["privacy preferences"],
+      bodyExcludes: ["you are listed", "you will appear"],
     },
   ] as const)("$name", (row) => {
     const next = resolveMemberNextAction(row.profile);

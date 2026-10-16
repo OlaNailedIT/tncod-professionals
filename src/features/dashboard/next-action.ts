@@ -29,7 +29,8 @@ function remainingSectionTitles(profile: OwnMemberProfile): string {
 /**
  * Presentation-only next-best-action from existing capabilities.
  * Does not invent product features or falsify status.
- * PENDING ≠ UNDER_REVIEW. Directory listing = VERIFIED ∧ DIRECTORY only.
+ * PENDING ≠ UNDER_REVIEW. Publication status does not prove directory inclusion:
+ * the directory also applies identity privacy preferences and public-slug checks.
  */
 export function resolveMemberNextAction(
   profile: OwnMemberProfile | null,
@@ -113,8 +114,8 @@ export function resolveMemberNextAction(
 
   if (verification === "VERIFIED" && visibility === "DIRECTORY") {
     return {
-      title: "You are listed in the directory",
-      body: "Your published profile can appear in the professionals directory. Review privacy preferences anytime, or explore opportunities.",
+      title: "Your profile is published",
+      body: "EXCO has published your verified profile for the directory. Whether it appears also depends on your privacy preferences and a public profile link. Review your privacy settings anytime, or explore opportunities.",
       href: "/professionals",
       cta: "Open directory",
     };
