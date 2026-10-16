@@ -3,6 +3,8 @@ export {
   publicNavItems,
   memberNavItems,
   memberAccountItems,
+  excoWorkspaceItem,
+  excoMemberReturnItem,
   excoNavGroups,
   excoNavItems,
   type NavItem,
