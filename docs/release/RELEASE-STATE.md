@@ -167,7 +167,7 @@ Consolidated owner board: `docs/release/gate-6b-action-board.md`
 
 Mapped to Launch Completion (see board LC overview). Do not treat historical phase PASS as automatic clearance of these rows.
 
-- **LC-B** — Production deploy of `1a69915` (#22) + signed-in Member↔EXCO acceptance (`docs/release/pr-22-signed-in-acceptance.md`)
+- **LC-B** — signed-in Member↔EXCO acceptance on azure after #22 Production recovery (`docs/release/pr-22-signed-in-acceptance.md`)
 - **LC-B** — PR #21 interest roster release + named migration authorization (`docs/release/pr-21-release-packet.md`)
 - **LC-B** — PR #23 dashboard clarity merge/release after review (`docs/release/pr-23-review.md`) — do not re-implement
 - **LC-C / AUTH-A** — provider-level E-API residual (unrestricted launch blocked; pilot exception remains; cutover unapproved)
