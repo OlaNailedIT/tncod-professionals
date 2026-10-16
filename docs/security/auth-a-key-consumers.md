@@ -26,6 +26,12 @@ scheduled consumers cannot be declared absent from a source search alone.
   test CAPTCHA verifier for registration, not a real CAPTCHA submission.
 - Numeric-code, renewed-session and private-document results must be read from
   the dated application report, not inferred from this inventory.
+- Independent local component proof passed 16 checks for real document
+  upload/private download and owner/Member/Viewer/Admin/Super boundaries,
+  plus canonical Auth ban/application-status suspension/reactivation using
+  the modern secret. Initial failed and revised passing runs are both in
+  `docs/release/evidence/auth-a/local-consumers.json`. This does not prove the
+  signed-document HTTP route with a browser session or Production operation.
 - Before any Production proposal, compare the actual environment variable
   consumers, jobs and external tools with this list, and identify a tested
   modern-key-compatible rollback build. Never export their raw credentials.

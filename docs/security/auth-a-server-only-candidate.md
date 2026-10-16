@@ -53,8 +53,19 @@ reached**. No retries or service/config changes were used to manufacture PASS.
 Both outcomes are retained in `docs/release/evidence/auth-a/local-application.json`.
 
 This candidate remains draft, not ready for Production cutover. Outstanding
-acceptance includes the unreached checks, modern-key Auth Admin account
-updates, real registration CAPTCHA, and a compatible rollback artifact.
+browser acceptance includes numeric OTP, actual session renewal and the
+signed-document HTTP route, plus real registration CAPTCHA and a compatible
+rollback artifact.
+
+An independent application-component run bypassed the email dependency, not
+authorization: actual document upload, private/public denial, owner download,
+unrelated MEMBER/Viewer denial, Admin/Super Admin review and canonical Auth
+ban/application-status suspension/reactivation passed **1 test / 16 checks**
+with the modern administrative secret. This does not claim browser-session
+acceptance for the document route. Its initial attempt failed after 12 checks
+with an unclassified cause; the follow-up added read-only role-grant preflight
+and redacted failure-stage diagnostics, not an application/permission change.
+Both outcomes are in `docs/release/evidence/auth-a/local-consumers.json`.
 
 ## Application candidate
 
@@ -82,10 +93,11 @@ with no public API key.
 2. Verify the actual build's browser/prerendered artifacts contain none of
    the live private test credentials. Keep production-style test helpers off.
 3. Carry forward the completed local PKCE/registration/profile/role evidence;
-   finish numerical-code UI, application refresh and private Storage checks
-   once local email delivery is available. Verify modern-key account-status
-   administration and real CAPTCHA separately. Provider/fixture proof is not
-   a substitute for these actual application consumers.
+   finish numerical-code UI, application refresh and signed-document HTTP
+   acceptance once local email delivery is available. Carry forward the 16
+   passing Storage/account-status component checks; verify real CAPTCHA
+   separately. Provider/fixture proof is not a substitute for application
+   consumer acceptance.
 4. Inventory every consumer of legacy anon **and service-role** credentials,
    including jobs, operational scripts, Storage uploads and signed URLs.
 5. Obtain explicit owner approval for the exact Production environment/key
