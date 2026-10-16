@@ -1,7 +1,7 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-16 (PR #18 released; physical retest still open)  
+**Updated:** 2026-10-16 (EXCO entry and opportunities link in review; headshot not started)  
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
 **AUTH-A:** PROVIDER-LEVEL residual — **unrestricted launch blocked**; controlled pilot exception remains (not an item for risk-acceptance solicitation here)
 
@@ -33,6 +33,8 @@ Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or
 | D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. DEF-23C-01 released, physical retest pending. DEF-23C-02 artificial-profile test corrected; real-device header responsiveness awaiting verification |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (depends on D/E + owner judgment on A/B/C) |
+| G | EXCO surface acceptance | **AWAITING HUMAN** — entry was missing from the member shell while `/exco` stayed role-checked. Restoration is in review and is not Production. Do not accept the EXCO surface until that release is retested |
+| H | Optional headshot | **NOT STARTED** — proposal only. No implementation until the new scope is approved |
 
 ---
 
@@ -179,6 +181,20 @@ Facilitator records verbatim understanding vs the “understanding looks like”
 **Unrestricted launch PASS:** withheld (AUTH-A at minimum).
 
 ---
+
+## EXCO discoverability and opportunities
+
+The completed navigation release (PR #18, merge `19b214a`) is unchanged.
+
+`/exco` still redirects members without EXCO_VIEWER, EXCO_ADMIN, or SUPER_ADMIN to `/dashboard`, and anonymous users to sign-in. The missing piece was the member shell: it never asked `hasExcoDashboardAccess`, so an authorized account could open the route directly and still see no EXCO entry. Account items were Profile, Settings, and Sign out only.
+
+The review branch restores the entry from that server check on the desktop sidebar, the phone/tablet drawer, and the account menu. It does not change Production roles. Direct-route checks stay in place.
+
+EXCO navigation had no route to `/opportunities`. The existing create form already renders there for `opportunity.manage` (EXCO_ADMIN and SUPER_ADMIN). MEMBER and EXCO_VIEWER do not receive that permission, and `createOpportunity` checks it on the server. The review branch adds an Opportunities link in the EXCO Manage group to that same page.
+
+**Interest follow-up today:** a member can express or withdraw interest. The product stores one row per member and writes an audit event. It does not show EXCO a list or count of interested members, and it does not send an introduction or notification. The detail page can show deterministic potential matches for EXCO viewers and admins; that panel is not the interest list. There is no in-product follow-up procedure beyond closing the opportunity. Reviewing who expressed interest is a missing operational capability.
+
+**Optional headshot:** proposal only, in `docs/product/optional-headshot-proposal.md`. Not implemented. It does not block the EXCO fix.
 
 ## Priority order for the project owner (now)
 

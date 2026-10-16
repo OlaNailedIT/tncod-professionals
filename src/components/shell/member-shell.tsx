@@ -6,7 +6,7 @@ import { BrandLogo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AccountMenu } from "./account-menu";
-import { memberAccountItems, memberNavItems } from "./nav-config";
+import { memberAccountMenuItems, memberNavigationItems } from "./nav-config";
 import { NavLink, type ShellLinkMode } from "./nav-link";
 import { NavigationDrawer } from "./navigation-drawer";
 import { SkipLink } from "./skip-link";
@@ -17,6 +17,11 @@ export type MemberShellProps = {
   mode?: ShellLinkMode;
   onNavigate?: (href: string) => void;
   title?: string;
+  /**
+   * Server-decided. True only when hasExcoDashboardAccess passed.
+   * Does not grant /exco; the route still checks the role.
+   */
+  showExco?: boolean;
 };
 
 /**
@@ -28,8 +33,11 @@ export function MemberShell({
   mode = "button",
   onNavigate,
   title = "Member",
+  showExco = false,
 }: MemberShellProps) {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const navItems = memberNavigationItems(showExco);
+  const accountItems = memberAccountMenuItems(showExco);
 
   const logo =
     mode === "link" && !onNavigate ? (
@@ -62,7 +70,7 @@ export function MemberShell({
       <aside className="hidden w-56 shrink-0 border-r border-border-subtle bg-surface lg:flex lg:flex-col">
         <div className="border-b border-border-subtle px-4 py-4">{logo}</div>
         <nav aria-label="Member" className="flex flex-1 flex-col gap-1 p-3">
-          {memberNavItems.map((item) => (
+          {navItems.map((item) => (
             <NavLink
               key={item.href}
               href={item.href}
@@ -76,7 +84,7 @@ export function MemberShell({
         </nav>
         <div className="border-t border-border-subtle p-3">
           <AccountMenu
-            items={memberAccountItems}
+            items={accountItems}
             pathname={pathname}
             mode={mode}
             onNavigate={onNavigate}
@@ -101,7 +109,7 @@ export function MemberShell({
           </div>
           <div className="lg:hidden">
             <AccountMenu
-              items={memberAccountItems}
+              items={accountItems}
               pathname={pathname}
               mode={mode}
               onNavigate={onNavigate}
@@ -113,7 +121,7 @@ export function MemberShell({
           open={drawerOpen}
           onOpenChange={setDrawerOpen}
           title="Member menu"
-          items={memberNavItems}
+          items={navItems}
           pathname={pathname}
           mode={mode}
           density="member"
@@ -122,7 +130,7 @@ export function MemberShell({
             <>
               <Separator className="mb-3" />
               <AccountMenu
-                items={memberAccountItems}
+                items={accountItems}
                 pathname={pathname}
                 mode={mode}
                 onNavigate={onNavigate}
