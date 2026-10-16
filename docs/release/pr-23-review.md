@@ -29,11 +29,15 @@
 - Full Phase 23D participant comprehension: **not** claimed by this PR.
 - Secondary “Explore opportunities” can duplicate the primary CTA in PENDING/UNDER_REVIEW — acceptable, not a defect.
 
+## Dependency on #21
+
+**None.** #23 is dashboard copy/logic only (next-action labels, PageIntro, CTAs). It does not import interest-roster code, migrations, or EXCO opportunity queries. Prior “after #21” sequencing was queue preference, not a hard dependency.
+
 ## Recommended release order relative to queue
 
-1. Confirm/fix Production deploy of #22 (`1a69915`) and run signed-in acceptance.
-2. Owner-authorize and release #21 (migration + merge) under its packet.
-3. Merge/release #23 (docs+UI only; no DB). After release, retest dashboard wording/destinations only.
+1. #22 Production recovery is done (`dpl_DTe6dmsQ…` on azure) — run signed-in acceptance.
+2. #23 may merge/release independently of #21 (docs+UI only; no DB). Retest dashboard wording/destinations after release.
+3. #21 still requires explicit owner migration authorization before Production apply/merge.
 
 ## Do not
 

@@ -18,7 +18,7 @@
 | **LC-F** Privacy and operations | Privacy-L1, backup class/recovery, monitoring, operators | **AWAITING HUMAN** |
 | **LC-G** Freeze and launch | Frozen candidate + GO/NO-GO | **NOT STARTED** — 23 Oct target contingent on AUTH-A |
 
-**Critical path to 23 October:** AUTH-A demonstrated non-Production remedy (or concrete alternative) by **19 Oct**, plus LC-B Production catch-up for `1a69915`. If AUTH-A remains unresolved at that checkpoint, revise the public-launch date; controlled pilot may continue under its existing exception.
+**Critical path to 23 October:** AUTH-A hosted non-Production proof of the publishable+revoke candidate (or concrete alternative) by **19 Oct**. LC-B #22 Production recovery is done (`dpl_DTe6dmsQ…` on azure); signed-in acceptance remains human. If AUTH-A remains unresolved at that checkpoint, revise the public-launch date; controlled pilot may continue under its existing exception.
 
 **Live identity:**
 

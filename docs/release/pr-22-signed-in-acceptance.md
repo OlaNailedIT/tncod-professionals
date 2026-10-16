@@ -13,8 +13,9 @@
 | Application tree | merge `1a69915` **===** reviewed head `b80bc5d` (identical git trees) |
 | Root cause of lag | **Deployment absent** — no Vercel/GitHub Production (or Preview) deployment was created for `1a69915` after merge; not a failed build; azure still aliased to PR #20 until recovery |
 | Recovery action | CLI Production deploy from clean checkout of `1a69915` on linked project `tncod-professionals` (Git webhook never produced a deployment for this SHA). Meta: `githubCommitSha=1a69915`, `deployReason=lc-b-release-recovery-git-webhook-absent` |
-| Ready Production (Vercel) | `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · `https://tncod-professionals-9g33jg1dl-olanailedits-projects.vercel.app` · **aliased to azure** |
-| “Member dashboard” on azure | **Present** in deployed application JS after recovery (read-only smoke) |
+| Ready Production (Vercel) | `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · `https://tncod-professionals-9g33jg1dl-olanailedits-projects.vercel.app` · aliases: **azure**, project default, **git-main** (git-main re-pointed 2026-10-16 after lagging on `dpl_BdtPVaT`) |
+| GitHub Deployments API | Latest recorded Production still `7115716634` / `71b5570` — **no** GitHub deployment row for `1a69915` (webhook absent; Vercel Ready + azure alias are authoritative) |
+| “Member dashboard” on azure | **Present** in deployed application JS after recovery (read-only smoke; homepage chunk `page-0853a8d8daaf56e6.js`) |
 
 **Signed-in acceptance** is now unblocked on azure for the #22 journey below. Do not claim browser PASS until the signed-in walk is actually performed.
 
