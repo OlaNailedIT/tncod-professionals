@@ -1,9 +1,27 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Locator, type Page } from "@playwright/test";
 
 /**
  * DEF-23C-01 — mobile drawer must navigate (URL + destination content), not only close.
+ * DEF-23C-02 — header Sign in at tablet/landscape widths.
+ *
+ * DEF-23C-02 limitation: resizing a touch phone preset (deviceScaleFactor 3) with
+ * page.setViewportSize() and then calling locator.click() is not a physical tap.
+ * On that combination the click can finish without a navigation request. The header
+ * matrix uses the native iPad Pro 11 profile, an iPhone landscape context created at
+ * 844×390 (the header is hidden below the md breakpoint; Playwright's built-in
+ * landscape preset is 750×340), and locator.tap() when the project has touch.
+ * A non-prefetch RSC request is not treated as navigation; each test asserts the URL
+ * and unique #main-content. Navigations are not chained: a late client commit can
+ * interrupt a following goto.
+ *
  * Does not submit registration or mutate Production accounts.
  */
+
+const HEADER_ASSERT_TIMEOUT = 15_000;
+
+function isWideHeaderProject(name: string) {
+  return name.includes("ipad") || name.includes("landscape") || name.includes("desktop");
+}
 
 const DESTINATIONS = [
   {
@@ -43,7 +61,20 @@ async function openPublicMenu(page: Page) {
   await expect(page.locator("dialog[open]")).toBeVisible();
 }
 
+async function activateHeaderLink(link: Locator) {
+  const hasTouch = Boolean(test.info().project.use.hasTouch);
+  if (hasTouch) await link.tap();
+  else await link.click();
+}
+
 test.describe("DEF-23C-01 public mobile menu navigation", () => {
+  test.beforeEach(({}, testInfo) => {
+    test.skip(
+      isWideHeaderProject(testInfo.project.name),
+      "phone drawer is covered by the phone projects",
+    );
+  });
+
   for (const dest of DESTINATIONS) {
     test(`phone menu → ${dest.label} changes URL and shows destination`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
@@ -71,43 +102,60 @@ test.describe("DEF-23C-01 public mobile menu navigation", () => {
     });
   }
 
-  test("tablet/desktop header nav still navigates", async ({ page }) => {
-    await page.setViewportSize({ width: 834, height: 1194 });
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+});
 
-    await expect(page.getByRole("button", { name: /^Menu$/i })).toHaveCount(0);
-
-    const nav = page.getByRole("navigation", { name: "Public" });
-    await expect(nav.getByRole("link", { name: "Join" })).toBeVisible();
-    const main = page.locator("#main-content");
-    await nav.getByRole("link", { name: "Join" }).click();
-    await expect(page).toHaveURL(/\/join\/?$/);
-    await expect(main.getByRole("heading", { name: "Join the Professionals community", level: 1 })).toBeVisible();
-    await expect(main.getByLabel("Full name")).toBeVisible();
-
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await nav.getByRole("link", { name: "Sign in" }).click();
-    await expect(page).toHaveURL(/\/sign-in\/?$/);
-    await expect(main.getByRole("heading", { name: "Sign in", level: 1 })).toBeVisible();
-    await expect(main.getByLabel("Email address")).toBeVisible();
+test.describe("DEF-23C-02 public header navigation", () => {
+  test.beforeEach(({}, testInfo) => {
+    test.skip(
+      !isWideHeaderProject(testInfo.project.name),
+      "header links are hidden below md; phone projects cover the drawer",
+    );
   });
 
-  test("desktop header nav opens Professionals directory content", async ({ page }) => {
-    await page.setViewportSize({ width: 834, height: 1194 });
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    const nav = page.getByRole("navigation", { name: "Public" });
-    await nav.getByRole("link", { name: "Professionals" }).click();
-    await expect(page).toHaveURL(/\/professionals\/?$/);
-    await expect(
-      page.locator("#main-content").getByRole("heading", { name: "Professionals Directory", level: 1 }),
-    ).toBeVisible();
-  });
+  for (const dest of DESTINATIONS) {
+    test(`header → ${dest.label} changes URL and shows destination`, async ({ page }) => {
+      await page.goto("/", { waitUntil: "domcontentloaded" });
+      await expect(page.getByRole("button", { name: /^Menu$/i })).toHaveCount(0);
+
+      const link = page.getByRole("navigation", { name: "Public" }).getByRole("link", { name: dest.label });
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute("href", dest.path);
+      await page.waitForFunction((label) => {
+        const node = [...document.querySelectorAll('nav[aria-label="Public"] a')].find(
+          (anchor) => (anchor.textContent || "").trim() === label,
+        );
+        if (!node) return false;
+        return Object.keys(node).some(
+          (key) => key.startsWith("__reactProps") || key.startsWith("__reactFiber"),
+        );
+      }, dest.label);
+
+      await activateHeaderLink(link);
+      await expect(page).toHaveURL(new RegExp(`${dest.path.replace("/", "\\/")}\\/?$`), {
+        timeout: HEADER_ASSERT_TIMEOUT,
+      });
+      const main = page.locator("#main-content");
+      await expect(main.getByRole("heading", { name: dest.mainHeading, level: 1 })).toBeVisible({
+        timeout: HEADER_ASSERT_TIMEOUT,
+      });
+      if (dest.label === "Join") {
+        await expect(main.getByLabel("Full name")).toBeVisible();
+      }
+      if (dest.label === "Sign in") {
+        await expect(main.getByLabel("Email address")).toBeVisible();
+      }
+    });
+  }
 });
 
 test.describe("DEF-23C-01 showcase button-mode drawer (design-system)", () => {
   test("member specimen menu still uses buttons and local pathname side effects", async ({
     page,
-  }) => {
+  }, testInfo) => {
+    test.skip(
+      isWideHeaderProject(testInfo.project.name),
+      "showcase drawer is covered by the phone projects",
+    );
     test.skip(process.env.VERCEL_ENV === "production", "design-system is 404 in Production");
 
     await page.setViewportSize({ width: 390, height: 844 });

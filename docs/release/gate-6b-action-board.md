@@ -1,18 +1,19 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-12 (closeout board)  
+**Updated:** 2026-10-16 (DEF-23C-02 header disposition; no merge, no Production deploy)  
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
 **AUTH-A:** PROVIDER-LEVEL residual — **unrestricted launch blocked**; controlled pilot exception remains (not an item for risk-acceptance solicitation here)
 
-**Live identity (verified this closeout):**
+**Live identity:**
 
 | Fact | Value |
 | --- | --- |
-| `origin/main` | `6618ac87c806e1a58cd027c34c08783bb7ed6567` |
-| GitHub Production deployment | id `7021555704` · sha `6618ac8` · 2026-10-12T19:10:33Z |
+| `origin/main` | `1c50836282f752a5bf2463577e7898662f74ff1c` (PR #17, 2026-10-13) |
+| GitHub Production deployment | id `7032753378` · sha `1c50836` · 2026-10-13T07:34:15Z |
 | Azure origin | `https://tncod-professionals-azure.vercel.app` |
-| CI on tip | `verify` **success** |
+| PR #18 | OPEN · branch `fix/def-23c-01-mobile-menu` · not merged · not Production |
+| Phase 23C | **NOT LOCKED** — physical phone and tablet evidence on the released build is still required |
 
 Status vocabulary: `NOT STARTED` · `AWAITING HUMAN` · `AUTHORIZED` · `IN PROGRESS` · `PASS` · `FAIL` · `BLOCKED`
 
@@ -28,7 +29,7 @@ Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or
 | A | AUTH-B owner confirmations (COLLISION-01…08) | **AWAITING HUMAN** |
 | B | Privacy Notice legal/privacy sign-off | **AWAITING HUMAN** |
 | C | Backup class (Dashboard) + production-data recovery posture | **AWAITING HUMAN** (schema-only disposable restore drill **PASS**) |
-| D | Phase 23C real-device acceptance | **AWAITING HUMAN** |
+| D | Phase 23C real-device acceptance | **AWAITING HUMAN** — phone Task 1 PASS; Task 2 FAIL (DEF-23C-01); DEF-23C-02 physical tap still required |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (depends on D/E + owner judgment on A/B/C) |
 
@@ -103,6 +104,42 @@ LEGAL SIGN-OFF: NOT APPROVED
 
 ---
 
+## Navigation defects (automation, not Phase 23C lock)
+
+**DEF-23C-01** — phone menu closed and the page stayed put. Root cause: `NavLink` rendered a button whenever `onNavigate` was set, including drawer links in `mode="link"`. PR #18 keeps `mode` as the element choice; the drawer still closes after a real link navigation. Preview phone-drawer checks for Professionals, Join, and Sign in passed (URL plus unique `#main-content`). **Baseline preserved:** a local run reached the Professionals URL and closed the drawer, then missed the heading because disposable Postgres at `127.0.0.1:54322` was down. The same heading assertion later passed on the Git-linked preview.
+
+**DEF-23C-02** — header Sign in stayed on `/` in touch WebKit. It reproduces on Production `1c50836` and on the PR preview, so it is not a drawer-fix regression. No header code change.
+
+Click versus `locator.tap()` on the same Sign in anchor, from `/`, expecting `/sign-in`:
+
+| Profile | click | tap |
+| --- | --- | --- |
+| Native iPad Pro 11 | Starts a non-prefetch navigation RSC. In the Join sequence the URL was still `/` at 8s, then the in-flight navigation to `/join` interrupted the next `goto`. A separate Sign in click committed to `/sign-in` in under 1.5s, as did keyboard Enter. | Same late non-prefetch navigation as click. |
+| iPhone landscape context at 844×390 | Same: navigation RSC starts; the URL is still `/` inside 8s; the commit then interrupts the next load. | Same, with the navigation RSC about 5s after tap. |
+| iPhone 12 Pro resized with `setViewportSize` to 834×1194 (scale 3) | Click can return with only prefetch requests and no navigation. This was the original failing test. It is not a tablet tap. | `tap()` timed out in scroll-into-view and did not navigate. |
+
+The `/sign-in?_rsc=` request after the interaction is a click-triggered navigation (`next-router-prefetch` absent, distinct `_rsc` from the viewport prefetch of Professionals, Join, and Sign in). A 200 on that request is not a completed navigation: history did not `pushState` until later, and the heading stayed “TNCOD Professionals” through the assertion window. Viewport prefetches are the separate `next-router-prefetch: 1` requests.
+
+Corrected matrix on the PR preview (native iPad, landscape context created at 844×390, desktop click, phone drawer): **20 passed, 22 skipped, 0 failed**. Header cases use `tap()` on touch projects, one destination per test, and assert the URL plus unique main content. `NavLink` was not changed for this finding.
+
+**Physical check still required before Phase 23C lock.** Emulator commit time varied from under 1.5s to more than 8s, so this does not prove a real device fails or that it is fast.
+
+```text
+DEF-23C-02 physical retest — after a Production release that contains PR #18. Do not use the preview.
+
+Device: a real iPad, portrait, Safari or Chrome. Then the same iPhone in landscape.
+Open https://tncod-professionals-azure.vercel.app/
+Do not open the menu. Professionals, Join, and Sign in must be visible in the header.
+Tap Sign in once.
+
+PASS: the address ends in /sign-in, the heading is "Sign in", and an Email address field is visible.
+FAIL: the address stays on the home page, or the heading stays "TNCOD Professionals".
+
+Write the result in your own words. One tap. Do not tap again to turn a failure into a pass.
+```
+
+DEF-23C-01 still needs the released build on the iPhone 12 Pro Max, Chrome, portrait: open the menu and tap Professionals, Join, and Sign in. Each tap must change the page, not only close the menu.
+
 ## D. Phase 23C — device acceptance
 
 **Packet (fill this):** `docs/release/phase-23c-human-acceptance-packet.md`  
@@ -151,4 +188,4 @@ Facilitator records verbatim understanding vs the “understanding looks like”
 5. **Backup class** — fill Dashboard fields in `ops-backup-class-owner-check.md`.  
 6. **Pilot closeout** — complete `pilot-closeout-packet.md` only after real cohort evidence exists.
 
-**Next single action:** Start Phase 23C Task 1 on a physical phone at the azure origin and fill the packet row-by-row.
+**Next single action:** After PR #18 is released to Production, run the DEF-23C-02 physical tap above on a real iPad and a landscape iPhone, and redo the phone menu task (DEF-23C-01) on the iPhone 12 Pro Max. Do not mark Phase 23C complete from Playwright. AUTH-A, Privacy-L1, backup class, AUTH-B, Phase 23D, and pilot closeout stay open and independent of that tap.

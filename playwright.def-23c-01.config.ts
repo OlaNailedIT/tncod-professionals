@@ -64,8 +64,29 @@ export default defineConfig({
       },
     },
     {
+      name: "webkit-ipad",
+      use: { ...devices["iPad Pro 11"] },
+    },
+    {
+      // Built-in landscape preset is 750×340, below the md header breakpoint.
+      // Viewport is set with the context so the header is on screen at the
+      // physical iPhone 12 Pro landscape width, without a later resize.
+      name: "webkit-iphone-landscape",
+      use: {
+        ...devices["iPhone 12 Pro landscape"],
+        viewport: { width: 844, height: 390 },
+      },
+    },
+    {
       name: "chromium-ipad",
       use: { ...devices["iPad Pro 11"] },
+    },
+    {
+      name: "chromium-desktop",
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1280, height: 800 },
+      },
     },
   ],
   webServer: {
