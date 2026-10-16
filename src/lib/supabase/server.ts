@@ -2,18 +2,18 @@ import "server-only";
 
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { getPublicEnv, hasBrowserSupabaseConfig } from "@/lib/env/public";
+import { getSessionSupabaseConfig } from "@/lib/env/supabase-session";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
-/** User-scoped server client. Uses the anon key + session cookies. Not the service role. */
+/** User-scoped client: low-privilege API key + session cookies, never a secret/service role. */
 export async function createServerSupabaseClient() {
-  if (!hasBrowserSupabaseConfig()) {
+  const config = getSessionSupabaseConfig();
+  if (!config) {
     return null;
   }
-  const env = getPublicEnv();
   const cookieStore = await cookies();
-  return createServerClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  return createServerClient(config.url, config.key, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

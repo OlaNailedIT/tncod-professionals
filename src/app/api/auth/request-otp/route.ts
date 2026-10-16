@@ -4,6 +4,7 @@ import { z } from "zod";
 import { sanitizeNextPath } from "@/lib/auth/safe-redirect";
 import { classifyAuthErrorMessage } from "@/lib/auth/classify-auth-error";
 import { logger } from "@/lib/logger";
+import { getSessionSupabaseConfig } from "@/lib/env/supabase-session";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
@@ -31,8 +32,7 @@ function unwrapEnv(value: string | undefined): string | undefined {
  * Outward JSON is identical for member, unknown, inactive, and banned emails.
  */
 export async function POST(request: NextRequest) {
-  const supabaseUrl = unwrapEnv(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  const anonKey = unwrapEnv(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  const config = getSessionSupabaseConfig();
   const origin =
     unwrapEnv(process.env.NEXT_PUBLIC_SITE_URL)?.replace(/\/$/, "") ||
     new URL(request.url).origin;
@@ -75,13 +75,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, emailRedirectTo, skipSend: true });
   }
 
-  if (!supabaseUrl || !anonKey) {
+  if (!config) {
     logger.warn("auth_sign_in_request_failed", { error_category: "config" });
     return success;
   }
 
   const email = parsed.data.toLowerCase();
-  const supabase = createServerClient(supabaseUrl, anonKey, {
+  const supabase = createServerClient(config.url, config.key, {
     cookies: {
       getAll() {
         return request.cookies.getAll();

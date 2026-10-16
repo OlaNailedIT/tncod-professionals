@@ -1,4 +1,4 @@
-param([ValidateSet('inspect', 'recover', 'provider-proof')][string]$Phase = 'inspect')
+param([ValidateSet('inspect', 'recover', 'provider-proof', 'app-build', 'app-runtime')][string]$Phase = 'inspect')
 $ErrorActionPreference = 'Stop'
 # Owner-authorized saved CLI credential reuse. Never echo credentials or put them in arguments.
 Add-Type -TypeDefinition @'
@@ -42,7 +42,7 @@ public static class AuthAOnlyCredential {
 try {
   $authAToken = [AuthAOnlyCredential]::Read()
   $authAInput = @{projectId='hyzkearnbhxznkeokacj';managementToken=$authAToken;phase=$Phase}
-  if ($Phase -eq 'provider-proof') {
+  if ($Phase -in @('provider-proof', 'app-build', 'app-runtime')) {
     $authAOwner = (& npx --yes supabase whoami --output-format json | ConvertFrom-Json)
     if (-not $authAOwner.email) { throw 'No owner-controlled test mailbox was established.' }
     $authAInput.testEmail = $authAOwner.email

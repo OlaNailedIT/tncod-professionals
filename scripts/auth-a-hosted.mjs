@@ -1,6 +1,9 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 import { createServerClient } from '@supabase/ssr';
+import { spawn } from 'node:child_process';
+import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 
 const TEST_PROJECT = 'hyzkearnbhxznkeokacj';
 const TEST_ORG = 'qrctrhdndbuypymdxzkr';
@@ -76,6 +79,75 @@ try {
     const settled=await waitLegacySetting(true);
     console.log(JSON.stringify({operation:'recovery readback',settled,setting:await manage('/api-keys/legacy')}));
     if(!settled) process.exitCode=1;
+  }
+  if (['app-build','app-runtime'].includes(input.phase)) {
+    const publishable=keys.find(k=>k.type==='publishable'&&!k.disabled)?.api_key;
+    const secret=keys.find(k=>k.type==='secret'&&!k.disabled)?.api_key;
+    check('test-project keys available for actual app build',publishable && secret);
+    const env={...process.env};
+    for(const name of ['DATABASE_URL','DIRECT_URL','NEXT_PUBLIC_SUPABASE_URL','NEXT_PUBLIC_SUPABASE_ANON_KEY','NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY','NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY','NEXT_PUBLIC_SUPABASE_SECRET_KEY','AUTH_E2E_HELPER']) delete env[name];
+    Object.assign(env,{NODE_ENV:'production',NEXT_TELEMETRY_DISABLED:'1',SUPABASE_AUTH_SERVER_ONLY:'1',SUPABASE_URL:url,SUPABASE_PUBLISHABLE_KEY:publishable,SUPABASE_SERVICE_ROLE_KEY:secret,NEXT_PUBLIC_SITE_URL:'http://127.0.0.1:3197'});
+    const run=(args)=>new Promise(resolve=>{
+      const child=spawn(process.execPath,['node_modules/next/dist/bin/next',...args],{env,stdio:'inherit'});
+      child.on('error',()=>resolve(-1));child.on('exit',code=>resolve(code));
+    });
+    if(input.phase==='app-build') check('actual Next production build in strict server-only mode',(await run(['build']))===0);
+    let scanned=0;
+    const secretValues=[publishable,secret,input.managementToken];
+    const scan=async(dir,renderedOnly=false)=>{
+      for(const entry of await readdir(dir,{withFileTypes:true})) {
+        const filename=path.join(dir,entry.name);
+        if(entry.isDirectory()) await scan(filename,renderedOnly);
+        else if(!renderedOnly||/\.(html|rsc|body|meta|json)$/.test(filename)) {
+          const bytes=await readFile(filename);scanned++;
+          if(secretValues.some(value=>bytes.includes(Buffer.from(value)))) throw new Error('Private credential found in public build artifact');
+        }
+      }
+    };
+    await scan('.next/static');await scan('.next/server/app',true);await scan('public');
+    check('actual public bundles and prerendered outputs contain no private credentials',scanned>0,{files:scanned});
+    if(input.phase==='app-runtime') {
+      originalLegacy=await manage('/api-keys/legacy');changedLegacy=true;
+      await manage('/api-keys/legacy?enabled=false','PUT');
+      check('hosted legacy keys disabled for actual app runtime',await waitLegacySetting(false));
+      const oldAnon=keys.find(k=>k.name==='anon')?.api_key;
+      let oldStatus;
+      for(let attempt=0;attempt<20;attempt++) {
+        oldStatus=(await authRequest('settings',oldAnon)).status;
+        if(oldStatus===401) break;
+        await new Promise(resolve=>setTimeout(resolve,2000));
+      }
+      check('old key rejected while actual application is tested',oldStatus===401);
+    }
+    const app=spawn(process.execPath,['node_modules/next/dist/bin/next','start','--hostname','127.0.0.1','--port','3197'],{env,stdio:'ignore'});
+    try {
+      let ready=false;
+      for(let attempt=0;attempt<30;attempt++) {
+        try {ready=(await fetch('http://127.0.0.1:3197/sign-in')).status===200;} catch {}
+        if(ready) break;await new Promise(resolve=>setTimeout(resolve,1000));
+      }
+      check('actual app starts with private keys only',ready);
+      for(const route of ['/sign-in','/join','/privacy']) {
+        const response=await fetch(`http://127.0.0.1:3197${route}`);const body=await response.text();
+        check(`actual app ${route}: 200 and no credential serialization`,response.status===200 && secretValues.every(value=>!body.includes(value)));
+      }
+      const session=await fetch('http://127.0.0.1:3197/api/runtime/session').then(r=>r.json());
+      check('actual session probe recognizes private configuration',session.supabaseConfigured===true && session.sessionPresent===false);
+      for(const route of ['/dashboard','/exco']) {
+        const response=await fetch(`http://127.0.0.1:3197${route}`,{redirect:'manual'});
+        check(`actual ${route} keeps anonymous access gated`,response.status===307 && response.headers.get('location')?.includes('/sign-in'));
+      }
+      const helper=await fetch('http://127.0.0.1:3197/api/test/auth-session',{method:'POST'});
+      check('test session helper stays disabled in production build',helper.status===404);
+      const signOut=await fetch('http://127.0.0.1:3197/auth/sign-out',{method:'POST',redirect:'manual'});
+      check('actual sign-out route redirects safely with private configuration',signOut.status===303&&signOut.headers.get('location')?.endsWith('/sign-in'));
+      const post=async(email)=>{
+        const response=await fetch('http://127.0.0.1:3197/api/auth/request-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+        const body=await response.text();return {status:response.status,body};
+      };
+      const known=await post(input.testEmail);const unknown=await post(`auth-a-never-${randomUUID()}@example.com`);
+      check('actual OTP route is neutral and does not serialize credentials',known.status===200 && unknown.status===200 && known.body===unknown.body && secretValues.every(value=>!known.body.includes(value)));
+    } finally {app.kill();}
   }
   if (input.phase === 'provider-proof') {
     check('owner-controlled mailbox supplied', typeof input.testEmail === 'string' && input.testEmail.includes('@'));
@@ -185,9 +257,15 @@ try {
     try { await manage('/config/auth','PATCH',{disable_signup:originalAuth.disable_signup}); checks.push({name:'initial signup setting restored',pass:true}); }
     catch {checks.push({name:'initial signup setting restored',pass:false});process.exitCode=1;}
   }
-  if(input.phase==='provider-proof') console.log(JSON.stringify({
-    projectId:TEST_PROJECT,scope:'Hosted provider/SSR SDK fixture proof; NOT deployed application acceptance',
+  if(['provider-proof','app-build','app-runtime'].includes(input.phase)) {
+    const report={
+    projectId:TEST_PROJECT,scope:input.phase==='provider-proof'?'Hosted provider/SSR SDK fixture proof':'Actual local production-build artifact and HTTP checks',
     checks,executed:checks.length,passed:checks.filter(c=>c.pass).length,failed:checks.filter(c=>!c.pass).length,
-    applicationBundleScan:'NOT EXECUTED',applicationEndToEnd:'NOT EXECUTED',productionChanged:false,
-  }));
+    applicationBundleScan:input.phase!=='provider-proof'?'EXECUTED':'NOT EXECUTED',
+    fullAuthenticatedApplicationEndToEnd:'NOT EXECUTED',productionChanged:false,
+    };
+    await mkdir('.cache/auth-a',{recursive:true});
+    await writeFile(`.cache/auth-a/${input.phase}.json`,JSON.stringify(report,null,2));
+    console.log(JSON.stringify(report));
+  }
 }
