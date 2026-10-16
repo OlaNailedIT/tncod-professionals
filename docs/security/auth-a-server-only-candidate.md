@@ -33,9 +33,28 @@ or evidence that Production keys are disabled.
 
 The two application reports are in the same evidence directory. Counts are
 separate runs with overlapping checks, not a count of unique acceptance
-criteria. Full authenticated application/DB, persisted registration,
-browser PKCE and Storage acceptance are still pending; this candidate is
-for draft review, not Production cutover.
+criteria.
+
+The first full local application journey subsequently passed **1 test / 19
+boundary checks**: real browser email/PKCE sign-in, persisted registration,
+profile save/readback, session reload, identity-substitution denial, MEMBER
+denial and all three EXCO roles, suspended-session rejection and sign-out.
+Registration used the existing test CAPTCHA verifier, not real UI CAPTCHA
+acceptance. The Next production-mode build used local modern private keys
+with session helpers disabled. Synthetic local fixtures were retained.
+
+An expanded follow-up **failed** before the new email arrived: **1 test
+executed, 0 passed, 1 failed, 0 skipped**, with seven preceding boundary
+checks completed. Auth logs showed HTTP 429; the local stack is configured
+for two emails/hour. The exact provider error code was not established, so
+the quota explanation remains a diagnosis, not a claimed definitive cause.
+Numeric-code UI, renewed application session and Storage checks were **not
+reached**. No retries or service/config changes were used to manufacture PASS.
+Both outcomes are retained in `docs/release/evidence/auth-a/local-application.json`.
+
+This candidate remains draft, not ready for Production cutover. Outstanding
+acceptance includes the unreached checks, modern-key Auth Admin account
+updates, real registration CAPTCHA, and a compatible rollback artifact.
 
 ## Application candidate
 
@@ -62,13 +81,19 @@ with no public API key.
 1. Review the candidate and exact-head CI/build evidence.
 2. Verify the actual build's browser/prerendered artifacts contain none of
    the live private test credentials. Keep production-style test helpers off.
-3. Complete a full authenticated application journey, including persisted
-   registration, PKCE callback, active-identity enforcement, refresh,
-   sign-out and all role boundaries. Provider/fixture proof is not this gate.
+3. Carry forward the completed local PKCE/registration/profile/role evidence;
+   finish numerical-code UI, application refresh and private Storage checks
+   once local email delivery is available. Verify modern-key account-status
+   administration and real CAPTCHA separately. Provider/fixture proof is not
+   a substitute for these actual application consumers.
 4. Inventory every consumer of legacy anon **and service-role** credentials,
    including jobs, operational scripts, Storage uploads and signed URLs.
 5. Obtain explicit owner approval for the exact Production environment/key
    changes. Existing approvals do not authorize that cutover.
+
+Repository credential consumers and historical script limitations are listed
+in `docs/security/auth-a-key-consumers.md`. This is not proof of the actual
+Production environment or external scheduler/tool configuration.
 
 ## Proposed sequence — NOT execution authorization
 

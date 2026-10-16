@@ -1,0 +1,159 @@
+{
+  "scope": "Actual local strict-mode application; not Production acceptance",
+  "firstJourney": {
+    "source": "actual local application / strict server-only candidate",
+    "at": "2026-10-16T21:02:01.767Z",
+    "database": "127.0.0.1:54322",
+    "auth": "127.0.0.1:54321",
+    "productionChanged": false,
+    "testSessionShortcutUsed": false,
+    "registrationCaptcha": "test verifier (not UI/real CAPTCHA proof)",
+    "fixtures": "unique synthetic local records retained; no pre-existing records changed",
+    "checks": [
+      {
+        "name": "required registration migration present before fixture writes",
+        "pass": true
+      },
+      {
+        "name": "real registration command succeeds (test CAPTCHA, not UI CAPTCHA evidence)",
+        "pass": true
+      },
+      {
+        "name": "Auth-linked active application record, private profile and MEMBER role persisted",
+        "pass": true
+      },
+      {
+        "name": "actual production-mode app starts with private local keys",
+        "pass": true
+      },
+      {
+        "name": "session shortcut disabled",
+        "pass": true
+      },
+      {
+        "name": "anonymous EXCO route denied",
+        "pass": true
+      },
+      {
+        "name": "real OTP endpoint writes PKCE verifier cookie",
+        "pass": true
+      },
+      {
+        "name": "real email includes a provider verification link",
+        "pass": true
+      },
+      {
+        "name": "verification link restricted to disposable Auth",
+        "pass": true
+      },
+      {
+        "name": "real browser PKCE callback establishes app session and honors internal next",
+        "pass": true
+      },
+      {
+        "name": "browser save persisted without verification/publication side effects",
+        "pass": true
+      },
+      {
+        "name": "session survives reload and own-profile loader reads persisted value",
+        "pass": true
+      },
+      {
+        "name": "direct identity substitution denied",
+        "pass": true
+      },
+      {
+        "name": "MEMBER cannot enter EXCO",
+        "pass": true
+      },
+      {
+        "name": "EXCO_VIEWER reaches EXCO with a real authenticated session",
+        "pass": true
+      },
+      {
+        "name": "EXCO_ADMIN reaches EXCO with a real authenticated session",
+        "pass": true
+      },
+      {
+        "name": "SUPER_ADMIN reaches EXCO with a real authenticated session",
+        "pass": true
+      },
+      {
+        "name": "active-identity boundary rejects an existing suspended session",
+        "pass": true
+      },
+      {
+        "name": "sign-out redirects safely and protected API has no session",
+        "pass": true
+      }
+    ],
+    "passed": 19,
+    "failed": 0,
+    "completed": true,
+    "failure": null,
+    "vitest": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "extendedAttempt": {
+    "source": "actual local application / strict server-only candidate",
+    "at": "2026-10-16T21:07:28.072Z",
+    "database": "127.0.0.1:54322",
+    "auth": "127.0.0.1:54321",
+    "productionChanged": false,
+    "testSessionShortcutUsed": false,
+    "registrationCaptcha": "test verifier (not UI/real CAPTCHA proof)",
+    "fixtures": "unique synthetic local records retained; no pre-existing records changed",
+    "checks": [
+      {
+        "name": "required registration migration present before fixture writes",
+        "pass": true
+      },
+      {
+        "name": "real registration command succeeds (test CAPTCHA, not UI CAPTCHA evidence)",
+        "pass": true
+      },
+      {
+        "name": "Auth-linked active application record, private profile and MEMBER role persisted",
+        "pass": true
+      },
+      {
+        "name": "actual production-mode app starts with private local keys",
+        "pass": true
+      },
+      {
+        "name": "session shortcut disabled",
+        "pass": true
+      },
+      {
+        "name": "anonymous EXCO route denied",
+        "pass": true
+      },
+      {
+        "name": "real OTP endpoint writes PKCE verifier cookie",
+        "pass": true
+      }
+    ],
+    "passed": 7,
+    "failed": 0,
+    "completed": false,
+    "failure": "journey stopped before the next boundary completed",
+    "vitest": {
+      "executed": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0
+    }
+  },
+  "diagnosis": {
+    "stoppedAt": "local email delivery after OTP request",
+    "observedAuthHttp429": true,
+    "configuredLocalEmailsPerHour": 2,
+    "exactProviderErrorCode": "not established; quota/rate limiting is the leading explanation",
+    "newExtendedChecks": "numeric OTP, renewed session and Storage were not reached"
+  },
+  "productionChanged": false
+}
