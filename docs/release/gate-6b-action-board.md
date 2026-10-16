@@ -1,18 +1,18 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-16 (LC-A reconciliation — Launch Completion programme)  
+**Updated:** 2026-10-16 (AUTH-A hosted proof authorized; #22 recovered; auto-deploy unexplained)  
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
 **Delivery frame:** Launch Completion stages **LC-A → LC-G** (not a replacement for historical phase contracts). Strategy: external Launch Completion Plan 2026-10-16.  
-**AUTH-A:** **unrestricted launch blocked**. Server-held **publishable** + Dashboard deactivation of previously exposed `anon` remains an **unproven candidate** (`docs/release/auth-a-eapi-closeout.md`). Secret-key SSR rejected (RLS bypass). Cutover **not approved**. Pilot exception ≠ public-launch risk acceptance.
+**AUTH-A:** **unrestricted launch blocked / unproven**. Hosted non-Production proof **AUTHORIZED** 2026-10-16 — execution **BLOCKED** pending disposable hosted resource (see `docs/release/auth-a-hosted-proof.md`). Creating publishable keys does **not** invalidate legacy keys; Dashboard deactivation is a separate step ([API keys](https://supabase.com/docs/guides/getting-started/api-keys)). Secret-key SSR rejected (RLS bypass). Production cutover **not** approved. Pilot exception ≠ public-launch risk acceptance.
 
 ## Launch Completion overview
 
 | Stage | Focus | Status (2026-10-16) |
 | --- | --- | --- |
 | **LC-A** Control the release | One accurate backlog + identities | **IN PROGRESS** — this board reconciliation |
-| **LC-B** Finish existing delivery | #22 Production + acceptance; #21 release; #23 review/release | **IN PROGRESS** — #22 merged but Production lagging; #21/#23 open |
-| **LC-C** Trust and access | AUTH-A proof/decision; AUTH-B; named security residuals | **IN PROGRESS** — AUTH-A unproven; AUTH-B awaiting human |
+| **LC-B** Finish existing delivery | #22 Production + acceptance; #21 release; #23 review/release | **IN PROGRESS** — #22 Production **recovered**; signed-in acceptance pending; auto-deploy trigger **OPEN** (unexplained); #21/#23 open |
+| **LC-C** Trust and access | AUTH-A proof/decision; AUTH-B; named security residuals | **IN PROGRESS** — AUTH-A hosted proof authorized but resource-blocked; AUTH-B awaiting human |
 | **LC-D** Operating promise | Guidance, verification policy, follow-up ownership, support, genuine content | **NOT STARTED** as a gate (dashboard clarity is only a partial LC-D input via #23) |
 | **LC-E** Acceptance | Devices, journeys, comprehension, pilot | **AWAITING HUMAN** — carry forward owner-reported checks; do not restart them |
 | **LC-F** Privacy and operations | Privacy-L1, backup class/recovery, monitoring, operators | **AWAITING HUMAN** |
@@ -28,7 +28,7 @@
 | Ready Production (Vercel / azure) | `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · deployment URL `…-9g33jg1dl-…` · **aliased to azure** (LC-B recovery 2026-10-16). Application tree = reviewed `b80bc5d` |
 | Prior Ready Production (superseded) | `dpl_BdtPVaT…` / GitHub `7115716634` · sha `71b5570` (PR #20) |
 | Azure origin | `https://tncod-professionals-azure.vercel.app` · homepage chunk `app/page-0853a8d8daaf56e6.js` · “Member dashboard” **present** in deployed JS |
-| PR #22 | **MERGED** · head `b80bc5d` · merge `1a69915` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — **Production recovered**; signed-in acceptance **pending** |
+| PR #22 | **MERGED** · head `b80bc5d` · merge `1a69915` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — **Production recovered** (`dpl_DTe6dmsQ…`); signed-in acceptance **pending**. **OPEN:** Git→Vercel automatic Production deploy for `1a69915` never fired (“deployment absent” = symptom; root cause unexplained) |
 | PR #21 | **OPEN** · head `4666248` · checks PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — packet `docs/release/pr-21-release-packet.md` |
 | PR #23 | **OPEN** · head `f56e7c8` · checks PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/23 — review `docs/release/pr-23-review.md` |
 | Phase 23C | **NOT LOCKED** |
@@ -52,9 +52,11 @@ Carry forward completed owner-reported checks; missing device/browser metadata i
 | D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. Owner-reported phone/tablet navigation + join/sign-in/dashboard + profile/privacy save **carry forward**; device/browser models **not recorded**. Remaining packet rows stay open (LC-E) |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** — dashboard clarity in **#23** (reviewed; not merged). Full comprehension still needs real participants (LC-E) |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (LC-E) |
-| G | EXCO surface / Member↔EXCO return | **AWAITING HUMAN** — Production azure now serves #22 recovery deploy `dpl_DTe6dmsQ…`. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B) |
+| G | EXCO surface / Member↔EXCO return | **AWAITING HUMAN** — Production azure serves #22 (`dpl_DTe6dmsQ…`). Signed-in Member↔EXCO↔Member on desktop/phone/tablet. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B). Auto-deploy reliability remains **OPEN** (does not block this test) |
 | H | Current interest roster | **IN REVIEW** — #21 head `4666248`; migration **not** applied; cadence **NOT ACCEPTED**. Packet: `docs/release/pr-21-release-packet.md` (LC-B) |
-| J | Dashboard clarity (#23) | **REVIEWED — ready for sequencing** after #22 Production + #21 path. Review: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
+| J | Dashboard clarity (#23) | **REVIEWED** — no hard dependency on #21. Do **not** merge under AUTH-A auth. Review: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
+| K | AUTH-A hosted non-Production proof | **AUTHORIZED / BLOCKED** — needs disposable hosted project (Production `brpppukzqgpzxjelwwrj` excluded). Evidence: `docs/release/auth-a-hosted-proof.md` (LC-C) |
+| L | Git→Vercel Production auto-deploy | **OPEN** — merge `1a69915` produced no automatic Production deployment; recovered via authorized CLI. Targeted diagnosis continues; does not block #22 signed-in acceptance |
 | I | Optional headshot | **DEFERRED** post-launch / proposal only — not a launch dependency |
 
 ---
