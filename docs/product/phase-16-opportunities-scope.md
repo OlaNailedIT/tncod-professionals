@@ -43,7 +43,7 @@ This is intentional Phase 16 product evolution authorized by implementation inst
 | Create | `opportunity.manage` (EXCO_ADMIN / SUPER_ADMIN); Viewer/Member denied |
 | Discover | Authenticated members; ACTIVE only (EXCO manage can also see drafts) |
 | Interest | `opportunity_interests` unique `(opportunity_id, profile_id)`; reversible withdraw |
-| Privacy | No contact exposure; no interest lists/counts in UI; no consent writes |
+| Privacy | No contact exposure; no consent writes. Interest lists were omitted at lock. A later owner amendment allows one EXCO roster — see below |
 | Attribution | “Posted by TNCOD Professionals” — no creator profile disclosure |
 
 ### Key files
@@ -137,6 +137,16 @@ Messaging · contact exchange · matching/AI · notifications · job application
 ```text
 Production changes: NONE
 ```
+
+---
+
+## Amendment — current interest roster (2026-10-16)
+
+The project owner authorized one narrow addition after lock. Recorded before implementation in `docs/product/opportunity-interest-roster-amendment.md`.
+
+EXCO_ADMIN and SUPER_ADMIN may see which members currently expressed interest in an opportunity, on the existing opportunity detail page, and open the existing EXCO professional record for follow-up. MEMBER, anonymous, and EXCO_VIEWER do not receive that roster. Contact stays off the roster. Potential matches stay a separate panel. Messaging, notifications, exports, applications, and introductions stay out.
+
+This does not reopen Phase 16 for redesign.
 
 ---
 
