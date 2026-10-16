@@ -1,7 +1,7 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-16 (DEF-23C-02 header disposition; no merge, no Production deploy)  
+**Updated:** 2026-10-16 (PR #18 released; physical retest still open)  
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
 **AUTH-A:** PROVIDER-LEVEL residual — **unrestricted launch blocked**; controlled pilot exception remains (not an item for risk-acceptance solicitation here)
 
@@ -9,11 +9,12 @@
 
 | Fact | Value |
 | --- | --- |
-| `origin/main` | `1c50836282f752a5bf2463577e7898662f74ff1c` (PR #17, 2026-10-13) |
-| GitHub Production deployment | id `7032753378` · sha `1c50836` · 2026-10-13T07:34:15Z |
-| Azure origin | `https://tncod-professionals-azure.vercel.app` |
-| PR #18 | OPEN · branch `fix/def-23c-01-mobile-menu` · not merged · not Production |
-| Phase 23C | **NOT LOCKED** — physical phone and tablet evidence on the released build is still required |
+| `origin/main` | `19b214a2ee10cdeb124538a7467b9a75894c032d` (PR #18 merge, 2026-10-16T04:51:16Z) |
+| GitHub Production deployment | id `7111227913` · environment Production · sha `19b214a2ee10cdeb124538a7467b9a75894c032d` · status success · 2026-10-16T04:52:17Z |
+| Azure origin | `https://tncod-professionals-azure.vercel.app` serves that deployment (page chunk `app/page-107fab8bbc877f06.js`, not the previous Production chunk) |
+| PR #18 | **MERGED** · head `bcc42d1` · https://github.com/OlaNailedIT/tncod-professionals/pull/18 |
+| Phase 23C | **NOT LOCKED** |
+| Public launch | **BLOCKED** — AUTH-A remains an unrestricted-launch blocker |
 
 Status vocabulary: `NOT STARTED` · `AWAITING HUMAN` · `AUTHORIZED` · `IN PROGRESS` · `PASS` · `FAIL` · `BLOCKED`
 
@@ -29,7 +30,7 @@ Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or
 | A | AUTH-B owner confirmations (COLLISION-01…08) | **AWAITING HUMAN** |
 | B | Privacy Notice legal/privacy sign-off | **AWAITING HUMAN** |
 | C | Backup class (Dashboard) + production-data recovery posture | **AWAITING HUMAN** (schema-only disposable restore drill **PASS**) |
-| D | Phase 23C real-device acceptance | **AWAITING HUMAN** — phone Task 1 PASS; Task 2 FAIL (DEF-23C-01); DEF-23C-02 physical tap still required |
+| D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. DEF-23C-01 released, physical retest pending. DEF-23C-02 artificial-profile test corrected; real-device header responsiveness awaiting verification |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (depends on D/E + owner judgment on A/B/C) |
 
@@ -106,9 +107,9 @@ LEGAL SIGN-OFF: NOT APPROVED
 
 ## Navigation defects (automation, not Phase 23C lock)
 
-**DEF-23C-01** — phone menu closed and the page stayed put. Root cause: `NavLink` rendered a button whenever `onNavigate` was set, including drawer links in `mode="link"`. PR #18 keeps `mode` as the element choice; the drawer still closes after a real link navigation. Preview phone-drawer checks for Professionals, Join, and Sign in passed (URL plus unique `#main-content`). **Baseline preserved:** a local run reached the Professionals URL and closed the drawer, then missed the heading because disposable Postgres at `127.0.0.1:54322` was down. The same heading assertion later passed on the Git-linked preview.
+**DEF-23C-01 — released; physical retest pending.** The phone menu closed and the page stayed put because `NavLink` rendered a button whenever `onNavigate` was set. The released fix keeps `mode` as the element choice, so link mode stays a real link and the drawer still closes. Read-only Production checks on `19b214a` passed for Professionals, Join, and Sign in through the phone drawer (WebKit iPhone and narrow Chromium): exact URL and unique `#main-content`. **Baseline preserved:** a local run reached `/professionals` and closed the drawer, then missed the heading because disposable Postgres at `127.0.0.1:54322` was down. The iPhone 12 Pro Max, Chrome, portrait retest on this release is still required.
 
-**DEF-23C-02** — header Sign in stayed on `/` in touch WebKit. It reproduces on Production `1c50836` and on the PR preview, so it is not a drawer-fix regression. No header code change.
+**DEF-23C-02 — artificial-profile test corrected; real-device header responsiveness awaiting verification.** Header Sign in stayed on `/` under a resized iPhone 12 Pro profile (scale 3) on both Production `1c50836` and the PR preview. That profile is not a physical tap. No header code change. Native iPad, landscape 844×390, Chromium iPad, and desktop header checks for Professionals, Join, and Sign in passed on Production `19b214a` (tap on touch projects, click on desktop, exact URL and unique main content). A physical iPad and landscape iPhone tap is still required. Phase 23C stays **NOT LOCKED**.
 
 Click versus `locator.tap()` on the same Sign in anchor, from `/`, expecting `/sign-in`:
 
@@ -120,12 +121,12 @@ Click versus `locator.tap()` on the same Sign in anchor, from `/`, expecting `/s
 
 The `/sign-in?_rsc=` request after the interaction is a click-triggered navigation (`next-router-prefetch` absent, distinct `_rsc` from the viewport prefetch of Professionals, Join, and Sign in). A 200 on that request is not a completed navigation: history did not `pushState` until later, and the heading stayed “TNCOD Professionals” through the assertion window. Viewport prefetches are the separate `next-router-prefetch: 1` requests.
 
-Corrected matrix on the PR preview (native iPad, landscape context created at 844×390, desktop click, phone drawer): **20 passed, 22 skipped, 0 failed**. Header cases use `tap()` on touch projects, one destination per test, and assert the URL plus unique main content. `NavLink` was not changed for this finding.
+Preview matrix before release (application code identical to `bcc42d1`; the later commit changed tests and this board only): **20 passed, 22 skipped, 0 failed**. Skips were phone-drawer tests on header projects, header tests on phone projects, and the design-system specimen on header projects. Production matrix on the azure origin after `19b214a`: **18 passed, 24 skipped, 0 failed**. The extra two skips are the design-system specimen, which is 404 in Production. Every required Professionals, Join, and Sign in case ran.
 
 **Physical check still required before Phase 23C lock.** Emulator commit time varied from under 1.5s to more than 8s, so this does not prove a real device fails or that it is fast.
 
 ```text
-DEF-23C-02 physical retest — after a Production release that contains PR #18. Do not use the preview.
+DEF-23C-02 physical retest — Production release 19b214a is ready. Use the azure origin, not a preview.
 
 Device: a real iPad, portrait, Safari or Chrome. Then the same iPhone in landscape.
 Open https://tncod-professionals-azure.vercel.app/
@@ -188,4 +189,4 @@ Facilitator records verbatim understanding vs the “understanding looks like”
 5. **Backup class** — fill Dashboard fields in `ops-backup-class-owner-check.md`.  
 6. **Pilot closeout** — complete `pilot-closeout-packet.md` only after real cohort evidence exists.
 
-**Next single action:** After PR #18 is released to Production, run the DEF-23C-02 physical tap above on a real iPad and a landscape iPhone, and redo the phone menu task (DEF-23C-01) on the iPhone 12 Pro Max. Do not mark Phase 23C complete from Playwright. AUTH-A, Privacy-L1, backup class, AUTH-B, Phase 23D, and pilot closeout stay open and independent of that tap.
+**Next single action:** On the released azure origin, run the DEF-23C-02 physical tap on a real iPad and a landscape iPhone, and redo the phone menu task (DEF-23C-01) on the iPhone 12 Pro Max. Phase 23C is **NOT LOCKED**. AUTH-A still blocks unrestricted public launch. Privacy-L1, backup class, AUTH-B, Phase 23D, and pilot closeout stay open and independent of that tap.
