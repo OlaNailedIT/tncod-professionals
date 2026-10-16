@@ -1,11 +1,18 @@
 /**
- * Current interest roster — disposable database only.
- * CI excludes this file. Do not point DATABASE_URL at Production.
+ * Application-loader tests for the current interest roster.
+ * Direct row-level policy tests live in interest-roster-policy.integration.test.ts.
+ *
+ * Default: skipped unless PHASE4_DISPOSABLE_AUTH_TESTS=1.
+ * Opted-in run: fails when the loopback database or schema is unavailable.
  */
 import { randomUUID } from "crypto";
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { PrismaClient } from "@prisma/client";
 import { AppError } from "@/lib/errors";
+import {
+  assertDisposableDatabaseEnv,
+  DISPOSABLE_AUTH_OPT_IN,
+} from "@/features/registration/disposable-env-gate";
 import {
   createOpportunity,
   expressInterest,
@@ -14,14 +21,20 @@ import {
 import {
   canViewInterestRoster,
   listCurrentOpportunityInterest,
+  type InterestRosterResult,
 } from "@/features/opportunities/interest-roster";
 
-const prisma = new PrismaClient();
+const requested = process.env[DISPOSABLE_AUTH_OPT_IN] === "1";
 const TAG = `roster-${Date.now()}`;
 const SECRET_EMAIL_DOMAIN = "roster-secret.example";
 
-let dbReady = false;
-let schemaReady = false;
+let prisma: PrismaClient;
+
+function requireRoster(result: InterestRosterResult): Extract<InterestRosterResult, { ok: true }> {
+  expect(result.ok).toBe(true);
+  if (!result.ok) throw new Error("roster result was not ok");
+  return result;
+}
 
 async function grantRole(
   userId: string,
@@ -75,38 +88,22 @@ async function openOpportunity(actorUserId: string, title: string) {
   return created.opportunityId;
 }
 
-beforeAll(async () => {
-  const url = process.env.DATABASE_URL ?? "";
-  if (/supabase\.co|pooler\.supabase|brpppukzqgpzxjelwwrj/i.test(url)) {
-    throw new Error("Refusing interest roster tests against a hosted database");
-  }
-  try {
+describe.skipIf(!requested)("opportunity interest roster loader", () => {
+  it("limits the roster to EXCO_ADMIN and SUPER_ADMIN and strips contact fields", async () => {
+    const gate = assertDisposableDatabaseEnv();
+    if (!gate.ok) throw new Error(gate.reason);
+    prisma = new PrismaClient();
+    try {
     await prisma.$queryRaw`SELECT 1`;
-    dbReady = true;
     const col = await prisma.$queryRawUnsafe<Array<{ e: boolean }>>(
       `SELECT EXISTS (
          SELECT 1 FROM information_schema.tables
          WHERE table_schema = 'public' AND table_name = 'opportunity_interests'
        ) AS e`,
     );
-    schemaReady = col[0]?.e === true;
-  } catch {
-    dbReady = false;
-  }
-});
-
-describe("opportunity interest roster", () => {
-  it("skips honestly when the disposable database is unavailable", () => {
-    if (!dbReady || !schemaReady) {
-      expect(dbReady && schemaReady).toBe(false);
-      return;
+    if (col[0]?.e !== true) {
+      throw new Error("opportunity_interests is not present on the disposable database");
     }
-    expect(schemaReady).toBe(true);
-  });
-
-  it("limits the roster to EXCO_ADMIN and SUPER_ADMIN and strips contact fields", async () => {
-    if (!dbReady || !schemaReady) return;
-
     const admin = await createUser(`${TAG}-admin@${SECRET_EMAIL_DOMAIN}`, "Roster Admin");
     await grantRole(admin.userId, "EXCO_ADMIN");
     const superAdmin = await createUser(`${TAG}-super@${SECRET_EMAIL_DOMAIN}`, "Roster Super");
@@ -163,18 +160,18 @@ describe("opportunity interest roster", () => {
         })
       ).ok,
     ).toBe(true);
-    expect((await expressInterest({ actorUserId: other.userId, opportunityId: otherOpportunityId })).ok).toBe(
-      true,
-    );
+    expect(
+      (await expressInterest({ actorUserId: other.userId, opportunityId: otherOpportunityId })).ok,
+    ).toBe(true);
 
-    const listed = await listCurrentOpportunityInterest({
-      actorUserId: admin.userId,
-      opportunityId,
-      role: "SUPER_ADMIN",
-      profileId: member.profileId,
-    });
-    expect(listed.ok).toBe(true);
-    if (!listed.ok) return;
+    const listed = requireRoster(
+      await listCurrentOpportunityInterest({
+        actorUserId: admin.userId,
+        opportunityId,
+        role: "SUPER_ADMIN",
+        profileId: member.profileId,
+      }),
+    );
     expect(listed.opportunityId).toBe(opportunityId);
     expect(listed.opportunityStatus).toBe("ACTIVE");
     expect(listed.items).toHaveLength(1);
@@ -191,12 +188,13 @@ describe("opportunity interest roster", () => {
     expect(payload).not.toContain("Other Opportunity");
     expect(payload).not.toContain(other.profileId);
 
-    const asSuper = await listCurrentOpportunityInterest({
-      actorUserId: superAdmin.userId,
-      opportunityId,
-    });
-    expect(asSuper.ok).toBe(true);
-    if (asSuper.ok) expect(asSuper.items.map((row) => row.displayName)).toEqual(["Roster Member"]);
+    const asSuper = requireRoster(
+      await listCurrentOpportunityInterest({
+        actorUserId: superAdmin.userId,
+        opportunityId,
+      }),
+    );
+    expect(asSuper.items.map((row) => row.displayName)).toEqual(["Roster Member"]);
 
     await expect(
       listCurrentOpportunityInterest({ actorUserId: viewer.userId, opportunityId }),
@@ -222,39 +220,38 @@ describe("opportunity interest roster", () => {
     expect(missing).toEqual({ ok: false, code: "NOT_FOUND", message: "Opportunity not found" });
 
     await removeInterest({ actorUserId: member.userId, opportunityId });
-    const withdrawn = await listCurrentOpportunityInterest({
-      actorUserId: superAdmin.userId,
-      opportunityId,
-    });
-    expect(withdrawn.ok).toBe(true);
-    if (withdrawn.ok) expect(withdrawn.items).toEqual([]);
+    const withdrawn = requireRoster(
+      await listCurrentOpportunityInterest({
+        actorUserId: superAdmin.userId,
+        opportunityId,
+      }),
+    );
+    expect(withdrawn.items).toEqual([]);
 
     expect((await expressInterest({ actorUserId: member.userId, opportunityId })).ok).toBe(true);
     await prisma.profile.update({
       where: { id: member.profileId },
       data: { deletedAt: new Date() },
     });
-    const deletedProfile = await listCurrentOpportunityInterest({
-      actorUserId: admin.userId,
-      opportunityId,
-    });
-    expect(deletedProfile.ok).toBe(true);
-    if (deletedProfile.ok) expect(deletedProfile.items).toEqual([]);
+    const deletedProfile = requireRoster(
+      await listCurrentOpportunityInterest({
+        actorUserId: admin.userId,
+        opportunityId,
+      }),
+    );
+    expect(deletedProfile.items).toEqual([]);
 
-    await prisma.profile.update({
-      where: { id: other.profileId },
-      data: { deletedAt: null },
-    });
     await prisma.user.update({
       where: { id: other.userId },
       data: { accountStatus: "SUSPENDED" },
     });
-    const suspended = await listCurrentOpportunityInterest({
-      actorUserId: admin.userId,
-      opportunityId: otherOpportunityId,
-    });
-    expect(suspended.ok).toBe(true);
-    if (suspended.ok) expect(suspended.items).toEqual([]);
+    const suspended = requireRoster(
+      await listCurrentOpportunityInterest({
+        actorUserId: admin.userId,
+        opportunityId: otherOpportunityId,
+      }),
+    );
+    expect(suspended.items).toEqual([]);
 
     await prisma.user.update({
       where: { id: other.userId },
@@ -264,14 +261,17 @@ describe("opportunity interest roster", () => {
       where: { id: otherOpportunityId },
       data: { status: "CLOSED" },
     });
-    const closed = await listCurrentOpportunityInterest({
-      actorUserId: admin.userId,
-      opportunityId: otherOpportunityId,
-    });
-    expect(closed.ok).toBe(true);
-    if (!closed.ok) return;
+    const closed = requireRoster(
+      await listCurrentOpportunityInterest({
+        actorUserId: admin.userId,
+        opportunityId: otherOpportunityId,
+      }),
+    );
     expect(closed.opportunityStatus).toBe("CLOSED");
     expect(closed.items.map((row) => row.displayName)).toEqual(["Other Opportunity"]);
     expect(closed.items[0]?.professionalHref).toBe(`/exco/professionals/${other.profileId}`);
+    } finally {
+      await prisma?.$disconnect();
+    }
   });
 });

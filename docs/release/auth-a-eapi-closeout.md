@@ -61,3 +61,15 @@ Do **not** accept this residual for unrestricted/public launch without a new exp
 Do **not** burn further engineering cycles on speculative rewrites in Gate 6A.
 
 Controlled pilot may continue with E-UI neutralization + restricted cohort.
+
+---
+
+## Exact dependency (2026-10-16)
+
+The application same-origin route already returns one success JSON body. The remaining difference is upstream.
+
+Hosted GoTrue `POST /auth/v1/otp` with `create_user: false` calls `shouldCreateUser` in `internal/api/otp.go`. A missing account returns HTTP 422 `otp_disabled` / “Signups not allowed for otp”. An existing account continues and returns 200. `/recover` already returns one success response for an unknown address. That `/otp` branch does not.
+
+Tracked as [supabase/auth#1547](https://github.com/supabase/auth/issues/1547). Current `master` still has the differentiating branch. This project cannot close it by changing `shouldCreateUser: false` or by hiding the public anon key.
+
+**Dependency:** a hosted Auth release that makes `/otp` non-differentiating when user creation is not allowed, matching `/recover`, without enabling open signup. Until that release is on this project’s Auth instance, unrestricted launch stays blocked here and no further application rewrite is authorized.
