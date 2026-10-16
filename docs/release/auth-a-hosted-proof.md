@@ -73,8 +73,16 @@ publishable key. No Production data was copied.
   retained in the candidate's `local-application.json`; do not combine them
   into a false PASS. No mail/config/service reset was performed.
 - Candidate branch: `test/auth-a-hosted-proof`, head
-  `2fc52aa6a4da56adcbf3d210d1eb28f47af5c1a4`. Evidence and proposed
+  `da62f1c4fc7fac07fd34ff3b53b71d1d3bc7d436`. Evidence and proposed
   cutover/recovery boundaries are committed in [draft PR #25](https://github.com/OlaNailedIT/tncod-professionals/pull/25).
+- Independent application-component acceptance then passed **1 test / 16
+  checks**, without requesting email: private document upload and exact-byte
+  owner/Admin/Super download; unrelated MEMBER/Viewer denial; canonical Auth
+  ban/application-status suspension and reactivation with the modern secret.
+  Its initial attempt failed after 12 checks with cause unconfirmed. Both
+  outcomes are retained in `local-consumers.json`; follow-up added diagnostic
+  stages/read-only grant preflight, not application or permission changes.
+  This is not browser-session acceptance of the signed-document HTTP route.
 
 These are hosted provider/SDK and actual **local** application checks, not
 deployed-Production acceptance. Artifact scanning proves only the tested
@@ -84,7 +92,7 @@ candidate build, not that Production no longer exposes a key.
 
 | # | Proof item | Current evidence |
 | --- | --- | --- |
-| 1 | Registration, existing OTP, verify, refresh, sign-out with server-held publishable | Hosted protocol checks and actual local PKCE/registration/profile/roles/sign-out passed. Numerical-code UI, actual application refresh and Storage remain open after local email delivery failure |
+| 1 | Registration, existing OTP, verify, refresh, sign-out with server-held publishable | Hosted protocol and actual local PKCE/registration/profile/roles/sign-out passed. Storage/account controls passed 16 component checks. Numerical-code UI, actual application refresh and signed-document HTTP acceptance remain open |
 | 2 | Unknown sign-in creates no account | Passed hosted fixture check |
 | 3 | Legacy works before deactivation and fails afterward | PASS on hosted Auth; no Production change |
 | 4 | Missing/invalid credentials cannot recover enumeration | PASS; known/unknown both 401, including user-JWT-as-key and bearer-only variants |
@@ -97,9 +105,10 @@ candidate build, not that Production no longer exposes a key.
 ## Next gate
 
 Carry forward the passing registration/PKCE/profile/role evidence. Finish
-numerical-code, renewed application session, private Storage, modern-key
-account administration and real CAPTCHA acceptance once email delivery is
-available. A repository consumer inventory is now in the candidate; external
+numerical-code, renewed application session, signed-document HTTP and real
+CAPTCHA acceptance once email delivery is available. Carry forward the 16
+passing Storage/account-control component checks. A repository consumer
+inventory is now in the candidate; external
 and deployed consumer configuration still needs confirmation. Then review
 the candidate before any Production proposal. Do not repeat
 the completed hosted-provider proof or irrelevant local Kong probes without

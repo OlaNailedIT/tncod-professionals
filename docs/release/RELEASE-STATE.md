@@ -8,6 +8,14 @@
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Signed-in Member↔EXCO acceptance still pending. **OPEN reliability:** automatic Git→Vercel Production trigger for that merge remains unexplained (symptom ≠ root cause); does not block signed-in acceptance.  
 **LC-C note:** AUTH-A resource/cost gate resolved: independently verified Free/$0; isolated hosted `hyzkearnbhxznkeokacj` under explicit approval. Provider/SSR **32/32**, targeted tests **43/43**, build/local **12/12**, legacy-disabled runtime **15/15** passed; **141** public artifacts scanned clean (overlapping runs). First real local application journey passed **1 test / 19 checks**, including email/PKCE, saved profile and roles. Expanded run failed at new local email delivery (Auth HTTP 429 observed; configured two emails/hour; exact provider code unconfirmed): **1 failed test**, numerical-code/refresh/Storage not reached. No retry/reset to manufacture PASS. Draft #25 at `2fc52aa`; remaining consumer/real CAPTCHA/rollback checks and separate Production approval required. See `docs/release/auth-a-hosted-proof.md`. No Production cutover or public-launch PASS.
 
+**Subsequent LC-C evidence:** draft #25 now at `da62f1c`. Independent private
+Storage/document authorization and canonical account-control proof passed
+**1 test / 16 checks**, without another email. Initial component failure
+after 12 checks is retained; cause unconfirmed, no application/permission
+change made. This advances component acceptance only: numeric-code UI,
+browser refresh, signed-document HTTP, real CAPTCHA, rollback and Production
+approval remain open. Earlier failed email run is not erased.
+
 This document is the **current release-state summary** for humans and agents.  
 It does not replace locked phase contracts. It reconciles verified Production/gate evidence with repository status.
 
