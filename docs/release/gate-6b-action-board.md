@@ -1,9 +1,9 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-16 (PR #20 released; interest roster still in review; owner device results recorded without device models)
+**Updated:** 2026-10-16 (PR #21 runbook amended for approval; AUTH-A server-only key candidate recorded; EXCO signed-in retest still independent)
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
-**AUTH-A:** PROVIDER-LEVEL residual — **unrestricted launch blocked**. Exact dependency: hosted GoTrue must make `/auth/v1/otp` non-differentiating when `create_user` is false ([supabase/auth#1547](https://github.com/supabase/auth/issues/1547), `shouldCreateUser` in `internal/api/otp.go`). Controlled pilot exception remains.
+**AUTH-A:** **unrestricted launch blocked**. Feasibility (2026-10-16): server-held **publishable** + Dashboard deactivation of previously exposed `anon` is an **unproven candidate** — see `docs/release/auth-a-eapi-closeout.md`. Secret-key SSR rejected (RLS bypass). #1547 remains an alternate path. Controlled pilot exception remains.
 
 **Live identity:**
 
@@ -35,7 +35,7 @@ Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (depends on D/E + owner judgment on A/B/C) |
 | G | EXCO surface acceptance | **AWAITING HUMAN** — PR #20 is on Production. Signed-in retest: see EXCO in member navigation, open it, then open Opportunities. Member and profile navigation stay in place |
-| H | Current interest roster | **IN REVIEW** — PR #21. Not merged. Migration not applied to Production. Operator cadence **NOT ACCEPTED** |
+| H | Current interest roster | **IN REVIEW** — PR #21. Not merged. Migration not applied to Production. Production runbook amended (transactional apply; app rollback keeps tighter policy). Operator cadence **NOT ACCEPTED** |
 | I | Optional headshot | **NOT STARTED** — proposal only, pending a display and privacy decision |
 
 ---
