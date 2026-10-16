@@ -36,4 +36,22 @@ describe("EXCO workspace entry", () => {
     expect(drawer).toContain(">EXCO<");
     expect(html.match(/href="\/exco"/g)?.length).toBe(2);
   });
+
+  it("keeps member and profile destinations when the EXCO entry is shown", () => {
+    expect(memberNavigationItems(true).map((item) => item.href)).toEqual([
+      "/dashboard",
+      "/professionals",
+      "/profile",
+      "/businesses",
+      "/opportunities",
+      "/settings",
+      "/exco",
+    ]);
+    expect(memberAccountMenuItems(true).map((item) => item.href)).toEqual([
+      "/exco",
+      "/profile",
+      "/settings",
+      "/auth/sign-out",
+    ]);
+  });
 });
