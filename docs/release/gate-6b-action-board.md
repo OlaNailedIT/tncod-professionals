@@ -1,7 +1,7 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-16 (PR #18 released; physical retest still open)  
+**Updated:** 2026-10-16 (PR #20 and the interest roster are in review; neither is Production)  
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
 **AUTH-A:** PROVIDER-LEVEL residual — **unrestricted launch blocked**; controlled pilot exception remains (not an item for risk-acceptance solicitation here)
 
@@ -33,6 +33,9 @@ Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or
 | D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. DEF-23C-01 released, physical retest pending. DEF-23C-02 artificial-profile test corrected; real-device header responsiveness awaiting verification |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (depends on D/E + owner judgment on A/B/C) |
+| G | EXCO entry and opportunities link | **IN REVIEW** — PR #20. CI verify passed. Not merged. Not Production |
+| H | Current interest roster | **IN REVIEW** — separate pull request. Not merged. Not Production. Operator cadence **NOT ACCEPTED** |
+| I | Optional headshot | **NOT STARTED** — proposal only, pending a display and privacy decision |
 
 ---
 
@@ -177,6 +180,18 @@ Facilitator records verbatim understanding vs the “understanding looks like”
 **Pilot activation (invite restricted cohort) may proceed when:** owner accepts AUTH-A residual for this limited cohort **and** 23C/23D execution is scheduled with real humans.  
 **Pilot closeout PASS** still needs filled 23C + 23D + `docs/release/pilot-closeout-packet.md`.  
 **Unrestricted launch PASS:** withheld (AUTH-A at minimum).
+
+---
+
+## Review work that is not Production
+
+PR #20 restores the server-checked EXCO entry and links the existing opportunities page from EXCO navigation. It is open and not deployed.
+
+The interest roster is a separate review branch. EXCO_ADMIN and SUPER_ADMIN can see who currently expressed interest and open the existing professional record. MEMBER, anonymous, and EXCO_VIEWER cannot. The operator procedure is `docs/product/opportunity-interest-operator-procedure.md`. The project owner is the human owner. The proposed weekly review, and a review before closing an opportunity, has **not** been accepted.
+
+The optional headshot proposal stays unimplemented.
+
+AUTH-A, Privacy-L1, backup class, AUTH-B, Phase 23C device acceptance, Phase 23D, and pilot closeout are unchanged by these review branches.
 
 ---
 
