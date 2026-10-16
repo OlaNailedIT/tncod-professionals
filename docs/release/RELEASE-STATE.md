@@ -1,9 +1,11 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-12  
-**Release Gate 5:** Release hygiene / clean source reconstruction  
-**Authoritative Git SHA (current `origin/main` tip):** `6618ac87c806e1a58cd027c34c08783bb7ed6567`  
-**Authoritative Production:** GitHub Production deployment `7021555704` · sha `6618ac8` · env URL matches live Vercel Production alias for `https://tncod-professionals-azure.vercel.app`
+**Authority date:** 2026-10-16 (LC-A reconciliation)  
+**Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
+**Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
+**Authoritative Git SHA (`origin/main` tip):** `1a699153cb6259628c9dc1372051aec5f1bf4b04` (PR #22 merge)  
+**Authoritative Production (live Ready):** GitHub deployment `7115716634` · sha `71b5570aaf5b1dd950001662f8bf16e3a0d5fde3` (PR #20) · Vercel `dpl_BdtPVaTNnKktWxLSWe1KqQFanHjQ` · azure `https://tncod-professionals-azure.vercel.app`  
+**Gap:** `main` is ahead of Ready Production — `1a69915` has **no** Ready Production deployment at last LC-A check.
 
 This document is the **current release-state summary** for humans and agents.  
 It does not replace locked phase contracts. It reconciles verified Production/gate evidence with repository status.
@@ -163,16 +165,21 @@ Consolidated owner board: `docs/release/gate-6b-action-board.md`
 
 ## Remaining launch gates (not complete)
 
-- AUTH-A — provider-level E-API residual (unrestricted launch blocked; pilot exception remains)
-- AUTH-B — owner confirmations for remaining reclaim candidates
-- PRIVACY-L1 — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
-- Phase 23C — real phone/tablet human acceptance
-- Phase 23D — participant / task comprehension evidence
-- Controlled pilot closeout (human)
-- Dashboard backup **class** confirmation (schema-only disposable restore drill **PASS**)
-- Protected production-data recovery drill (not executed)
+Mapped to Launch Completion (see board LC overview). Do not treat historical phase PASS as automatic clearance of these rows.
+
+- **LC-B** — Production deploy of `1a69915` (#22) + signed-in Member↔EXCO acceptance (`docs/release/pr-22-signed-in-acceptance.md`)
+- **LC-B** — PR #21 interest roster release + named migration authorization (`docs/release/pr-21-release-packet.md`)
+- **LC-B** — PR #23 dashboard clarity merge/release after review (`docs/release/pr-23-review.md`) — do not re-implement
+- **LC-C / AUTH-A** — provider-level E-API residual (unrestricted launch blocked; pilot exception remains; cutover unapproved)
+- **LC-C / AUTH-B** — owner confirmations for remaining reclaim candidates
+- **LC-F / PRIVACY-L1** — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
+- **LC-E / Phase 23C** — remaining packet rows (owner-reported navigation/profile/privacy checks carry forward; device models not recorded)
+- **LC-E / Phase 23D** — participant comprehension (dashboard PR is only a partial implementation)
+- **LC-E** — Controlled pilot closeout (human)
+- **LC-F** — Dashboard backup **class** confirmation (schema-only disposable restore drill **PASS**)
+- **LC-F** — Protected production-data recovery drill (not executed)
 - Monitoring alerting (optional; dashboards / procedure exist)
-- Phase 23 brand/theme/navigation UI (intentionally deferred from dirty tree)
+- Headshot UX / export / CRM / public business discovery — **deferred** (not launch blockers)
 
 ---
 
