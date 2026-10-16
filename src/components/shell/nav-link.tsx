@@ -11,6 +11,10 @@ export type NavLinkProps = {
   pathname: string;
   /** Showcase mode uses buttons so product routes are not hit. */
   mode?: ShellLinkMode;
+  /**
+   * Side effect after choose (e.g. close drawer).
+   * In `link` mode this must not replace or cancel href navigation.
+   */
   onNavigate?: (href: string) => void;
   className?: string;
   density?: "member" | "exco";
@@ -21,6 +25,8 @@ export type NavLinkProps = {
 /**
  * Presentational navigation item with accessible current state.
  * Active ≠ focus; colour reinforces, not sole meaning (aria-current + weight).
+ *
+ * DEF-23C-01: `mode` alone selects the element. `onNavigate` is never a routing substitute.
  */
 export function NavLink({
   href,
@@ -44,7 +50,7 @@ export function NavLink({
     className,
   );
 
-  if (mode === "button" || onNavigate) {
+  if (mode === "button") {
     return (
       <button
         type="button"
@@ -64,6 +70,7 @@ export function NavLink({
       role={role}
       className={classes}
       aria-current={active ? "page" : undefined}
+      onClick={() => onNavigate?.(href)}
     >
       {label}
     </Link>

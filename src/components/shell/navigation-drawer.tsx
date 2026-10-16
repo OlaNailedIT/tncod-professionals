@@ -76,7 +76,13 @@ export function NavigationDrawer({
             density={density}
             onNavigate={(href) => {
               onNavigate?.(href);
-              onOpenChange(false);
+              if (mode === "button") {
+                onOpenChange(false);
+              } else {
+                // DEF-23C-01: defer close so Next.js <Link> can start navigation
+                // before the dialog unmounts the anchor (same-path + cross-path).
+                queueMicrotask(() => onOpenChange(false));
+              }
             }}
           />
         ))}
