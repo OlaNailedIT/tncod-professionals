@@ -116,15 +116,21 @@ So the browser helper is unused, but the public anon credential is still the Aut
 
 Conclusion of the probe: Auth can run with a server-held elevated key, and registration controls (`create_user: false`) still hold. Using the **secret** key for ordinary SSR is unsafe because it bypasses RLS. Local gateway surgery did not prove public-key rejection the way hosted Dashboard deactivation is documented to.
 
-### Supported remediation candidate (not implemented)
+### Original remediation proposal (now implemented as a draft candidate)
+
+Current implementation/evidence: [draft PR #25](https://github.com/OlaNailedIT/tncod-professionals/pull/25),
+head `a5ae4e46a938e2eb3795c304264f52a8a3949d03`. The proposal below is historical
+context, not Production execution authorization. The candidate's cutover and
+recovery requirements supersede this abbreviated sequence.
 
 ```text
 1. Mint a NEW publishable key (low privilege, RLS intact).
 2. Hold it only as a server env (no NEXT_PUBLIC_ / no browser shipping).
 3. Point middleware, request-otp, verifyOtp, session refresh, and sign-out at that server key.
 4. Keep registration on the service-role / secret path with existing app authorization.
-5. After every runtime uses the new key, deactivate the legacy anon JWT (and delete any
-   publishable that ever left the browser) in Dashboard Settings → API Keys.
+5. After every runtime has replacements, deactivate legacy API keys (anon AND service_role).
+   Privileged consumers must already use a modern secret. Any other previously exposed,
+   still-active publishable key must also be retired through its appropriate control.
 6. Prove previously exposed credentials fail against /auth/v1/otp; prove member OTP,
    shouldCreateUser:false, and authorization still pass on disposable then Production.
 ```
@@ -142,10 +148,18 @@ HIDE / PROXY ONLY: still insufficient
 PUBLIC LAUNCH PASS: withheld until an accepted Auth requirement is satisfied
 ```
 
-**Hosted proof (2026-10-16):** Owner authorized a bounded non-Production experiment. Execution **BLOCKED** — org has only Production `brpppukzqgpzxjelwwrj` (excluded); creating a second project may incur ~$10/mo on a paid org and cost is unconfirmed. See `docs/release/auth-a-hosted-proof.md`. Creating keys still does **not** equal proof; Dashboard deactivation remains untested on hosted.
+**Hosted proof (2026-10-16):** The resource/cost gate is resolved: verified Free,
+provider quote $0, explicit owner approval, and isolated project
+`hyzkearnbhxznkeokacj`. Hosted provider/SSR checks **32/32** passed; actual
+application unit/domain checks **43/43**, strict build/local checks **12/12**,
+and legacy-disabled runtime checks **15/15** passed (overlapping runs).
+The key scan found no private credentials in 141 public artifacts. Test settings
+were restored. Production `brpppukzqgpzxjelwwrj` was not changed.
+See `docs/release/auth-a-hosted-proof.md`; do not repeat the resolved cost gate.
 
-**Next owner decision (one of):**
+**Next action:**
 
-1. Unblock hosted proof: confirm Free plan / authorize ~$10 Micro / provide empty Free disposable project ref; or  
-2. Keep waiting on [supabase/auth#1547](https://github.com/supabase/auth/issues/1547) for equalized `/otp` while public keys remain; or  
-3. Explicitly accept the residual for unrestricted launch (not recommended).
+Complete full authenticated application/DB, browser PKCE and Storage acceptance
+and legacy-credential consumer inventory on the draft candidate. Then request
+explicit approval for the exact Production cutover. Public-launch PASS remains
+withheld. No spending, upstream wait, or residual acceptance is the default path.
