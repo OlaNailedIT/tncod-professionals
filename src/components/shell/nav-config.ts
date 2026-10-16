@@ -39,6 +39,15 @@ export const memberAccountItems: NavItem[] = [
 /** Workspace entry. Shown only after the server access check. Not a role claim. */
 export const excoWorkspaceItem: NavItem = { href: "/exco", label: "EXCO" };
 
+/**
+ * Return to the member workspace from EXCO chrome.
+ * Distinct from Overview → Dashboard (`/exco`). Presentational only.
+ */
+export const excoMemberReturnItem: NavItem = {
+  href: "/dashboard",
+  label: "Member dashboard",
+};
+
 export function memberNavigationItems(showExco: boolean): NavItem[] {
   return showExco ? [...memberNavItems, excoWorkspaceItem] : memberNavItems;
 }
