@@ -10,6 +10,11 @@ import {
   getOpportunityForMember,
 } from "@/features/opportunities/commands";
 import { InterestControls } from "@/features/opportunities/interest-controls";
+import { InterestRosterPanel } from "@/features/opportunities/interest-roster-panel";
+import {
+  canViewInterestRoster,
+  listCurrentOpportunityInterest,
+} from "@/features/opportunities/interest-roster";
 import { CloseOpportunityButton } from "@/features/opportunities/close-button";
 import {
   canViewOpportunityMatches,
@@ -32,6 +37,12 @@ export default async function OpportunityDetailPage({
   const opportunity = await getOpportunityForMember(user.userId, id);
   if (!opportunity) notFound();
   const canManage = await canManageOpportunities(user.userId);
+  const roster = (await canViewInterestRoster(user.userId))
+    ? await listCurrentOpportunityInterest({
+        actorUserId: user.userId,
+        opportunityId: opportunity.id,
+      })
+    : null;
   const canViewMatches = await canViewOpportunityMatches(user.userId);
   const matchResult =
     canViewMatches && opportunity.status === "ACTIVE"
@@ -87,6 +98,7 @@ export default async function OpportunityDetailPage({
               ) : null}
             </div>
           </Surface>
+          {roster ? <InterestRosterPanel result={roster} /> : null}
           {matchResult ? <PotentialMatchesPanel result={matchResult} /> : null}
         </Stack>
       </Section>

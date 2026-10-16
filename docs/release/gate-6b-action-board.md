@@ -1,17 +1,18 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-16 (EXCO entry and opportunities link in review; headshot not started)  
+**Updated:** 2026-10-16 (PR #21 runbook amended for approval; AUTH-A server-only key candidate recorded; EXCO signed-in retest still independent)
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
-**AUTH-A:** PROVIDER-LEVEL residual — **unrestricted launch blocked**; controlled pilot exception remains (not an item for risk-acceptance solicitation here)
+**AUTH-A:** **unrestricted launch blocked**. Feasibility (2026-10-16): server-held **publishable** + Dashboard deactivation of previously exposed `anon` is an **unproven candidate** — see `docs/release/auth-a-eapi-closeout.md`. Secret-key SSR rejected (RLS bypass). #1547 remains an alternate path. Controlled pilot exception remains.
 
 **Live identity:**
 
 | Fact | Value |
 | --- | --- |
-| `origin/main` | `19b214a2ee10cdeb124538a7467b9a75894c032d` (PR #18 merge, 2026-10-16T04:51:16Z) |
-| GitHub Production deployment | id `7111227913` · environment Production · sha `19b214a2ee10cdeb124538a7467b9a75894c032d` · status success · 2026-10-16T04:52:17Z |
-| Azure origin | `https://tncod-professionals-azure.vercel.app` serves that deployment (page chunk `app/page-107fab8bbc877f06.js`, not the previous Production chunk) |
+| `origin/main` | `71b5570aaf5b1dd950001662f8bf16e3a0d5fde3` (PR #20 merge, 2026-10-16T09:33:05Z) |
+| GitHub Production deployment | id `7115716634` · environment Production · sha `71b5570aaf5b1dd950001662f8bf16e3a0d5fde3` · status success · 2026-10-16T09:34:15Z |
+| Azure origin | `https://tncod-professionals-azure.vercel.app` serves that deployment (page chunk `app/page-2194e43327d5ea22.js`) |
+| PR #20 | **MERGED** · reviewed head `7bf171d03de77626c978ae82a57e8a0c028cdbcd` · https://github.com/OlaNailedIT/tncod-professionals/pull/20 |
 | PR #18 | **MERGED** · head `bcc42d1` · https://github.com/OlaNailedIT/tncod-professionals/pull/18 |
 | Phase 23C | **NOT LOCKED** |
 | Public launch | **BLOCKED** — AUTH-A remains an unrestricted-launch blocker |
@@ -30,11 +31,12 @@ Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or
 | A | AUTH-B owner confirmations (COLLISION-01…08) | **AWAITING HUMAN** |
 | B | Privacy Notice legal/privacy sign-off | **AWAITING HUMAN** |
 | C | Backup class (Dashboard) + production-data recovery posture | **AWAITING HUMAN** (schema-only disposable restore drill **PASS**) |
-| D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. DEF-23C-01 released, physical retest pending. DEF-23C-02 artificial-profile test corrected; real-device header responsiveness awaiting verification |
+| D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. Owner-reported results below cover part of the packet. Device and browser are not recorded. Remaining packet rows stay open |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (depends on D/E + owner judgment on A/B/C) |
-| G | EXCO surface acceptance | **AWAITING HUMAN** — entry was missing from the member shell while `/exco` stayed role-checked. Restoration is in review and is not Production. Do not accept the EXCO surface until that release is retested |
-| H | Optional headshot | **NOT STARTED** — proposal only. No implementation until the new scope is approved |
+| G | EXCO surface acceptance | **AWAITING HUMAN** — PR #20 is on Production. Signed-in retest: see EXCO in member navigation, open it, then open Opportunities. Member and profile navigation stay in place |
+| H | Current interest roster | **IN REVIEW** — PR #21. Not merged. Migration not applied to Production. Production runbook amended (transactional apply; app rollback keeps tighter policy). Operator cadence **NOT ACCEPTED** |
+| I | Optional headshot | **NOT STARTED** — proposal only, pending a display and privacy decision |
 
 ---
 
@@ -182,27 +184,46 @@ Facilitator records verbatim understanding vs the “understanding looks like”
 
 ---
 
+---
+
+## Owner-reported device results (2026-10-16)
+
+These are the project owner’s reports from this conversation. Device model and browser were not stated, so they are not filled in. This does not lock Phase 23C.
+
+| Check | Phone | Tablet |
+| --- | --- | --- |
+| Portrait menu: Professionals, Join, Sign in | **PASS** (owner-reported) | not reported in this set |
+| Landscape header: Professionals, Join, Sign in | **PASS** (owner-reported) | not reported |
+| Portrait header: Professionals, Join, Sign in | not reported | **PASS** (owner-reported) |
+| Join, email sign-in, and dashboard | **PASS** (owner-reported) | **PASS** (owner-reported) |
+| Profile overview, edit/save persistence, privacy/save persistence | **PASS** (owner-reported) | **PASS** (owner-reported) |
+
+Still open on the 23C packet: home scroll, verification presentation, directory eligibility, directory detail, businesses, opportunities, EXCO surfaces, accessibility/errors, privacy notice, and Production `/design-system` 404. Phase 23D and pilot closeout stay open.
+
 ## EXCO discoverability and opportunities
 
-The completed navigation release (PR #18, merge `19b214a`) is unchanged.
+PR #20 is merged as `71b5570aaf5b1dd950001662f8bf16e3a0d5fde3` and the Git-linked Production deployment `7115716634` is success. Azure serves page chunk `app/page-2194e43327d5ea22.js`.
 
-`/exco` still redirects members without EXCO_VIEWER, EXCO_ADMIN, or SUPER_ADMIN to `/dashboard`, and anonymous users to sign-in. The missing piece was the member shell: it never asked `hasExcoDashboardAccess`, so an authorized account could open the route directly and still see no EXCO entry. Account items were Profile, Settings, and Sign out only.
+`/exco` still redirects members without EXCO_VIEWER, EXCO_ADMIN, or SUPER_ADMIN to `/dashboard`, and anonymous users to sign-in. The member shell now asks `hasExcoDashboardAccess` before showing EXCO in the desktop sidebar, the phone/tablet drawer, and the account menu. Dashboard, Directory, Profile, Businesses, Opportunities, and Settings stay in member navigation.
 
-The review branch restores the entry from that server check on the desktop sidebar, the phone/tablet drawer, and the account menu. It does not change Production roles. Direct-route checks stay in place.
+EXCO navigation includes the existing `/opportunities` page. Creating an opportunity still requires `opportunity.manage`.
 
-EXCO navigation had no route to `/opportunities`. The existing create form already renders there for `opportunity.manage` (EXCO_ADMIN and SUPER_ADMIN). MEMBER and EXCO_VIEWER do not receive that permission, and `createOpportunity` checks it on the server. The review branch adds an Opportunities link in the EXCO Manage group to that same page.
+**Signed-in retest, not yet done:** the owner should see EXCO in member navigation, open it, and follow Opportunities. Profile and the other member destinations should still be there.
 
-**Interest follow-up today:** a member can express or withdraw interest. The product stores one row per member and writes an audit event. It does not show EXCO a list or count of interested members, and it does not send an introduction or notification. The detail page can show deterministic potential matches for EXCO viewers and admins; that panel is not the interest list. There is no in-product follow-up procedure beyond closing the opportunity. Reviewing who expressed interest is a missing operational capability.
+**Interest roster:** PR #21 is open and is not Production. Its migration has not been applied. The operator procedure names the project owner. The proposed weekly review, and a review before closing an opportunity, is **not accepted**.
 
-**Optional headshot:** proposal only, in `docs/product/optional-headshot-proposal.md`. Not implemented. It does not block the EXCO fix.
+**Optional headshot:** proposal only, in `docs/product/optional-headshot-proposal.md`. Not implemented.
 
 ## Priority order for the project owner (now)
 
-1. **Execute Phase 23C** on a real phone + tablet using the 23C packet (unblocks visual/UX acceptance).  
-2. **Execute Phase 23D** with real participants using the 23D packet (unblocks comprehension evidence).  
-3. **Privacy-L1** — choose one of the three legal reply lines after reviewing `/privacy`.  
-4. **AUTH-B** — authorise or explicitly defer each COLLISION-0N UUID (no bulk reclaim).  
-5. **Backup class** — fill Dashboard fields in `ops-backup-class-owner-check.md`.  
-6. **Pilot closeout** — complete `pilot-closeout-packet.md` only after real cohort evidence exists.
+1. **Signed-in EXCO retest** on the azure origin: EXCO in member navigation, open EXCO, then Opportunities. Confirm profile and member navigation remain.
+2. **Finish Phase 23C** rows that are not in the owner-reported table above. Phase 23C stays **NOT LOCKED**.
+3. **Execute Phase 23D** with real participants.
+4. **Privacy-L1** — choose one of the three legal reply lines after reviewing `/privacy`.
+5. **AUTH-B** — authorise or explicitly defer each COLLISION-0N UUID (no bulk reclaim).
+6. **Backup class** — fill Dashboard fields in `ops-backup-class-owner-check.md`.
+7. **Pilot closeout** — complete `pilot-closeout-packet.md` only after real cohort evidence exists.
 
-**Next single action:** On the released azure origin, run the DEF-23C-02 physical tap on a real iPad and a landscape iPhone, and redo the phone menu task (DEF-23C-01) on the iPhone 12 Pro Max. Phase 23C is **NOT LOCKED**. AUTH-A still blocks unrestricted public launch. Privacy-L1, backup class, AUTH-B, Phase 23D, and pilot closeout stay open and independent of that tap.
+**AUTH-A dependency:** hosted GoTrue `/otp` still returns 422 `otp_disabled` for an unknown identifier when `create_user` is false, and 200 when the account exists. The required change is upstream [supabase/auth#1547](https://github.com/supabase/auth/issues/1547). No application rewrite is authorized for it.
+
+**Next single action:** On the azure origin, sign in and confirm EXCO appears in member navigation, opens, and reaches Opportunities, with profile still available.

@@ -16,12 +16,19 @@ const BLOCKED_HOST_SNIPPETS = [
   "pooler.supabase",
 ];
 
+/** Local Supabase database from `supabase/config.toml`. Not inferred from a denylist. */
+export const DISPOSABLE_DATABASE_PORT = "54322";
+
 export type DisposableEnvCheck =
   | {
       ok: true;
       databaseUrl: string;
       supabaseUrl: string;
     }
+  | { ok: false; reason: string };
+
+export type DisposableDatabaseCheck =
+  | { ok: true; databaseUrl: string }
   | { ok: false; reason: string };
 
 function hostOf(raw: string, kind: "db" | "http"): string | null {
@@ -98,4 +105,53 @@ export function assertDisposableAuthEnv(
   }
 
   return { ok: true, databaseUrl, supabaseUrl };
+}
+
+function databaseEndpoint(raw: string): { host: string; port: string } | null {
+  try {
+    const u = new URL(raw.replace(/^postgresql:/i, "http:"));
+    const host = (u.hostname || "").toLowerCase();
+    if (!host) return null;
+    return { host, port: u.port };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fail closed before disposable database fixture writes.
+ * Opt-in plus the loopback host and the established port are required.
+ * A hosted name is refused because it is not loopback, not because it matches a denylist.
+ */
+export function assertDisposableDatabaseEnv(
+  env: NodeJS.ProcessEnv | Record<string, string | undefined> = process.env,
+): DisposableDatabaseCheck {
+  if (env[DISPOSABLE_AUTH_OPT_IN] !== "1") {
+    return {
+      ok: false,
+      reason: `${DISPOSABLE_AUTH_OPT_IN}=1 is required before disposable database fixture writes`,
+    };
+  }
+
+  const databaseUrl = (env.DATABASE_URL || "").trim();
+  if (!databaseUrl) {
+    return { ok: false, reason: "DATABASE_URL is required (no implicit fallback)" };
+  }
+
+  const target = databaseEndpoint(databaseUrl);
+  if (!target) return { ok: false, reason: "DATABASE_URL is not a parseable URL" };
+  if (!LOCAL_HOSTS.has(target.host)) {
+    return {
+      ok: false,
+      reason: `DATABASE_URL host "${target.host}" is not a disposable loopback endpoint`,
+    };
+  }
+  if (target.port !== DISPOSABLE_DATABASE_PORT) {
+    return {
+      ok: false,
+      reason: `DATABASE_URL port "${target.port || "missing"}" is not the established disposable database port ${DISPOSABLE_DATABASE_PORT}`,
+    };
+  }
+
+  return { ok: true, databaseUrl };
 }
