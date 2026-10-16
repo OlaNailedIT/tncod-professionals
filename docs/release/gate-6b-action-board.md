@@ -25,10 +25,10 @@
 | Fact | Value |
 | --- | --- |
 | `origin/main` | `1a699153cb6259628c9dc1372051aec5f1bf4b04` (PR #22 merge) |
-| Ready Production (GitHub) | `7115716634` · sha `71b5570…` (**PR #20** — **not** `1a69915`) |
-| Vercel Production | `dpl_BdtPVaTNnKktWxLSWe1KqQFanHjQ` · aliases include azure + `*-git-main-*` |
-| Azure origin | `https://tncod-professionals-azure.vercel.app` · homepage chunk still `app/page-2194e43327d5ea22.js` · **no** “Member dashboard” string |
-| PR #22 | **MERGED** · head `b80bc5d` · merge `1a69915` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — **Production deploy pending** |
+| Ready Production (Vercel / azure) | `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · deployment URL `…-9g33jg1dl-…` · **aliased to azure** (LC-B recovery 2026-10-16). Application tree = reviewed `b80bc5d` |
+| Prior Ready Production (superseded) | `dpl_BdtPVaT…` / GitHub `7115716634` · sha `71b5570` (PR #20) |
+| Azure origin | `https://tncod-professionals-azure.vercel.app` · homepage chunk `app/page-0853a8d8daaf56e6.js` · “Member dashboard” **present** in deployed JS |
+| PR #22 | **MERGED** · head `b80bc5d` · merge `1a69915` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — **Production recovered**; signed-in acceptance **pending** |
 | PR #21 | **OPEN** · head `4666248` · checks PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — packet `docs/release/pr-21-release-packet.md` |
 | PR #23 | **OPEN** · head `f56e7c8` · checks PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/23 — review `docs/release/pr-23-review.md` |
 | Phase 23C | **NOT LOCKED** |
@@ -52,7 +52,7 @@ Carry forward completed owner-reported checks; missing device/browser metadata i
 | D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. Owner-reported phone/tablet navigation + join/sign-in/dashboard + profile/privacy save **carry forward**; device/browser models **not recorded**. Remaining packet rows stay open (LC-E) |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** — dashboard clarity in **#23** (reviewed; not merged). Full comprehension still needs real participants (LC-E) |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (LC-E) |
-| G | EXCO surface / Member↔EXCO return | **BLOCKED on Production identity** — #22 on `main` (`1a69915`) but azure still `71b5570`. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B) |
+| G | EXCO surface / Member↔EXCO return | **AWAITING HUMAN** — Production azure now serves #22 recovery deploy `dpl_DTe6dmsQ…`. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B) |
 | H | Current interest roster | **IN REVIEW** — #21 head `4666248`; migration **not** applied; cadence **NOT ACCEPTED**. Packet: `docs/release/pr-21-release-packet.md` (LC-B) |
 | J | Dashboard clarity (#23) | **REVIEWED — ready for sequencing** after #22 Production + #21 path. Review: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
 | I | Optional headshot | **DEFERRED** post-launch / proposal only — not a launch dependency |

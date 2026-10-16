@@ -4,8 +4,8 @@
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
 **Authoritative Git SHA (`origin/main` tip):** `1a699153cb6259628c9dc1372051aec5f1bf4b04` (PR #22 merge)  
-**Authoritative Production (live Ready):** GitHub deployment `7115716634` · sha `71b5570aaf5b1dd950001662f8bf16e3a0d5fde3` (PR #20) · Vercel `dpl_BdtPVaTNnKktWxLSWe1KqQFanHjQ` · azure `https://tncod-professionals-azure.vercel.app`  
-**Gap:** `main` is ahead of Ready Production — `1a69915` has **no** Ready Production deployment at last LC-A check.
+**Authoritative Production (live Ready / azure):** Vercel `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · application tree identical to reviewed head `b80bc5d` · azure `https://tncod-professionals-azure.vercel.app`  
+**LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Signed-in Member↔EXCO acceptance still pending.
 
 This document is the **current release-state summary** for humans and agents.  
 It does not replace locked phase contracts. It reconciles verified Production/gate evidence with repository status.

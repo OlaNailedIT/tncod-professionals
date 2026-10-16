@@ -5,17 +5,18 @@
 **Merge SHA:** `1a699153cb6259628c9dc1372051aec5f1bf4b04`  
 **PR:** https://github.com/OlaNailedIT/tncod-professionals/pull/22 · **MERGED**
 
-## Production identity (fresh read 2026-10-16)
+## Production identity (updated 2026-10-16 LC-B recovery)
 
 | Fact | Value |
 | --- | --- |
 | `origin/main` | `1a69915…` (includes #22) |
-| Ready Production (GitHub) | still `7115716634` · sha `71b5570…` (PR #20) |
-| Vercel Production | `dpl_BdtPVaTNnKktWxLSWe1KqQFanHjQ` · aliases include azure + `git-main` |
-| Azure homepage chunk | still `app/page-2194e43327d5ea22.js` |
-| “Member dashboard” on azure | **Not present** at last read-only smoke |
+| Application tree | merge `1a69915` **===** reviewed head `b80bc5d` (identical git trees) |
+| Root cause of lag | **Deployment absent** — no Vercel/GitHub Production (or Preview) deployment was created for `1a69915` after merge; not a failed build; azure still aliased to PR #20 until recovery |
+| Recovery action | CLI Production deploy from clean checkout of `1a69915` on linked project `tncod-professionals` (Git webhook never produced a deployment for this SHA). Meta: `githubCommitSha=1a69915`, `deployReason=lc-b-release-recovery-git-webhook-absent` |
+| Ready Production (Vercel) | `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · `https://tncod-professionals-9g33jg1dl-olanailedits-projects.vercel.app` · **aliased to azure** |
+| “Member dashboard” on azure | **Present** in deployed application JS after recovery (read-only smoke) |
 
-**Conclusion:** code is on `main`, but **Git-linked Production has not deployed `1a69915`**. Signed-in acceptance against azure is **blocked until** a Ready Production deployment for `1a69915` (or an owner-authorized equivalent) is confirmed.
+**Signed-in acceptance** is now unblocked on azure for the #22 journey below. Do not claim browser PASS until the signed-in walk is actually performed.
 
 ## Human journey (run only on the #22 Production identity)
 
