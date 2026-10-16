@@ -142,8 +142,10 @@ HIDE / PROXY ONLY: still insufficient
 PUBLIC LAUNCH PASS: withheld until an accepted Auth requirement is satisfied
 ```
 
+**Hosted proof (2026-10-16):** Owner authorized a bounded non-Production experiment. Execution **BLOCKED** — org has only Production `brpppukzqgpzxjelwwrj` (excluded); creating a second project may incur ~$10/mo on a paid org and cost is unconfirmed. See `docs/release/auth-a-hosted-proof.md`. Creating keys still does **not** equal proof; Dashboard deactivation remains untested on hosted.
+
 **Next owner decision (one of):**
 
-1. Authorize a bounded implementation + disposable proof of this candidate, then a separate Production key-cutover authorization; or  
+1. Unblock hosted proof: confirm Free plan / authorize ~$10 Micro / provide empty Free disposable project ref; or  
 2. Keep waiting on [supabase/auth#1547](https://github.com/supabase/auth/issues/1547) for equalized `/otp` while public keys remain; or  
 3. Explicitly accept the residual for unrestricted launch (not recommended).
