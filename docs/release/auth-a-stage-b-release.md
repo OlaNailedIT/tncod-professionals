@@ -1,6 +1,6 @@
 # AUTH-A Stage B — private configuration and recovery baseline
 
-Updated: 2026-10-17. **DEPLOYED / CORE AUTHENTICATED CHECKS PASS / CONSUMER-RECOVERY REVIEW OPEN. STAGE C NOT AUTHORIZED.**
+Updated: 2026-10-17. **DEPLOYED / CORE AUTHENTICATED CHECKS PASS / CONSUMER-RECOVERY DISPOSITION RECORDED. STAGE C NOT AUTHORIZED.**
 
 The owner approved Stage B, then separately approved restricted in-memory
 Supabase CLI credential reuse to create a fresh publishable key only on
@@ -137,13 +137,14 @@ Sanitized evidence: `evidence/auth-a/stage-b-private-fixture.json`.
 | Live SSR, OTP, active identity, middleware renewal | Stage B build and actual operator checks above |
 | Registration and document signing/uploads | Fresh Production registration, exact document upload/download/denial and cleanup passed using the configured modern administrative consumer |
 | Compensation and account-status controls | Same reviewed shared admin factory and modern config; actual local fault/status proofs carried forward. No Production fault injection or status toggle claimed |
-| Vercel registration cleanup | Actual project cron enabled: `/api/internal/registration-cleanup`, `0 3 * * *`; source uses shared admin factory. No global cleanup invocation or job success fabricated |
+| Vercel registration cleanup | Fresh project metadata: enabledAt present, disabledAt null, `/api/internal/registration-cleanup`, `0 3 * * *`; scheduler and Production target both point to current Stage B build. Source uses shared modern admin factory; no job invocation/success fabricated |
 | Supabase Edge Functions | Native deployed-function list returned empty |
 | Database scheduler | Read-only catalog query found no `pg_cron`/`pg_net` extensions or `cron.job` table |
 | Repository GitHub secrets/variables | Both name inventories returned empty; CI uses reviewed loopback placeholders |
 | Historical/manual scripts | Not approved for future Production use unless adapted/retired individually; no import/reclaim rerun |
 | Old deployment artifacts | May retain historically exposed keys; not strict recovery candidates. Stage C retirement must account for these exposures |
-| Other external integrations/tools | Not declared absent from repository/source inspection; owner/operator reconciliation remains open |
+| Current Preview Auth scope | Fresh environment metadata shows no Supabase Auth variable targeting Preview; no current preview Auth-key consumer. Historical artifacts remain covered by proposed old-key retirement |
+| Other external integrations/tools | Owner explicitly confirmed “none” on 2026-10-17, including other apps, scripts, automations and integrations using Production API keys. This is owner confirmation, not an inference from source inspection, and is not key-deactivation authorization |
 
 **Separate launch risk:** the same `DATABASE_URL` environment entry is scoped
 to both Production and Preview. It was preserved under Stage B's explicit
@@ -152,18 +153,24 @@ approval. No claim about its decrypted host or an actual data leak is made.
 
 ## Recovery and stop boundary
 
-The Stage B READY artifact above is the **candidate modern-compatible recovery
-baseline**, paired with this exact private-key mapping and Production config.
+The Stage B READY artifact above is the **recorded modern-compatible application
+recovery baseline**, paired with this exact private-key mapping and Production config.
 The successful promotion demonstrates that the platform can select the artifact.
 Core authenticated sign-in/renewal/role/registration/document/logout acceptance
-has now passed. Full consumer/exposure reconciliation and recovery disposition
-remain prerequisites to Stage C; core PASS does not certify all such rows.
+has now passed. The subsequent deployed-consumer/exposure and recovery review is
+recorded in `auth-a-stage-b-consumer-review.md`, with actual scheduler/target/scoping
+metadata, owner-confirmed absence of external consumers, explicit evidence limits,
+and exact proposed retirement/keep identifiers. No source-only absence or
+Production fault/status proof is invented. The previously selected/tested artifact
+and matching configuration are the modern-compatible application recovery baseline,
+not a database/object restore proof.
 Retain the fresh publishable and modern admin secret in their
 providers, never in a plaintext recovery file. Future rollback must restore both
 the tested artifact and matching private config; never blindly select the old
 legacy-dependent Stage A build after key retirement.
 
-AUTH-A and unrestricted launch remain OPEN. Do not request or execute Stage C
-until the unresolved acceptance/consumer/recovery rows are dispositioned. Any
-later legacy anon/service-role or exposed-modern-key retirement needs explicit
-project/key authorization. No automatic re-enable, JWT rotation or paid fallback.
+AUTH-A and unrestricted launch remain OPEN. Stage C may now be proposed under the
+recorded review but must not execute without separate explicit project/key and
+restricted credential-use authorization. Recheck actual state before mutation;
+stop on any new mismatch or unapproved consumer. No automatic re-enable, JWT
+rotation, migration, new fixture or paid fallback.

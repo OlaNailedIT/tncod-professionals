@@ -1,12 +1,12 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-17 (AUTH-A Stage B core authenticated checks and exact fixture cleanup PASS; consumer/recovery review open; Stage C unapproved; no paid dependency)
+**Updated:** 2026-10-17 (AUTH-A Stage B core checks/cleanup PASS; consumer/recovery disposition recorded; Stage C unapproved; no paid dependency)
 
-**Latest release evidence:** Stage B private Production config is live on READY deployment `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC`, CLI-staged from clean reviewed `bcd113d` and then promoted; actual azure alias pointer verified. Five rendered pages and 15 public assets scanned without known key matches. Fresh sign-in, session continuity, renewal, desktop Member↔EXCO, owner-operated registration, private-document HTTP access/denial and synthetic logout passed. The focused document run passed 12 checks; earlier failures are retained, not summed away. Exact test account/business/document/file cleanup verified, two audit entries retained. Sixteen unrelated env entries preserved; no provider keys disabled, migrations, real-account/role changes or paid resources. Full consumer/recovery review, #21 and Stage C remain open. Evidence: `docs/release/auth-a-stage-b-release.md`.
+**Latest release evidence:** Stage B private Production config is live on READY deployment `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC`, CLI-staged from clean reviewed `bcd113d` and then promoted; actual azure alias pointer verified. Five rendered pages and 15 public assets scanned without known key matches. Fresh sign-in, session continuity, renewal, desktop Member↔EXCO, owner-operated registration, private-document HTTP access/denial and synthetic logout passed. The focused document run passed 12 checks; earlier failures are retained, not summed away. Exact fixture cleanup verified, two audit entries retained. Sixteen unrelated env entries preserved; no keys disabled, migrations, real-account/role changes or paid resources. Consumer/recovery disposition is now recorded; #21 and Stage C remain open. Evidence: `docs/release/auth-a-stage-b-release.md` and `auth-a-stage-b-consumer-review.md`.
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
 **Delivery frame:** Launch Completion stages **LC-A → LC-G** (not a replacement for historical phase contracts). Strategy: external Launch Completion Plan 2026-10-16.  
-**AUTH-A:** **unrestricted launch still blocked / provider residual not removed**. Private Stage B core authenticated checks and exact cleanup passed; full consumer/exposure and recovery reconciliation remain incomplete. All existing provider keys remain active; Stage C retirement is **not approved**. See `docs/release/auth-a-stage-b-release.md`. Pilot exception ≠ public-launch acceptance. No paid fallback is authorized.
+**AUTH-A:** **unrestricted launch still blocked / provider residual not removed**. Private Stage B core checks/cleanup passed; actual consumer/recovery disposition is recorded in `docs/release/auth-a-stage-b-consumer-review.md`. Scheduler targets the modern build; no current Preview Auth env; owner confirmed no external consumers. Old anon/default publishable still return 200 to read-only Auth settings (missing/invalid: 401). Exact retirement is proposed, **not approved**. Pilot exception ≠ public-launch acceptance. No paid fallback is authorized.
 
 ## Launch Completion overview
 
@@ -14,13 +14,13 @@
 | --- | --- | --- |
 | **LC-A** Control the release | One accurate backlog + identities | **IN PROGRESS** — this board reconciliation |
 | **LC-B** Finish existing delivery | #22/#23 signed-in acceptance; #21 release | **IN PROGRESS** — #22 included; #23 released automatically; signed-in acceptance pending; #21 open. Historical #22 auto-deploy omission unexplained |
-| **LC-C** Trust and access | AUTH-A proof/decision; AUTH-B; named security residuals | **IN PROGRESS** — private Stage B live; core operator session/refresh/desktop navigation passed; remaining acceptance and consumers open; Stage C unapproved. AUTH-B awaiting human |
+| **LC-C** Trust and access | AUTH-A proof/decision; AUTH-B; named security residuals | **IN PROGRESS** — Stage B core checks/cleanup passed and consumer/recovery disposition recorded; exact Stage C key retirement still requires approval. AUTH-B awaiting human |
 | **LC-D** Operating promise | Guidance, verification policy, follow-up ownership, support, genuine content | **NOT STARTED** as a gate (dashboard clarity is only a partial LC-D input via #23) |
 | **LC-E** Acceptance | Devices, journeys, comprehension, pilot | **AWAITING HUMAN** — carry forward owner-reported checks; do not restart them |
 | **LC-F** Privacy and operations | Privacy-L1, backup class/recovery, monitoring, operators | **AWAITING HUMAN** |
 | **LC-G** Freeze and launch | Frozen candidate + GO/NO-GO | **NOT STARTED** — 23 Oct target contingent on AUTH-A |
 
-**Critical path to 23 October:** AUTH-A non-Production core proof is achieved; next is reviewed staged Production preparation/recovery, consumer verification and explicitly approved key deactivation. Keep the **19 Oct** readiness decision. #22 recovery is recorded; signed-in acceptance remains human. If AUTH-A remains unresolved at that checkpoint, reassess the public-launch date; controlled pilot may continue only under its existing exception.
+**Critical path to 23 October:** Stage B private Production preparation, core authenticated checks/cleanup and consumer/recovery disposition are recorded. Next is separately approved exact old-key retirement and actual post-change verification; do not rerun completed Stage B work. Keep the **19 Oct** readiness decision. Desktop Member↔EXCO passed; remaining physical-device acceptance stays human. If AUTH-A remains unresolved at that checkpoint, reassess the public-launch date; controlled pilot may continue only under its existing exception.
 
 **Live identity:**
 
@@ -33,7 +33,7 @@
 | PR #22 | **MERGED** · head `b80bc5d` · merge `1a69915` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — **Production recovered** (`dpl_DTe6dmsQ…`); signed-in acceptance **pending**. **OPEN:** Git→Vercel automatic Production deploy for `1a69915` never fired (“deployment absent” = symptom; root cause unexplained) |
 | PR #21 | **OPEN** · head `4666248` · checks PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — packet `docs/release/pr-21-release-packet.md` |
 | PR #23 | **MERGED / RELEASED** · head `7f517fb`, merge `52f3d8c` · CI/preview PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/23 — `docs/release/pr-23-review.md`; signed-in acceptance pending |
-| PR #25 | **MERGED / STAGE B DEPLOYED, ACCEPTANCE INCOMPLETE** · head `ab9080b`, merge `bcd113d` · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — Stage C unapproved. Evidence: `docs/release/auth-a-stage-b-release.md` |
+| PR #25 | **MERGED / STAGE B CORE CHECKS AND READINESS RECORDED** · head `ab9080b`, merge `bcd113d` · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — exact Stage C retirement unapproved. Evidence: `docs/release/auth-a-stage-b-release.md` and consumer review |
 | Phase 23C | **NOT LOCKED** |
 | Public launch | **BLOCKED** — AUTH-A |
 
@@ -58,7 +58,7 @@ Carry forward completed owner-reported checks; missing device/browser metadata i
 | G | EXCO surface / Member↔EXCO return | **PARTIAL ACCEPTANCE** — actual signed-in desktop Member↔EXCO↔Member passed on current Stage B azure release; physical phone/tablet checks remain. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B). Historical auto-deploy reliability finding remains **OPEN** |
 | H | Current interest roster | **IN REVIEW** — #21 head `4666248`; migration **not** applied; cadence **NOT ACCEPTED**. Packet: `docs/release/pr-21-release-packet.md` (LC-B) |
 | J | Dashboard clarity (#23) | **RELEASED** under separate #23-only owner approval; signed-in CTA acceptance pending. No hard dependency on #21. Evidence: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
-| K | AUTH-A release preparation | **CORE STAGE B CHECKS PASS / CONSUMER-RECOVERY REVIEW OPEN** — registration, private-document access/denial, synthetic logout and exact cleanup now verified in addition to session/renewal/desktop navigation. Earlier failures retained. Full consumer/exposure reconciliation, unexecuted Production fault/status operations and recovery disposition remain explicit. Stage C unapproved. Evidence: `docs/release/auth-a-stage-b-release.md` (LC-C) |
+| K | AUTH-A release preparation | **STAGE B READINESS RECORDED / C AWAITS AUTHORIZATION** — core checks/cleanup PASS; actual scheduler/configuration and owner-confirmed external-consumer disposition recorded, with modern-compatible application recovery baseline. Historical artifacts/old keys have an exact proposed retirement set; no retirement executed. Local fault/status evidence carried without inventing Production execution. Evidence: `docs/release/auth-a-stage-b-consumer-review.md` (LC-C) |
 | N | Preview database credential segregation | **SEPARATE REVIEW REQUIRED** — same `DATABASE_URL` entry targets Production and Preview. Preserved under Stage B database boundary; no decrypted host or actual leak claimed. Obtain scoped remediation approval; do not run mutating Preview tests (LC-F) |
 | L | Git→Vercel Production auto-deploy | **OPEN** — merge `1a69915` produced no automatic Production deployment; recovered via authorized CLI. Targeted diagnosis continues; does not block #22 signed-in acceptance |
 | M | Free hosting plan / permitted-use fit | **PLAN VERIFIED** — existing Vercel project is active Hobby; no purchase/upgrade. Exact nonprofit professional/service-directory fit needs provider clarification before unrestricted launch, not an assumed violation or paid dependency. Current usage headroom not measured. See `docs/release/hosting-free-plan-check.md` (LC-F) |

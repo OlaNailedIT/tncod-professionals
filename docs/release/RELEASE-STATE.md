@@ -1,11 +1,11 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-17 (AUTH-A Stage B core authenticated checks and exact fixture cleanup PASS; consumer/recovery review open; Stage C unapproved)
+**Authority date:** 2026-10-17 (AUTH-A Stage B core checks and cleanup PASS; consumer/recovery disposition recorded; Stage C unapproved)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
 **Authoritative Git SHA (`origin/main` tip):** `bcd113de137bde1216aa147fc9cc699b40156884` (PR #25 merge; PR #22/#23 included)
 
-**Authoritative Production (live Ready / azure):** Vercel `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · source CLI, clean reviewed `bcd113d` checkout and matching `meta.gitCommitSha`; actual azure alias pointer verified after staged tests and promotion. Private config is live; fresh emailed-code sign-in, existing-session continuity, renewal/token rotation, desktop Member↔EXCO, owner-operated registration, private-document HTTP access/denial and synthetic logout passed. Exact synthetic fixture cleanup verified; audit retained. Full consumer/exposure and recovery disposition remains open. Evidence: `docs/release/auth-a-stage-b-release.md`. Earlier Stage A Git-linked build/CI evidence is retained separately.
+**Authoritative Production (live Ready / azure):** Vercel `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · source CLI, clean reviewed `bcd113d` checkout and matching `meta.gitCommitSha`; actual azure alias pointer verified after staged tests and promotion. Private config is live; fresh emailed-code sign-in, existing-session continuity, renewal/token rotation, desktop Member↔EXCO, owner-operated registration, private-document HTTP access/denial and synthetic logout passed. Exact synthetic fixture cleanup verified; audit retained. Consumer/exposure and application-recovery disposition is recorded; separate key-retirement approval remains open. Evidence: `docs/release/auth-a-stage-b-release.md` and `auth-a-stage-b-consumer-review.md`. Earlier Stage A Git-linked build/CI evidence is retained separately.
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Fresh signed-in desktop Member↔EXCO acceptance passed on the Stage B release; physical phone/tablet acceptance remains separate. **OPEN reliability:** automatic Git→Vercel Production trigger for that historical merge remains unexplained (symptom ≠ root cause).
 **LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
 provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
@@ -22,8 +22,12 @@ PR #25 head `ab9080b` was reviewed and released under explicit Stage A approval.
 Separate Stage B approval then covered private Production configuration and a
 fresh publishable key, while retaining all existing provider keys and 16 unrelated
 environment entries. No migration, real-account role change or paid resource.
-Core Stage B authenticated checks passed; full external-consumer/exposure and
-recovery reconciliation remain incomplete; Stage C is unapproved.
+Core Stage B authenticated checks passed. Deployed-consumer and recovery
+disposition is now recorded in `auth-a-stage-b-consumer-review.md`: actual
+scheduler and Production target match the modern build; no Preview Auth env;
+owner confirmed no external consumers. Old anon/default publishable keys still
+pass the read-only Auth gateway check; exact retirement is proposed but Stage C
+is unapproved. Shared Preview database isolation remains a separate open risk.
 AUTH-A/public-launch PASS stays withheld. See `auth-a-stage-b-release.md`.
 Evidence: `docs/release/auth-a-hosted-proof.md`.
 
