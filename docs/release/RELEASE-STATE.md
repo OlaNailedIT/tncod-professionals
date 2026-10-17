@@ -1,20 +1,29 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-16 (LC-A reconciliation)  
+**Authority date:** 2026-10-17 (LC-C local acceptance completed; release approvals outstanding)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
 **Authoritative Git SHA (`origin/main` tip):** `1a699153cb6259628c9dc1372051aec5f1bf4b04` (PR #22 merge)  
 **Authoritative Production (live Ready / azure):** Vercel `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · application tree identical to reviewed head `b80bc5d` · azure `https://tncod-professionals-azure.vercel.app`  
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Signed-in Member↔EXCO acceptance still pending. **OPEN reliability:** automatic Git→Vercel Production trigger for that merge remains unexplained (symptom ≠ root cause); does not block signed-in acceptance.  
-**LC-C note:** AUTH-A resource/cost gate resolved: independently verified Free/$0; isolated hosted `hyzkearnbhxznkeokacj` under explicit approval. Provider/SSR **32/32**, targeted tests **43/43**, build/local **12/12**, legacy-disabled runtime **15/15** passed; **141** public artifacts scanned clean (overlapping runs). First real local application journey passed **1 test / 19 checks**, including email/PKCE, saved profile and roles. Expanded run failed at new local email delivery (Auth HTTP 429 observed; configured two emails/hour; exact provider code unconfirmed): **1 failed test**, numerical-code/refresh/Storage not reached. No retry/reset to manufacture PASS. Draft #25 at `2fc52aa`; remaining consumer/real CAPTCHA/rollback checks and separate Production approval required. See `docs/release/auth-a-hosted-proof.md`. No Production cutover or public-launch PASS.
+**LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
+provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
+PKCE/profile/role journey 19 checks; Storage/account-control components 16
+checks; focused numeric OTP/session renewal/signed-document HTTP 13 checks
+(the latter: 1 test passed, 0 failed, 0 skipped). Runs overlap; do not sum them
+as unique acceptance criteria. Earlier failed attempts remain in the reports.
+The two-email quota hypothesis was not proven: runtime inspection found a
+different local setting. Existing CAPTCHA evidence is carried forward with
+unchanged control code; no fresh Production registration is claimed.
+Draft #25 head `ab9080b` includes the explicit staged release/recovery proposal.
+Deployed consumer inventory, review, compatible recovery deployment and exact
+Production approvals remain open. AUTH-A/public-launch PASS stays withheld.
+Evidence: `docs/release/auth-a-hosted-proof.md`.
 
-**Subsequent LC-C evidence:** draft #25 now at `da62f1c`. Independent private
-Storage/document authorization and canonical account-control proof passed
-**1 test / 16 checks**, without another email. Initial component failure
-after 12 checks is retained; cause unconfirmed, no application/permission
-change made. This advances component acceptance only: numeric-code UI,
-browser refresh, signed-document HTTP, real CAPTCHA, rollback and Production
-approval remain open. Earlier failed email run is not erased.
+**LC-F note:** Free plan identified. Use the $0 operator-managed recovery
+proposal in `docs/operations/free-tier-recovery-plan.md`; do not require a
+paid backup/PITR feature. Protected destination/key custody, operator/cadence,
+export authorization and actual data-plus-objects restore remain unproven.
 
 This document is the **current release-state summary** for humans and agents.  
 It does not replace locked phase contracts. It reconciles verified Production/gate evidence with repository status.
@@ -185,7 +194,7 @@ Mapped to Launch Completion (see board LC overview). Do not treat historical pha
 - **LC-E / Phase 23C** — remaining packet rows (owner-reported navigation/profile/privacy checks carry forward; device models not recorded)
 - **LC-E / Phase 23D** — participant comprehension (dashboard PR is only a partial implementation)
 - **LC-E** — Controlled pilot closeout (human)
-- **LC-F** — Dashboard backup **class** confirmation (schema-only disposable restore drill **PASS**)
+- **LC-F** — Free-tier protected backup destination/key custody + operator/cadence acceptance (historical schema-only drill **PASS**)
 - **LC-F** — Protected production-data recovery drill (not executed)
 - Monitoring alerting (optional; dashboards / procedure exist)
 - Headshot UX / export / CRM / public business discovery — **deferred** (not launch blockers)

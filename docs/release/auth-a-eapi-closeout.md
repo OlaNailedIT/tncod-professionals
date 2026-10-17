@@ -159,7 +159,10 @@ See `docs/release/auth-a-hosted-proof.md`; do not repeat the resolved cost gate.
 
 **Next action:**
 
-Complete full authenticated application/DB, browser PKCE and Storage acceptance
-and legacy-credential consumer inventory on the draft candidate. Then request
-explicit approval for the exact Production cutover. Public-launch PASS remains
+Local PKCE/profile/role, Storage/account-control and focused real numeric
+OTP/renewal/document-HTTP checks are now passing (19, 16 and 13 checks in
+separate overlapping runs). Carry forward unchanged historical CAPTCHA proof.
+Review the draft candidate/staged cutover packet and confirm actual deployed
+credential consumers/recovery baseline under explicit Production approval.
+Do not repeat completed local evidence. Public-launch PASS remains
 withheld. No spending, upstream wait, or residual acceptance is the default path.

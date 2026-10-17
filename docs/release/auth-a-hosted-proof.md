@@ -67,13 +67,14 @@ publishable key. No Production data was copied.
   sign-out. Registration used the test CAPTCHA verifier, not real CAPTCHA.
 - The expanded attempt then **failed** at new local email delivery: **1 test,
   0 passed, 1 failed, 0 skipped**, seven checks completed before the wait.
-  Local Auth logs showed HTTP 429 and the stack is configured for two emails
-  per hour; the exact provider error code was not established. Numerical-code,
+  Local Auth logs showed HTTP 429; the file contained a two-email setting,
+  but read-only runtime inspection later found an actual limit of 360000/hour.
+  That quota explanation was unproven; historical cause remains unknown. Numerical-code,
   application-refresh and Storage checks were not reached. Both outcomes are
   retained in the candidate's `local-application.json`; do not combine them
   into a false PASS. No mail/config/service reset was performed.
 - Candidate branch: `test/auth-a-hosted-proof`, head
-  `da62f1c4fc7fac07fd34ff3b53b71d1d3bc7d436`. Evidence and proposed
+  `ab9080b4b77aa595442a9a847f41598c86d048f2`. Evidence and proposed
   cutover/recovery boundaries are committed in [draft PR #25](https://github.com/OlaNailedIT/tncod-professionals/pull/25).
 - Independent application-component acceptance then passed **1 test / 16
   checks**, without requesting email: private document upload and exact-byte
@@ -83,6 +84,19 @@ publishable key. No Production data was copied.
   outcomes are retained in `local-consumers.json`; follow-up added diagnostic
   stages/read-only grant preflight, not application or permission changes.
   This is not browser-session acceptance of the signed-document HTTP route.
+- The focused remaining browser test subsequently passed **1 test / 13
+  checks, 0 failed, 0 skipped** with one real local email: typed numeric OTP,
+  correct member identity, actual middleware renewal/refresh-token rotation,
+  authenticated business creation and signed-document HTTP redirect/exact
+  bytes, then signed-out denial. No helper session, service/config reset or
+  repeat of the full 19-check journey was used. See `local-remaining.json`.
+- Historical real registration/CAPTCHA observations (Phase 4 ledger R2/R3)
+  carry forward: CAPTCHA verifier/widget unchanged from the observed deployed
+  commit; join-form diff only adds privacy copy. Three CAPTCHA unit tests
+  freshly passed; this is not a new real Cloudflare submission.
+- The candidate includes `docs/release/auth-a-production-cutover-packet.md`:
+  compatible code, then strict private configuration/recovery baseline, then
+  separately authorized legacy-key deactivation. Nothing executed on Production.
 
 These are hosted provider/SDK and actual **local** application checks, not
 deployed-Production acceptance. Artifact scanning proves only the tested
@@ -92,25 +106,24 @@ candidate build, not that Production no longer exposes a key.
 
 | # | Proof item | Current evidence |
 | --- | --- | --- |
-| 1 | Registration, existing OTP, verify, refresh, sign-out with server-held publishable | Hosted protocol and actual local PKCE/registration/profile/roles/sign-out passed. Storage/account controls passed 16 component checks. Numerical-code UI, actual application refresh and signed-document HTTP acceptance remain open |
+| 1 | Registration, existing OTP, verify, refresh, sign-out with server-held publishable | Hosted protocol + actual local PKCE/profile/role journey passed; Storage/account controls 16 checks passed; focused real numeric OTP, middleware renewal and signed-document HTTP 13 checks passed. Production acceptance remains separate |
 | 2 | Unknown sign-in creates no account | Passed hosted fixture check |
 | 3 | Legacy works before deactivation and fails afterward | PASS on hosted Auth; no Production change |
 | 4 | Missing/invalid credentials cannot recover enumeration | PASS; known/unknown both 401, including user-JWT-as-key and bearer-only variants |
 | 5 | Anonymous/authenticated RLS stays enforced | Passed hosted sentinel table before deactivation; this is not the full application schema |
 | 6 | Replacement key absent from browser bundles/public artifacts | PASS on actual local production-build candidate; 141 artifacts scanned |
 | 7 | Pre-deactivation tokens/sessions evaluated | PASS with the private publishable key after legacy deactivation |
-| 8 | Neutral application responses and alternate-oracle exclusion | Actual OTP HTTP response neutral with legacy keys disabled; tested missing/invalid/JWT-as-key/bearer-only provider variants denied. Full authenticated application acceptance remains pending |
+| 8 | Neutral application responses and alternate-oracle exclusion | Actual OTP HTTP neutral with hosted legacy keys disabled; invalid/JWT-as-key/bearer-only provider variants denied. Authenticated local browser journeys passed. Actual Production configuration/exposed-key retirement still unproven |
 | 9 | Hosted recovery | PASS: original legacy-key and signup settings restored after revised run; not a Production rollback drill |
 
 ## Next gate
 
-Carry forward the passing registration/PKCE/profile/role evidence. Finish
-numerical-code, renewed application session, signed-document HTTP and real
-CAPTCHA acceptance once email delivery is available. Carry forward the 16
-passing Storage/account-control component checks. A repository consumer
-inventory is now in the candidate; external
-and deployed consumer configuration still needs confirmation. Then review
-the candidate before any Production proposal. Do not repeat
+Carry forward the completed local browser/component and unchanged historical
+CAPTCHA evidence. Review the candidate and its staged cutover packet; confirm
+actual deployed/external credential consumers, obtain exact approvals and
+establish the modern-key-compatible recovery deployment before deactivation.
+No more speculative local email retries or a new paid resource are needed.
+Do not repeat
 the completed hosted-provider proof or irrelevant local Kong probes without
 a concrete regression reason. Do not restore resource/cost as a blocker.
 
