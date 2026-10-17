@@ -1,11 +1,11 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-17 (PR #23 released; AUTH-A Production approvals outstanding)
+**Authority date:** 2026-10-17 (PR #25 Stage A released; AUTH-A Stage B/C approvals outstanding)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
-**Authoritative Git SHA (`origin/main` tip):** `52f3d8c1edeeb6dc5965c1129431148a8a2a8500` (PR #23 merge)
+**Authoritative Git SHA (`origin/main` tip):** `bcd113de137bde1216aa147fc9cc699b40156884` (PR #25 merge; PR #22/#23 included)
 
-**Authoritative Production (live Ready / azure):** Vercel `dpl_83ezLvKX2czfGg3F3a4YWkupFEej` · source `git`, exact merge SHA; azure alias assigned, no alias error. Public smoke: `/`, `/sign-in`, `/join`, `/professionals` 200; `/dashboard`, `/exco` 307 to sign-in. PR #22 included; signed-in acceptance remains pending.
+**Authoritative Production (live Ready / azure):** Vercel `dpl_E4iNVkhfeViyz3HEuTtHzwiUJoef` · source `git`, exact merge SHA; azure alias assigned, no alias error. Ten anonymous/configuration/helper smoke checks passed; signed-in acceptance remains pending. Main CI attempt 1 failed in unchanged font loader; the single retry passed including build. Evidence: `docs/release/auth-a-stage-a-release.md`.
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Signed-in Member↔EXCO acceptance still pending. **OPEN reliability:** automatic Git→Vercel Production trigger for that merge remains unexplained (symptom ≠ root cause); does not block signed-in acceptance.  
 **LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
 provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
@@ -16,9 +16,10 @@ as unique acceptance criteria. Earlier failed attempts remain in the reports.
 The two-email quota hypothesis was not proven: runtime inspection found a
 different local setting. Existing CAPTCHA evidence is carried forward with
 unchanged control code; no fresh Production registration is claimed.
-Draft #25 head `ab9080b` includes the explicit staged release/recovery proposal.
-Deployed consumer inventory, review, compatible recovery deployment and exact
-Production approvals remain open. AUTH-A/public-launch PASS stays withheld.
+PR #25 head `ab9080b` was reviewed and released under explicit Stage A approval.
+No Production environment, keys, roles or migrations changed. Deployed consumer
+inventory, strict configuration, compatible recovery deployment and exact
+Stage B/C approvals remain open. AUTH-A/public-launch PASS stays withheld.
 Evidence: `docs/release/auth-a-hosted-proof.md`.
 
 **LC-F note:** Free plan identified. Use the $0 operator-managed recovery

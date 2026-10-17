@@ -1,16 +1,16 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-17 (PR #23 released; AUTH-A approvals outstanding; no paid dependency)
+**Updated:** 2026-10-17 (PR #25 Stage A released; Stage B/C approvals outstanding; no paid dependency)
 
-**Latest release evidence:** Owner-approved PR #23 merged as `52f3d8c1edeeb6dc5965c1129431148a8a2a8500` at `2026-10-17T05:28:42Z`; current main matches. Production `dpl_83ezLvKX2czfGg3F3a4YWkupFEej` is READY, source Git, exact merge SHA, azure alias assigned without error. Public smoke 4 routes 200, dashboard/EXCO 307 to sign-in. No migration, key/role change or paid resource. Signed-in #22/#23 acceptance and Phase 23D comprehension remain pending. #21 and #25 remain excluded. Current automatic Git deployment succeeded; historical #22 omission's root cause remains unknown. Evidence: `docs/release/pr-23-review.md`.
+**Latest release evidence:** Owner-approved PR #25 Stage A merged as `bcd113de137bde1216aa147fc9cc699b40156884`; current main matches. Production `dpl_E4iNVkhfeViyz3HEuTtHzwiUJoef` is READY, source Git, exact merge SHA, azure alias assigned without error. Ten smoke checks passed. Main CI's initial unchanged font-loader failure is retained; one retry passed including build. No environment, migration, key/role change or paid resource. PR #22/#23 are included; signed-in acceptance and Phase 23D comprehension remain pending. #21 and Stage B/C remain excluded. Evidence: `docs/release/auth-a-stage-a-release.md`.
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
 **Delivery frame:** Launch Completion stages **LC-A → LC-G** (not a replacement for historical phase contracts). Strategy: external Launch Completion Plan 2026-10-16.  
-**AUTH-A:** **unrestricted launch still blocked / Production remediation unproven**. Free hosted provider and actual local build/browser/Storage/account-control evidence is passing, including the formerly missing numerical-code, session-renewal and signed-document HTTP checks. Candidate remains draft; actual deployed consumer inventory, compatible recovery deployment and exact release/key-change approvals remain open. See `docs/release/auth-a-hosted-proof.md`. Production cutover **not** approved. Pilot exception ≠ public-launch acceptance. No paid fallback is authorized.
+**AUTH-A:** **unrestricted launch still blocked / provider residual not removed**. Non-Production acceptance is passing and compatible code Stage A is released. Actual deployed consumer inventory, strict configuration and compatible recovery deployment remain open; Stage B/C changes are **not approved**. See `docs/release/auth-a-stage-a-release.md` and `docs/release/auth-a-hosted-proof.md`. Pilot exception ≠ public-launch acceptance. No paid fallback is authorized.
 
 ## Launch Completion overview
 
-| Stage | Focus | Status (2026-10-16) |
+| Stage | Focus | Status (2026-10-17) |
 | --- | --- | --- |
 | **LC-A** Control the release | One accurate backlog + identities | **IN PROGRESS** — this board reconciliation |
 | **LC-B** Finish existing delivery | #22/#23 signed-in acceptance; #21 release | **IN PROGRESS** — #22 included; #23 released automatically; signed-in acceptance pending; #21 open. Historical #22 auto-deploy omission unexplained |
@@ -26,14 +26,14 @@
 
 | Fact | Value |
 | --- | --- |
-| `origin/main` | `52f3d8c1edeeb6dc5965c1129431148a8a2a8500` (PR #23 merge) |
-| Ready Production (Vercel / azure) | `dpl_83ezLvKX2czfGg3F3a4YWkupFEej` · source Git, exact merge SHA · azure alias assigned without error |
-| Prior Ready Production (superseded) | `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · sha `1a69915` (PR #22) |
+| `origin/main` | `bcd113de137bde1216aa147fc9cc699b40156884` (PR #25 Stage A merge) |
+| Ready Production (Vercel / azure) | `dpl_E4iNVkhfeViyz3HEuTtHzwiUJoef` · source Git, exact merge SHA · azure alias assigned without error |
+| Prior Ready Production (superseded) | `dpl_83ezLvKX2czfGg3F3a4YWkupFEej` · sha `52f3d8c` (PR #23) |
 | Azure origin | `https://tncod-professionals-azure.vercel.app` · current alias confirmed in deployment metadata; public smoke 4 routes 200, dashboard/EXCO 307 to sign-in |
 | PR #22 | **MERGED** · head `b80bc5d` · merge `1a69915` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — **Production recovered** (`dpl_DTe6dmsQ…`); signed-in acceptance **pending**. **OPEN:** Git→Vercel automatic Production deploy for `1a69915` never fired (“deployment absent” = symptom; root cause unexplained) |
 | PR #21 | **OPEN** · head `4666248` · checks PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — packet `docs/release/pr-21-release-packet.md` |
 | PR #23 | **MERGED / RELEASED** · head `7f517fb`, merge `52f3d8c` · CI/preview PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/23 — `docs/release/pr-23-review.md`; signed-in acceptance pending |
-| PR #25 | **DRAFT** · head `ab9080b` · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — local PKCE/profile/roles 19 checks, components 16 checks and focused numeric OTP/renewal/document HTTP 13 checks passed (overlapping runs). Failed attempts retained. Staged release/recovery proposal prepared; Production actions unapproved |
+| PR #25 | **MERGED / STAGE A RELEASED** · head `ab9080b`, merge `bcd113d` · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — compatible code only; Stage B/C unapproved. Review, CI discrepancy and release evidence: `docs/release/auth-a-stage-a-release.md` |
 | Phase 23C | **NOT LOCKED** |
 | Public launch | **BLOCKED** — AUTH-A |
 
@@ -58,7 +58,7 @@ Carry forward completed owner-reported checks; missing device/browser metadata i
 | G | EXCO surface / Member↔EXCO return | **AWAITING HUMAN** — Production azure serves #22 (`dpl_DTe6dmsQ…`). Signed-in Member↔EXCO↔Member on desktop/phone/tablet. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B). Auto-deploy reliability remains **OPEN** (does not block this test) |
 | H | Current interest roster | **IN REVIEW** — #21 head `4666248`; migration **not** applied; cadence **NOT ACCEPTED**. Packet: `docs/release/pr-21-release-packet.md` (LC-B) |
 | J | Dashboard clarity (#23) | **RELEASED** under separate #23-only owner approval; signed-in CTA acceptance pending. No hard dependency on #21. Evidence: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
-| K | AUTH-A release preparation | **IN PROGRESS** — non-Production core proof passed; focused remaining browser test 1 passed / 13 checks / 0 failed / 0 skipped. Initial failed runs retained; earlier email-quota theory unproven. Historical CAPTCHA evidence carried forward without redoing that phase. Actual deployed consumers/recovery baseline and exact Production approvals pending. Evidence: `docs/release/auth-a-hosted-proof.md` (LC-C) |
+| K | AUTH-A release preparation | **STAGE A RELEASED / B/C UNAPPROVED** — compatible code live; 29 fresh unit checks and ten Production smoke checks passed. Initial CI font-loader failure retained; single retry passed. Non-Production evidence carried forward. Actual consumers, strict private configuration and compatible recovery baseline remain open. Evidence: `docs/release/auth-a-stage-a-release.md` (LC-C) |
 | L | Git→Vercel Production auto-deploy | **OPEN** — merge `1a69915` produced no automatic Production deployment; recovered via authorized CLI. Targeted diagnosis continues; does not block #22 signed-in acceptance |
 | M | Free hosting plan / permitted-use fit | **PLAN VERIFIED** — existing Vercel project is active Hobby; no purchase/upgrade. Exact nonprofit professional/service-directory fit needs provider clarification before unrestricted launch, not an assumed violation or paid dependency. Current usage headroom not measured. See `docs/release/hosting-free-plan-check.md` (LC-F) |
 | I | Optional headshot | **DEFERRED** post-launch / proposal only — not a launch dependency |
