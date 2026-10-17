@@ -58,6 +58,7 @@ Carry forward completed owner-reported checks; missing device/browser metadata i
 | J | Dashboard clarity (#23) | **REVIEWED** — no hard dependency on #21. Do **not** merge under AUTH-A auth. Review: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
 | K | AUTH-A release preparation | **IN PROGRESS** — non-Production core proof passed; focused remaining browser test 1 passed / 13 checks / 0 failed / 0 skipped. Initial failed runs retained; earlier email-quota theory unproven. Historical CAPTCHA evidence carried forward without redoing that phase. Actual deployed consumers/recovery baseline and exact Production approvals pending. Evidence: `docs/release/auth-a-hosted-proof.md` (LC-C) |
 | L | Git→Vercel Production auto-deploy | **OPEN** — merge `1a69915` produced no automatic Production deployment; recovered via authorized CLI. Targeted diagnosis continues; does not block #22 signed-in acceptance |
+| M | Free hosting plan / permitted-use fit | **PLAN VERIFIED** — existing Vercel project is active Hobby; no purchase/upgrade. Exact nonprofit professional/service-directory fit needs provider clarification before unrestricted launch, not an assumed violation or paid dependency. Current usage headroom not measured. See `docs/release/hosting-free-plan-check.md` (LC-F) |
 | I | Optional headshot | **DEFERRED** post-launch / proposal only — not a launch dependency |
 
 ---

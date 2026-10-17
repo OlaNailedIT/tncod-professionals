@@ -25,6 +25,13 @@ proposal in `docs/operations/free-tier-recovery-plan.md`; do not require a
 paid backup/PITR feature. Protected destination/key custody, operator/cadence,
 export authorization and actual data-plus-objects restore remain unproven.
 
+**Hosting read-only check:** existing Vercel team/project is active Hobby;
+GitHub link and `main` production branch match. No paid change. Plan identity
+does not resolve exact permitted-use fit for professional/service listings;
+provider clarification and usage monitoring remain an operating decision.
+See `docs/release/hosting-free-plan-check.md`. Historical missing automatic
+deployment root cause remains unconfirmed; current auto-assignment is true.
+
 This document is the **current release-state summary** for humans and agents.  
 It does not replace locked phase contracts. It reconciles verified Production/gate evidence with repository status.
 
