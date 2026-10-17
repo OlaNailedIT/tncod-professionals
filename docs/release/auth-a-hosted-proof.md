@@ -2,7 +2,7 @@
 
 **Updated:** 2026-10-17
 
-**Status:** **PROVIDER AND LOCAL APPLICATION ACCEPTANCE PASS / PRODUCTION REMEDIATION OPEN**. Stage B private configuration is separately approved and deployed, with fresh operator session/renewal/desktop navigation evidence; its remaining acceptance stays open. Stage C key retirement is unapproved. See `docs/release/auth-a-stage-b-release.md`. The Production exclusion below refers to these historical proof runs, not the later separately authorized releases. No public-launch PASS is claimed.
+**Status:** **PROVIDER AND LOCAL APPLICATION ACCEPTANCE PASS / PRODUCTION REMEDIATION OPEN**. Stage B private configuration is separately approved and deployed. Core Production session/renewal/desktop navigation, owner-operated registration, private-document HTTP access/denial, synthetic logout and exact cleanup now passed; full consumer/exposure and recovery review remains open. Stage C key retirement is unapproved. See `docs/release/auth-a-stage-b-release.md`. The Production exclusion below refers to these historical proof runs, not the later separately authorized releases. No public-launch PASS is claimed.
 
 **Production project:** `brpppukzqgpzxjelwwrj` — **EXCLUDED**
 

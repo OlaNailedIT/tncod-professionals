@@ -1,6 +1,6 @@
 # AUTH-A Stage B — private configuration and recovery baseline
 
-Updated: 2026-10-17. **DEPLOYED / ACCEPTANCE INCOMPLETE. STAGE C NOT AUTHORIZED.**
+Updated: 2026-10-17. **DEPLOYED / CORE AUTHENTICATED CHECKS PASS / CONSUMER-RECOVERY REVIEW OPEN. STAGE C NOT AUTHORIZED.**
 
 The owner approved Stage B, then separately approved restricted in-memory
 Supabase CLI credential reuse to create a fresh publishable key only on
@@ -23,7 +23,8 @@ All **16 unrelated environment entries** retained identical identity, target,
 type, integration and update metadata across the successful configuration run.
 Database, site URL, Turnstile, cron authorization, JWT signing configuration and
 unrelated Supabase variables were not changed. No provider API key was disabled
-or revoked. No migrations, roles, business data or registration fixtures changed.
+or revoked. The configuration run itself changed no migrations, roles, business
+data or registration fixtures. Later separately authorized fixture work is below.
 No paid upgrade, add-on, project or resource was provisioned.
 
 The integration-managed publishable variable remains **encrypted**, not the
@@ -69,18 +70,24 @@ default publishable key or regenerate key settings blindly.
 | Additional strict boundaries | Helper remains 404; own-business loader remains authenticated |
 | Earlier stopped browser runs | Retained: first stopped in navigation section without adequate exception detail; focused initial attempt timed out on `load` before requesting email, though sign-in main content was visible. Corrected harness uses DOM readiness plus exact URL/unique content, not weaker destination assertions. Neither initial stop is falsely counted as PASS |
 | Normal operator logout | Awaiting operator; no silent global logout invoked |
+| Fresh Production registration | PASS persistence readback after owner-operated normal-browser CAPTCHA; ACTIVE, MEMBER only, PRIVATE profile, no pending provisioning obligation |
+| Synthetic MEMBER boundary/business | PASS; MEMBER denied EXCO; exactly one PRIVATE/DRAFT business created |
+| Private document HTTP journey | PASS in focused 12-check run: hydrated server-action upload, exact 66-byte signed download, anonymous/public denial and nonexistent-ID denial |
+| Normal synthetic-account logout | PASS via existing HTTP route; own-profile access becomes 401; database sessions read back zero |
+| Exact approved fixture cleanup | PASS; Auth/application identity, profile, business, document, roles, sessions and Storage objects all zero; two audit entries preserved; real operator remains ACTIVE with unchanged roles |
 
 Counts are separate overlapping observations, not an invented combined suite
 total. The public artifact audit covers the five responses and their referenced
 assets, **not every output-tree file** or every historical deployment.
 Existing hosted/local proof is carried forward, not relabelled Production proof.
 
-The isolated browser helper does not change accounts or roles, register users,
-upload documents, create businesses, enable test helpers or capture auth state.
-Actual Production registration/compensation, private document HTTP access,
-remaining role actors and logout still require appropriate released-build
-evidence. Do not manufacture these from bucket metadata or unit tests. Existing
-global logout may affect other operator devices; it was not invoked silently.
+The earlier operator-only browser helpers did not change accounts or roles,
+register users, upload documents, create businesses, enable test helpers or
+capture auth state. Later synthetic fixture work has separate explicit approval.
+Compensation fault injection, private-document HTTP access, remaining role actors
+still require appropriate evidence. Do not manufacture these from
+bucket metadata or unit tests. Existing global logout may affect other operator
+devices; it was not invoked silently on the real operator account.
 
 The owner separately approved exactly one clearly labelled synthetic MEMBER
 registration using `olaoluface+tncodstageb20261017@gmail.com`, one PRIVATE test
@@ -88,17 +95,48 @@ business, one tiny non-sensitive document, and cleanup of only those fixtures.
 No real account, unrelated role, migration, key retirement or spending is covered.
 Read-only preflight found zero Auth/application matches for that alias and zero
 application matches for the reserved fictional test phone. Cleanup foreign keys
-were inspected first. A separate isolated browser has filled the normal live
-join form and is waiting for the genuine CAPTCHA. No fixture write or registration
-PASS is claimed at this checkpoint. Any emailed code must be entered directly
-in that browser, never chat. Production fault injection/global cleanup is excluded.
+were inspected first. Live CAPTCHA failed in the Playwright-controlled browser;
+the owner reported it worked in a regular browser and submitted the exact test
+registration there. Production readback confirms one ACTIVE Auth/application
+identity `5d999e7e-bcd4-420b-857d-5f3fb28654ca`, MEMBER only, and PRIVATE,
+REGISTERED, NOT_REVIEWED profile `e91fd971-2e36-4cc5-8278-b1f0937d329f`;
+no pending provisioning obligation. This is owner-operated CAPTCHA plus persisted
+registration evidence, not an automated CAPTCHA PASS or fault-injection proof.
+
+The synthetic member then signed in using a genuine emailed code in the isolated
+browser and was denied EXCO. The existing business API created exactly one
+PRIVATE/DRAFT business `50d843ea-7e59-4c9a-bd19-d04499cb2399`, with its sole
+OWNER association to that test profile. The upload attempt timed out waiting for
+the success message; database readback found no document row. Navigation in the
+test log suggests premature form interaction, but that is not a proved root
+cause. That failed attempt is retained. The focused run reused the same business,
+waited for the real React submit/change handlers, and recorded an actual upload
+POST (200), persisted document, authorized signed redirect and exact-byte download.
+Anonymous/public access and nonexistent-ID substitution were denied. Its initial
+sign-in attempt also stopped with “Email is required”; readiness was corrected in
+the harness without an application change. The final focused run passed all 12
+checks, including real synthetic-account logout. These are not added to earlier
+overlapping checks or used to erase failed attempts. One console error was counted
+without its message; no uncaught page error, but no zero-console-error PASS.
+
+Cleanup removed exactly that private object through Storage, the exact domain
+fixture in a guarded atomic transaction, and the exact Auth identity through Auth
+Admin. Final readback: zero fixture identities, profiles, businesses, documents,
+roles, sessions and private objects. Both audit entries remain (the existing FK
+nulls the deleted actor reference). The real operator remains ACTIVE with the
+same EXCO_VIEWER/SUPER_ADMIN roles. No additional registration/business creation,
+Production fault injection, global cleanup or application deployment was performed.
+The stored phone differs from the proposed US fictional test number; no broad
+international-phone acceptance is inferred, and cleanup was never phone-based.
+Sanitized evidence: `evidence/auth-a/stage-b-private-fixture.json`.
 
 ## Actual consumer inventory
 
 | Consumer | Observed state / disposition |
 | --- | --- |
 | Live SSR, OTP, active identity, middleware renewal | Stage B build and actual operator checks above |
-| Registration/compensation, account controls, document signing/uploads | Same reviewed shared admin factory now configured with modern secret; fresh bucket read passed; unexecuted functional rows remain explicit |
+| Registration and document signing/uploads | Fresh Production registration, exact document upload/download/denial and cleanup passed using the configured modern administrative consumer |
+| Compensation and account-status controls | Same reviewed shared admin factory and modern config; actual local fault/status proofs carried forward. No Production fault injection or status toggle claimed |
 | Vercel registration cleanup | Actual project cron enabled: `/api/internal/registration-cleanup`, `0 3 * * *`; source uses shared admin factory. No global cleanup invocation or job success fabricated |
 | Supabase Edge Functions | Native deployed-function list returned empty |
 | Database scheduler | Read-only catalog query found no `pg_cron`/`pg_net` extensions or `cron.job` table |
@@ -117,8 +155,10 @@ approval. No claim about its decrypted host or an actual data leak is made.
 The Stage B READY artifact above is the **candidate modern-compatible recovery
 baseline**, paired with this exact private-key mapping and Production config.
 The successful promotion demonstrates that the platform can select the artifact.
-Authenticated acceptance must finish before certifying the complete baseline or
-proposing Stage C. Retain the fresh publishable and modern admin secret in their
+Core authenticated sign-in/renewal/role/registration/document/logout acceptance
+has now passed. Full consumer/exposure reconciliation and recovery disposition
+remain prerequisites to Stage C; core PASS does not certify all such rows.
+Retain the fresh publishable and modern admin secret in their
 providers, never in a plaintext recovery file. Future rollback must restore both
 the tested artifact and matching private config; never blindly select the old
 legacy-dependent Stage A build after key retirement.

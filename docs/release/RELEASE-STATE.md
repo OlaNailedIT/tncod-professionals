@@ -1,11 +1,11 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-17 (AUTH-A Stage B private configuration deployed; acceptance incomplete; Stage C unapproved)
+**Authority date:** 2026-10-17 (AUTH-A Stage B core authenticated checks and exact fixture cleanup PASS; consumer/recovery review open; Stage C unapproved)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
 **Authoritative Git SHA (`origin/main` tip):** `bcd113de137bde1216aa147fc9cc699b40156884` (PR #25 merge; PR #22/#23 included)
 
-**Authoritative Production (live Ready / azure):** Vercel `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · source CLI, clean reviewed `bcd113d` checkout and matching `meta.gitCommitSha`; actual azure alias pointer verified after staged tests and promotion. Private config is live; fresh emailed-code sign-in, existing-session continuity, renewal/token rotation and desktop Member↔EXCO passed. Registration/document/logout acceptance remains open. Evidence: `docs/release/auth-a-stage-b-release.md`. Earlier Stage A Git-linked build/CI evidence is retained separately.
+**Authoritative Production (live Ready / azure):** Vercel `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · source CLI, clean reviewed `bcd113d` checkout and matching `meta.gitCommitSha`; actual azure alias pointer verified after staged tests and promotion. Private config is live; fresh emailed-code sign-in, existing-session continuity, renewal/token rotation, desktop Member↔EXCO, owner-operated registration, private-document HTTP access/denial and synthetic logout passed. Exact synthetic fixture cleanup verified; audit retained. Full consumer/exposure and recovery disposition remains open. Evidence: `docs/release/auth-a-stage-b-release.md`. Earlier Stage A Git-linked build/CI evidence is retained separately.
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Fresh signed-in desktop Member↔EXCO acceptance passed on the Stage B release; physical phone/tablet acceptance remains separate. **OPEN reliability:** automatic Git→Vercel Production trigger for that historical merge remains unexplained (symptom ≠ root cause).
 **LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
 provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
@@ -14,13 +14,16 @@ checks; focused numeric OTP/session renewal/signed-document HTTP 13 checks
 (the latter: 1 test passed, 0 failed, 0 skipped). Runs overlap; do not sum them
 as unique acceptance criteria. Earlier failed attempts remain in the reports.
 The two-email quota hypothesis was not proven: runtime inspection found a
-different local setting. Existing CAPTCHA evidence is carried forward with
-unchanged control code; no fresh Production registration is claimed.
+different local setting. Fresh Production registration is now verified after
+owner-operated normal-browser CAPTCHA; automated live CAPTCHA failed and was
+not bypassed. The focused document/logout run passed 12 checks; prior failures
+remain recorded, and overlapping runs are not summed. Exact fixtures removed.
 PR #25 head `ab9080b` was reviewed and released under explicit Stage A approval.
 Separate Stage B approval then covered private Production configuration and a
 fresh publishable key, while retaining all existing provider keys and 16 unrelated
-environment entries. No migration/role change or paid resource. Stage B acceptance
-and external-consumer reconciliation remain incomplete; Stage C is unapproved.
+environment entries. No migration, real-account role change or paid resource.
+Core Stage B authenticated checks passed; full external-consumer/exposure and
+recovery reconciliation remain incomplete; Stage C is unapproved.
 AUTH-A/public-launch PASS stays withheld. See `auth-a-stage-b-release.md`.
 Evidence: `docs/release/auth-a-hosted-proof.md`.
 
