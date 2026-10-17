@@ -1,12 +1,12 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-17 (PR #25 Stage A released; AUTH-A Stage B/C approvals outstanding)
+**Authority date:** 2026-10-17 (AUTH-A Stage B private configuration deployed; acceptance incomplete; Stage C unapproved)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
 **Authoritative Git SHA (`origin/main` tip):** `bcd113de137bde1216aa147fc9cc699b40156884` (PR #25 merge; PR #22/#23 included)
 
-**Authoritative Production (live Ready / azure):** Vercel `dpl_E4iNVkhfeViyz3HEuTtHzwiUJoef` · source `git`, exact merge SHA; azure alias assigned, no alias error. Ten anonymous/configuration/helper smoke checks passed; signed-in acceptance remains pending. Main CI attempt 1 failed in unchanged font loader; the single retry passed including build. Evidence: `docs/release/auth-a-stage-a-release.md`.
-**LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Signed-in Member↔EXCO acceptance still pending. **OPEN reliability:** automatic Git→Vercel Production trigger for that merge remains unexplained (symptom ≠ root cause); does not block signed-in acceptance.  
+**Authoritative Production (live Ready / azure):** Vercel `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · source CLI, clean reviewed `bcd113d` checkout and matching `meta.gitCommitSha`; actual azure alias pointer verified after staged tests and promotion. Private config is live; fresh emailed-code sign-in, existing-session continuity, renewal/token rotation and desktop Member↔EXCO passed. Registration/document/logout acceptance remains open. Evidence: `docs/release/auth-a-stage-b-release.md`. Earlier Stage A Git-linked build/CI evidence is retained separately.
+**LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Fresh signed-in desktop Member↔EXCO acceptance passed on the Stage B release; physical phone/tablet acceptance remains separate. **OPEN reliability:** automatic Git→Vercel Production trigger for that historical merge remains unexplained (symptom ≠ root cause).
 **LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
 provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
 PKCE/profile/role journey 19 checks; Storage/account-control components 16
@@ -17,9 +17,11 @@ The two-email quota hypothesis was not proven: runtime inspection found a
 different local setting. Existing CAPTCHA evidence is carried forward with
 unchanged control code; no fresh Production registration is claimed.
 PR #25 head `ab9080b` was reviewed and released under explicit Stage A approval.
-No Production environment, keys, roles or migrations changed. Deployed consumer
-inventory, strict configuration, compatible recovery deployment and exact
-Stage B/C approvals remain open. AUTH-A/public-launch PASS stays withheld.
+Separate Stage B approval then covered private Production configuration and a
+fresh publishable key, while retaining all existing provider keys and 16 unrelated
+environment entries. No migration/role change or paid resource. Stage B acceptance
+and external-consumer reconciliation remain incomplete; Stage C is unapproved.
+AUTH-A/public-launch PASS stays withheld. See `auth-a-stage-b-release.md`.
 Evidence: `docs/release/auth-a-hosted-proof.md`.
 
 **LC-F note:** Free plan identified. Use the $0 operator-managed recovery
@@ -197,7 +199,7 @@ Mapped to Launch Completion (see board LC overview). Do not treat historical pha
 - **LC-B** — signed-in Member↔EXCO acceptance on azure after #22 Production recovery (`docs/release/pr-22-signed-in-acceptance.md`)
 - **LC-B** — PR #21 interest roster release + named migration authorization (`docs/release/pr-21-release-packet.md`)
 - **LC-B** — PR #23 dashboard clarity released; signed-in CTA acceptance remains (`docs/release/pr-23-review.md`) — do not re-implement
-- **LC-C / AUTH-A** — provider-level E-API residual (unrestricted launch blocked; pilot exception remains; cutover unapproved)
+- **LC-C / AUTH-A** — private Stage B live, acceptance incomplete; provider E-API residual remains, Stage C unapproved (unrestricted launch blocked; pilot exception remains)
 - **LC-C / AUTH-B** — owner confirmations for remaining reclaim candidates
 - **LC-F / PRIVACY-L1** — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
 - **LC-E / Phase 23C** — remaining packet rows (owner-reported navigation/profile/privacy checks carry forward; device models not recorded)
