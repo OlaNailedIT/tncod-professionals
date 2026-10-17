@@ -1,0 +1,85 @@
+{
+  "scope": "Focused actual local browser numeric OTP, session renewal and signed-document HTTP; not Production acceptance",
+  "vitest": {
+    "executed": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "at": "2026-10-16T21:40:52.876Z",
+  "auth": "127.0.0.1:54321",
+  "database": "127.0.0.1:54322",
+  "productionChanged": false,
+  "testSessionShortcutUsed": false,
+  "registrationCaptcha": "existing test verifier, not real CAPTCHA",
+  "fixtures": "unique synthetic records retained; no privileged role assigned",
+  "checks": [
+    {
+      "name": "required registration schema exists",
+      "pass": true
+    },
+    {
+      "name": "synthetic registration succeeds without an email/session shortcut",
+      "pass": true
+    },
+    {
+      "name": "strict production-mode local app is ready",
+      "pass": true
+    },
+    {
+      "name": "session shortcut remains disabled",
+      "pass": true
+    },
+    {
+      "name": "single genuine OTP email received in the local mailbox",
+      "pass": true
+    },
+    {
+      "name": "typed OTP creates the correct authenticated application session",
+      "pass": true
+    },
+    {
+      "name": "app middleware renews the real session and rotates refresh credentials",
+      "pass": true
+    },
+    {
+      "name": "authenticated API creates business for current member",
+      "pass": true
+    },
+    {
+      "name": "synthetic private document is available for HTTP acceptance",
+      "pass": true
+    },
+    {
+      "name": "session-bound document route issues an authorized redirect",
+      "pass": true
+    },
+    {
+      "name": "signed redirect targets disposable Storage only",
+      "pass": true
+    },
+    {
+      "name": "signed-document HTTP flow returns exact private bytes",
+      "pass": true
+    },
+    {
+      "name": "same document endpoint denies a signed-out actor",
+      "pass": true
+    }
+  ],
+  "passed": 13,
+  "failed": 0,
+  "completed": true,
+  "failure": null,
+  "runtimeInspection": {
+    "collectedDuring": "same continuation, before the focused browser proof",
+    "source": "read-only local Auth container environment",
+    "emailSentLimit": 360000,
+    "otpRequestLimit": 30,
+    "verifyRequestLimit": 30,
+    "refreshRequestLimit": 150,
+    "smtpFrequency": "1s",
+    "correction": "config.toml email_sent=2 does not reflect the running local service; earlier two-email explanation was not proven",
+    "historical429Cause": "unconfirmed; no historical error details recovered"
+  }
+}

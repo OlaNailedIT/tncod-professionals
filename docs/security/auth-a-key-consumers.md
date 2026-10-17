@@ -26,6 +26,11 @@ scheduled consumers cannot be declared absent from a source search alone.
   test CAPTCHA verifier for registration, not a real CAPTCHA submission.
 - Numeric-code, renewed-session and private-document results must be read from
   the dated application report, not inferred from this inventory.
+- Focused local browser acceptance subsequently passed 13 checks: real emailed
+  numeric OTP, actual middleware refresh-token rotation, authenticated business
+  creation and session-bound signed-document HTTP download/signed-out denial.
+  See `docs/release/evidence/auth-a/local-remaining.json`. This is still local,
+  not Production key deactivation or a deployed consumer inventory.
 - Independent local component proof passed 16 checks for real document
   upload/private download and owner/Member/Viewer/Admin/Super boundaries,
   plus canonical Auth ban/application-status suspension/reactivation using

@@ -1,4 +1,4 @@
-param([switch]$ReuseBuild, [ValidateSet('journey', 'consumers')][string]$Case = 'journey')
+param([switch]$ReuseBuild, [ValidateSet('journey', 'consumers', 'remaining')][string]$Case = 'journey')
 $ErrorActionPreference = 'Stop'
 # Read only the existing local stack; never start, reset, or target a hosted project.
 $authALocalStatus = & npx --offline --yes supabase status --output json
