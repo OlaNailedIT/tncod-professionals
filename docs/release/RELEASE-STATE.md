@@ -1,10 +1,11 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-17 (LC-C local acceptance completed; release approvals outstanding)
+**Authority date:** 2026-10-17 (PR #23 released; AUTH-A Production approvals outstanding)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
-**Authoritative Git SHA (`origin/main` tip):** `1a699153cb6259628c9dc1372051aec5f1bf4b04` (PR #22 merge)  
-**Authoritative Production (live Ready / azure):** Vercel `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · application tree identical to reviewed head `b80bc5d` · azure `https://tncod-professionals-azure.vercel.app`  
+**Authoritative Git SHA (`origin/main` tip):** `52f3d8c1edeeb6dc5965c1129431148a8a2a8500` (PR #23 merge)
+
+**Authoritative Production (live Ready / azure):** Vercel `dpl_83ezLvKX2czfGg3F3a4YWkupFEej` · source `git`, exact merge SHA; azure alias assigned, no alias error. Public smoke: `/`, `/sign-in`, `/join`, `/professionals` 200; `/dashboard`, `/exco` 307 to sign-in. PR #22 included; signed-in acceptance remains pending.
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Signed-in Member↔EXCO acceptance still pending. **OPEN reliability:** automatic Git→Vercel Production trigger for that merge remains unexplained (symptom ≠ root cause); does not block signed-in acceptance.  
 **LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
 provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
@@ -194,7 +195,7 @@ Mapped to Launch Completion (see board LC overview). Do not treat historical pha
 
 - **LC-B** — signed-in Member↔EXCO acceptance on azure after #22 Production recovery (`docs/release/pr-22-signed-in-acceptance.md`)
 - **LC-B** — PR #21 interest roster release + named migration authorization (`docs/release/pr-21-release-packet.md`)
-- **LC-B** — PR #23 dashboard clarity merge/release after review (`docs/release/pr-23-review.md`) — do not re-implement
+- **LC-B** — PR #23 dashboard clarity released; signed-in CTA acceptance remains (`docs/release/pr-23-review.md`) — do not re-implement
 - **LC-C / AUTH-A** — provider-level E-API residual (unrestricted launch blocked; pilot exception remains; cutover unapproved)
 - **LC-C / AUTH-B** — owner confirmations for remaining reclaim candidates
 - **LC-F / PRIVACY-L1** — Privacy Notice **legal** sign-off (factual `/privacy` deployed)

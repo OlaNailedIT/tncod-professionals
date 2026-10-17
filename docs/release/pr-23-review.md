@@ -1,11 +1,19 @@
 # PR #23 — Dashboard clarity review (LC-B)
 
-**As of:** 2026-10-16  
+**As of:** 2026-10-17
 **PR:** https://github.com/OlaNailedIT/tncod-professionals/pull/23  
 **Head:** `7f517fb6bb02f18836902074e7d12d0a4ef9aa02`
 
 **Checks:** fresh local verification PASS; CI verify PASS ([run 38954110458](https://github.com/OlaNailedIT/tncod-professionals/actions/runs/38954110458)); new-head Vercel preview PASS. Earlier-head checks were not reused to certify this head.
-**Disposition:** **REVIEWED WITH NARROW CORRECTION** — publication does not prove effective directory listing. Migration/Auth/roles untouched. PR remains open.
+**Disposition:** **RELEASED WITH NARROW CORRECTION** — publication does not prove effective directory listing. Migration/Auth/roles untouched. Owner explicitly approved PR #23 release only. Merged at `2026-10-17T05:28:42Z` as `52f3d8c1edeeb6dc5965c1129431148a8a2a8500`; current `main` matches. No check bypass.
+
+## Production release evidence
+
+- Deployment `dpl_83ezLvKX2czfGg3F3a4YWkupFEej`: `READY`, target `production`, source `git`; both `gitSource.sha` and `meta.githubCommitSha` equal the merge SHA.
+- Project `prj_YL2rguqWGr4kSjJTQhuU7r8g6pce`, team `team_zvTxCHUqJDtCr1ezQWjg0LcR`; azure alias assigned, no alias error.
+- Read-only smoke: `/`, `/sign-in`, `/join`, `/professionals` returned 200; `/dashboard` and `/exco` returned 307 to sign-in with matching `next` destinations. Six checks; no failed request. No forms submitted or member data changed.
+- Authenticated dashboard CTA acceptance and participant comprehension remain pending. HTTP success is not signed-in flow verification or Phase 23D closure.
+- Historical #22 missing automatic deployment remains unexplained; #23 deployed automatically. No manual deploy, paid resource, migration, Auth key or role change was used for #23.
 
 ## Review against charter criteria
 
