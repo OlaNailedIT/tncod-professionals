@@ -1,0 +1,63 @@
+{
+  "projectId": "hyzkearnbhxznkeokacj",
+  "scope": "Hosted provider/SSR SDK fixture proof; NOT deployed application acceptance",
+  "checks": [
+    {
+      "name": "test-project keys available for actual app build",
+      "pass": true
+    },
+    {
+      "name": "actual Next production build in strict server-only mode",
+      "pass": true
+    },
+    {
+      "name": "actual public bundles and prerendered outputs contain no private credentials",
+      "pass": true,
+      "detail": {
+        "files": 141
+      }
+    },
+    {
+      "name": "actual app starts with private keys only",
+      "pass": true
+    },
+    {
+      "name": "actual app /sign-in: 200 and no credential serialization",
+      "pass": true
+    },
+    {
+      "name": "actual app /join: 200 and no credential serialization",
+      "pass": true
+    },
+    {
+      "name": "actual app /privacy: 200 and no credential serialization",
+      "pass": true
+    },
+    {
+      "name": "actual session probe recognizes private configuration",
+      "pass": true
+    },
+    {
+      "name": "actual /dashboard keeps anonymous access gated",
+      "pass": true
+    },
+    {
+      "name": "actual /exco keeps anonymous access gated",
+      "pass": true
+    },
+    {
+      "name": "test session helper stays disabled in production build",
+      "pass": true
+    },
+    {
+      "name": "actual OTP route is neutral and does not serialize credentials",
+      "pass": true
+    }
+  ],
+  "executed": 12,
+  "passed": 12,
+  "failed": 0,
+  "applicationBundleScan": "EXECUTED",
+  "fullAuthenticatedApplicationEndToEnd": "NOT EXECUTED",
+  "productionChanged": false
+}

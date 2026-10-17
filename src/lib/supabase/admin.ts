@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createClient } from "@supabase/supabase-js";
-import { getPublicEnv, hasBrowserSupabaseConfig } from "@/lib/env/public";
+import { getSessionSupabaseConfig } from "@/lib/env/supabase-session";
 import { requireServiceRoleKey } from "@/lib/env/server";
 
 /**
@@ -9,11 +9,11 @@ import { requireServiceRoleKey } from "@/lib/env/server";
  * Does not replace domain authorization. Prisma with DATABASE_URL also bypasses RLS.
  */
 export function createServiceRoleClient() {
-  if (!hasBrowserSupabaseConfig()) {
+  const config = getSessionSupabaseConfig();
+  if (!config) {
     throw new Error("Supabase URL is required for the service-role client");
   }
-  const env = getPublicEnv();
-  return createClient(env.NEXT_PUBLIC_SUPABASE_URL!, requireServiceRoleKey(), {
+  return createClient(config.url, requireServiceRoleKey(), {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

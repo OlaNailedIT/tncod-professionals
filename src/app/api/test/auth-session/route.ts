@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { z } from "zod";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
-import { getPublicEnv, hasBrowserSupabaseConfig } from "@/lib/env/public";
+import { getSessionSupabaseConfig } from "@/lib/env/supabase-session";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
@@ -18,7 +18,8 @@ export async function POST(request: Request) {
   if (process.env.NODE_ENV === "production") {
     return NextResponse.json({ error: "DISABLED" }, { status: 404 });
   }
-  if (!hasBrowserSupabaseConfig()) {
+  const config = getSessionSupabaseConfig();
+  if (!config) {
     return NextResponse.json({ error: "NO_SUPABASE" }, { status: 500 });
   }
 
@@ -46,11 +47,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "GENERATE_FAILED" }, { status: 500 });
     }
 
-    const env = getPublicEnv();
     const response = NextResponse.json({ ok: true, email });
     const supabase = createServerClient(
-      env.NEXT_PUBLIC_SUPABASE_URL!,
-      env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      config.url,
+      config.key,
       {
         cookies: {
           getAll() {
