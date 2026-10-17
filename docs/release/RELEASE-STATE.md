@@ -1,9 +1,36 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-12  
-**Release Gate 5:** Release hygiene / clean source reconstruction  
-**Authoritative Git SHA (current `origin/main` tip):** `6618ac87c806e1a58cd027c34c08783bb7ed6567`  
-**Authoritative Production:** GitHub Production deployment `7021555704` · sha `6618ac8` · env URL matches live Vercel Production alias for `https://tncod-professionals-azure.vercel.app`
+**Authority date:** 2026-10-17 (LC-C local acceptance completed; release approvals outstanding)
+**Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
+**Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
+**Authoritative Git SHA (`origin/main` tip):** `1a699153cb6259628c9dc1372051aec5f1bf4b04` (PR #22 merge)  
+**Authoritative Production (live Ready / azure):** Vercel `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · application tree identical to reviewed head `b80bc5d` · azure `https://tncod-professionals-azure.vercel.app`  
+**LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Signed-in Member↔EXCO acceptance still pending. **OPEN reliability:** automatic Git→Vercel Production trigger for that merge remains unexplained (symptom ≠ root cause); does not block signed-in acceptance.  
+**LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
+provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
+PKCE/profile/role journey 19 checks; Storage/account-control components 16
+checks; focused numeric OTP/session renewal/signed-document HTTP 13 checks
+(the latter: 1 test passed, 0 failed, 0 skipped). Runs overlap; do not sum them
+as unique acceptance criteria. Earlier failed attempts remain in the reports.
+The two-email quota hypothesis was not proven: runtime inspection found a
+different local setting. Existing CAPTCHA evidence is carried forward with
+unchanged control code; no fresh Production registration is claimed.
+Draft #25 head `ab9080b` includes the explicit staged release/recovery proposal.
+Deployed consumer inventory, review, compatible recovery deployment and exact
+Production approvals remain open. AUTH-A/public-launch PASS stays withheld.
+Evidence: `docs/release/auth-a-hosted-proof.md`.
+
+**LC-F note:** Free plan identified. Use the $0 operator-managed recovery
+proposal in `docs/operations/free-tier-recovery-plan.md`; do not require a
+paid backup/PITR feature. Protected destination/key custody, operator/cadence,
+export authorization and actual data-plus-objects restore remain unproven.
+
+**Hosting read-only check:** existing Vercel team/project is active Hobby;
+GitHub link and `main` production branch match. No paid change. Plan identity
+does not resolve exact permitted-use fit for professional/service listings;
+provider clarification and usage monitoring remain an operating decision.
+See `docs/release/hosting-free-plan-check.md`. Historical missing automatic
+deployment root cause remains unconfirmed; current auto-assignment is true.
 
 This document is the **current release-state summary** for humans and agents.  
 It does not replace locked phase contracts. It reconciles verified Production/gate evidence with repository status.
@@ -163,16 +190,21 @@ Consolidated owner board: `docs/release/gate-6b-action-board.md`
 
 ## Remaining launch gates (not complete)
 
-- AUTH-A — provider-level E-API residual (unrestricted launch blocked; pilot exception remains)
-- AUTH-B — owner confirmations for remaining reclaim candidates
-- PRIVACY-L1 — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
-- Phase 23C — real phone/tablet human acceptance
-- Phase 23D — participant / task comprehension evidence
-- Controlled pilot closeout (human)
-- Dashboard backup **class** confirmation (schema-only disposable restore drill **PASS**)
-- Protected production-data recovery drill (not executed)
+Mapped to Launch Completion (see board LC overview). Do not treat historical phase PASS as automatic clearance of these rows.
+
+- **LC-B** — signed-in Member↔EXCO acceptance on azure after #22 Production recovery (`docs/release/pr-22-signed-in-acceptance.md`)
+- **LC-B** — PR #21 interest roster release + named migration authorization (`docs/release/pr-21-release-packet.md`)
+- **LC-B** — PR #23 dashboard clarity merge/release after review (`docs/release/pr-23-review.md`) — do not re-implement
+- **LC-C / AUTH-A** — provider-level E-API residual (unrestricted launch blocked; pilot exception remains; cutover unapproved)
+- **LC-C / AUTH-B** — owner confirmations for remaining reclaim candidates
+- **LC-F / PRIVACY-L1** — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
+- **LC-E / Phase 23C** — remaining packet rows (owner-reported navigation/profile/privacy checks carry forward; device models not recorded)
+- **LC-E / Phase 23D** — participant comprehension (dashboard PR is only a partial implementation)
+- **LC-E** — Controlled pilot closeout (human)
+- **LC-F** — Free-tier protected backup destination/key custody + operator/cadence acceptance (historical schema-only drill **PASS**)
+- **LC-F** — Protected production-data recovery drill (not executed)
 - Monitoring alerting (optional; dashboards / procedure exist)
-- Phase 23 brand/theme/navigation UI (intentionally deferred from dirty tree)
+- Headshot UX / export / CRM / public business discovery — **deferred** (not launch blockers)
 
 ---
 

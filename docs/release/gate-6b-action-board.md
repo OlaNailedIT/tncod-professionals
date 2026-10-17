@@ -1,25 +1,45 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-16 (EXCO entry and opportunities link in review; headshot not started)  
+**Updated:** 2026-10-17 (AUTH-A local browser gaps passed; staged release proposal prepared; Free-tier recovery plan, no paid dependency)
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
-**AUTH-A:** PROVIDER-LEVEL residual — **unrestricted launch blocked**; controlled pilot exception remains (not an item for risk-acceptance solicitation here)
+**Delivery frame:** Launch Completion stages **LC-A → LC-G** (not a replacement for historical phase contracts). Strategy: external Launch Completion Plan 2026-10-16.  
+**AUTH-A:** **unrestricted launch still blocked / Production remediation unproven**. Free hosted provider and actual local build/browser/Storage/account-control evidence is passing, including the formerly missing numerical-code, session-renewal and signed-document HTTP checks. Candidate remains draft; actual deployed consumer inventory, compatible recovery deployment and exact release/key-change approvals remain open. See `docs/release/auth-a-hosted-proof.md`. Production cutover **not** approved. Pilot exception ≠ public-launch acceptance. No paid fallback is authorized.
+
+## Launch Completion overview
+
+| Stage | Focus | Status (2026-10-16) |
+| --- | --- | --- |
+| **LC-A** Control the release | One accurate backlog + identities | **IN PROGRESS** — this board reconciliation |
+| **LC-B** Finish existing delivery | #22 Production + acceptance; #21 release; #23 review/release | **IN PROGRESS** — #22 Production **recovered**; signed-in acceptance pending; auto-deploy trigger **OPEN** (unexplained); #21/#23 open |
+| **LC-C** Trust and access | AUTH-A proof/decision; AUTH-B; named security residuals | **IN PROGRESS** — AUTH-A non-Production core acceptance passed; staged deployment/recovery/consumer verification and exact approvals still required. AUTH-B awaiting human |
+| **LC-D** Operating promise | Guidance, verification policy, follow-up ownership, support, genuine content | **NOT STARTED** as a gate (dashboard clarity is only a partial LC-D input via #23) |
+| **LC-E** Acceptance | Devices, journeys, comprehension, pilot | **AWAITING HUMAN** — carry forward owner-reported checks; do not restart them |
+| **LC-F** Privacy and operations | Privacy-L1, backup class/recovery, monitoring, operators | **AWAITING HUMAN** |
+| **LC-G** Freeze and launch | Frozen candidate + GO/NO-GO | **NOT STARTED** — 23 Oct target contingent on AUTH-A |
+
+**Critical path to 23 October:** AUTH-A non-Production core proof is achieved; next is reviewed staged Production preparation/recovery, consumer verification and explicitly approved key deactivation. Keep the **19 Oct** readiness decision. #22 recovery is recorded; signed-in acceptance remains human. If AUTH-A remains unresolved at that checkpoint, reassess the public-launch date; controlled pilot may continue only under its existing exception.
 
 **Live identity:**
 
 | Fact | Value |
 | --- | --- |
-| `origin/main` | `19b214a2ee10cdeb124538a7467b9a75894c032d` (PR #18 merge, 2026-10-16T04:51:16Z) |
-| GitHub Production deployment | id `7111227913` · environment Production · sha `19b214a2ee10cdeb124538a7467b9a75894c032d` · status success · 2026-10-16T04:52:17Z |
-| Azure origin | `https://tncod-professionals-azure.vercel.app` serves that deployment (page chunk `app/page-107fab8bbc877f06.js`, not the previous Production chunk) |
-| PR #18 | **MERGED** · head `bcc42d1` · https://github.com/OlaNailedIT/tncod-professionals/pull/18 |
+| `origin/main` | `1a699153cb6259628c9dc1372051aec5f1bf4b04` (PR #22 merge) |
+| Ready Production (Vercel / azure) | `dpl_DTe6dmsQ51fckqdYPtQmhZZEzJRX` · deployment URL `…-9g33jg1dl-…` · **aliased to azure** (LC-B recovery 2026-10-16). Application tree = reviewed `b80bc5d` |
+| Prior Ready Production (superseded) | `dpl_BdtPVaT…` / GitHub `7115716634` · sha `71b5570` (PR #20) |
+| Azure origin | `https://tncod-professionals-azure.vercel.app` · homepage chunk `app/page-0853a8d8daaf56e6.js` · “Member dashboard” **present** in deployed JS |
+| PR #22 | **MERGED** · head `b80bc5d` · merge `1a69915` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — **Production recovered** (`dpl_DTe6dmsQ…`); signed-in acceptance **pending**. **OPEN:** Git→Vercel automatic Production deploy for `1a69915` never fired (“deployment absent” = symptom; root cause unexplained) |
+| PR #21 | **OPEN** · head `4666248` · checks PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — packet `docs/release/pr-21-release-packet.md` |
+| PR #23 | **OPEN** · head `7f517fb` · CI/preview PASS · directory-publication wording corrected without promising effective listing · https://github.com/OlaNailedIT/tncod-professionals/pull/23 — review `docs/release/pr-23-review.md` |
+| PR #25 | **DRAFT** · head `ab9080b` · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — local PKCE/profile/roles 19 checks, components 16 checks and focused numeric OTP/renewal/document HTTP 13 checks passed (overlapping runs). Failed attempts retained. Staged release/recovery proposal prepared; Production actions unapproved |
 | Phase 23C | **NOT LOCKED** |
-| Public launch | **BLOCKED** — AUTH-A remains an unrestricted-launch blocker |
+| Public launch | **BLOCKED** — AUTH-A |
 
 Status vocabulary: `NOT STARTED` · `AWAITING HUMAN` · `AUTHORIZED` · `IN PROGRESS` · `PASS` · `FAIL` · `BLOCKED`
 
 Update this board only from real owner/legal/tester evidence — never from automation alone.  
-Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or pilot PASS.
+Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or pilot PASS.  
+Carry forward completed owner-reported checks; missing device/browser metadata is a small evidence note, not a reason to restart PASS rows.
 
 ---
 
@@ -27,14 +47,19 @@ Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or
 
 | ID | Action | Status |
 | --- | --- | --- |
-| A | AUTH-B owner confirmations (COLLISION-01…08) | **AWAITING HUMAN** |
-| B | Privacy Notice legal/privacy sign-off | **AWAITING HUMAN** |
-| C | Backup class (Dashboard) + production-data recovery posture | **AWAITING HUMAN** (schema-only disposable restore drill **PASS**) |
-| D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. DEF-23C-01 released, physical retest pending. DEF-23C-02 artificial-profile test corrected; real-device header responsiveness awaiting verification |
-| E | Phase 23D participant comprehension | **AWAITING HUMAN** |
-| F | Controlled-pilot closeout | **AWAITING HUMAN** (depends on D/E + owner judgment on A/B/C) |
-| G | EXCO surface acceptance | **AWAITING HUMAN** — entry was missing from the member shell while `/exco` stayed role-checked. Restoration is in review and is not Production. Do not accept the EXCO surface until that release is retested |
-| H | Optional headshot | **NOT STARTED** — proposal only. No implementation until the new scope is approved |
+| A | AUTH-B owner confirmations (COLLISION-01…08) | **AWAITING HUMAN** (LC-C) |
+| B | Privacy Notice legal/privacy sign-off | **AWAITING HUMAN** (LC-F) |
+| C | Free-tier protected data/object recovery | **AWAITING HUMAN** — Free plan identified; no paid backup/PITR dependency. Protected destination/key custody, cadence and export/drill approval pending. Plan: `docs/operations/free-tier-recovery-plan.md`; historical schema-only drill PASS (LC-F) |
+| D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. Owner-reported phone/tablet navigation + join/sign-in/dashboard + profile/privacy save **carry forward**; device/browser models **not recorded**. Remaining packet rows stay open (LC-E) |
+| E | Phase 23D participant comprehension | **AWAITING HUMAN** — dashboard clarity in **#23** (reviewed; not merged). Full comprehension still needs real participants (LC-E) |
+| F | Controlled-pilot closeout | **AWAITING HUMAN** (LC-E) |
+| G | EXCO surface / Member↔EXCO return | **AWAITING HUMAN** — Production azure serves #22 (`dpl_DTe6dmsQ…`). Signed-in Member↔EXCO↔Member on desktop/phone/tablet. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B). Auto-deploy reliability remains **OPEN** (does not block this test) |
+| H | Current interest roster | **IN REVIEW** — #21 head `4666248`; migration **not** applied; cadence **NOT ACCEPTED**. Packet: `docs/release/pr-21-release-packet.md` (LC-B) |
+| J | Dashboard clarity (#23) | **REVIEWED** — no hard dependency on #21. Do **not** merge under AUTH-A auth. Review: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
+| K | AUTH-A release preparation | **IN PROGRESS** — non-Production core proof passed; focused remaining browser test 1 passed / 13 checks / 0 failed / 0 skipped. Initial failed runs retained; earlier email-quota theory unproven. Historical CAPTCHA evidence carried forward without redoing that phase. Actual deployed consumers/recovery baseline and exact Production approvals pending. Evidence: `docs/release/auth-a-hosted-proof.md` (LC-C) |
+| L | Git→Vercel Production auto-deploy | **OPEN** — merge `1a69915` produced no automatic Production deployment; recovered via authorized CLI. Targeted diagnosis continues; does not block #22 signed-in acceptance |
+| M | Free hosting plan / permitted-use fit | **PLAN VERIFIED** — existing Vercel project is active Hobby; no purchase/upgrade. Exact nonprofit professional/service-directory fit needs provider clarification before unrestricted launch, not an assumed violation or paid dependency. Current usage headroom not measured. See `docs/release/hosting-free-plan-check.md` (LC-F) |
+| I | Optional headshot | **DEFERRED** post-launch / proposal only — not a launch dependency |
 
 ---
 
@@ -159,6 +184,8 @@ How to record: mark each task **PASS** or **FAIL**; if FAIL add severity S0–S3
 **Participants:** real controlled-pilot cohort members (non-PII labels only).  
 Facilitator records verbatim understanding vs the “understanding looks like” column. Do not coach mid-task. Do not fabricate participants.
 
+**Implemented portion (in review, not accepted):** member **dashboard clarity** — human status labels via `present*`, one state-derived next-step (`resolveMemberNextAction` with PENDING ≠ UNDER_REVIEW), `PageIntro`, secondary links to existing `/opportunities` · `/profile` · `/settings/privacy`. Not the full Phase 23D surface set. Full acceptance remains **AWAITING HUMAN**.
+
 ---
 
 ## Controlled pilot readiness matrix
@@ -182,27 +209,46 @@ Facilitator records verbatim understanding vs the “understanding looks like”
 
 ---
 
+---
+
+## Owner-reported device results (2026-10-16)
+
+These are the project owner’s reports from this conversation. Device model and browser were not stated, so they are not filled in. This does not lock Phase 23C.
+
+| Check | Phone | Tablet |
+| --- | --- | --- |
+| Portrait menu: Professionals, Join, Sign in | **PASS** (owner-reported) | not reported in this set |
+| Landscape header: Professionals, Join, Sign in | **PASS** (owner-reported) | not reported |
+| Portrait header: Professionals, Join, Sign in | not reported | **PASS** (owner-reported) |
+| Join, email sign-in, and dashboard | **PASS** (owner-reported) | **PASS** (owner-reported) |
+| Profile overview, edit/save persistence, privacy/save persistence | **PASS** (owner-reported) | **PASS** (owner-reported) |
+
+Still open on the 23C packet: home scroll, verification presentation, directory eligibility, directory detail, businesses, opportunities, EXCO surfaces, accessibility/errors, privacy notice, and Production `/design-system` 404. Phase 23D and pilot closeout stay open.
+
 ## EXCO discoverability and opportunities
 
-The completed navigation release (PR #18, merge `19b214a`) is unchanged.
+PR #20 is merged as `71b5570aaf5b1dd950001662f8bf16e3a0d5fde3` and the Git-linked Production deployment `7115716634` is success. Azure serves page chunk `app/page-2194e43327d5ea22.js`.
 
-`/exco` still redirects members without EXCO_VIEWER, EXCO_ADMIN, or SUPER_ADMIN to `/dashboard`, and anonymous users to sign-in. The missing piece was the member shell: it never asked `hasExcoDashboardAccess`, so an authorized account could open the route directly and still see no EXCO entry. Account items were Profile, Settings, and Sign out only.
+`/exco` still redirects members without EXCO_VIEWER, EXCO_ADMIN, or SUPER_ADMIN to `/dashboard`, and anonymous users to sign-in. The member shell now asks `hasExcoDashboardAccess` before showing EXCO in the desktop sidebar, the phone/tablet drawer, and the account menu. Dashboard, Directory, Profile, Businesses, Opportunities, and Settings stay in member navigation.
 
-The review branch restores the entry from that server check on the desktop sidebar, the phone/tablet drawer, and the account menu. It does not change Production roles. Direct-route checks stay in place.
+EXCO navigation includes the existing `/opportunities` page. Creating an opportunity still requires `opportunity.manage`.
 
-EXCO navigation had no route to `/opportunities`. The existing create form already renders there for `opportunity.manage` (EXCO_ADMIN and SUPER_ADMIN). MEMBER and EXCO_VIEWER do not receive that permission, and `createOpportunity` checks it on the server. The review branch adds an Opportunities link in the EXCO Manage group to that same page.
+**Signed-in retest, not yet done:** the owner should see EXCO in member navigation, open it, and follow Opportunities. Profile and the other member destinations should still be there.
 
-**Interest follow-up today:** a member can express or withdraw interest. The product stores one row per member and writes an audit event. It does not show EXCO a list or count of interested members, and it does not send an introduction or notification. The detail page can show deterministic potential matches for EXCO viewers and admins; that panel is not the interest list. There is no in-product follow-up procedure beyond closing the opportunity. Reviewing who expressed interest is a missing operational capability.
+**Interest roster:** PR #21 is open and is not Production. Its migration has not been applied. The operator procedure names the project owner. The proposed weekly review, and a review before closing an opportunity, is **not accepted**.
 
-**Optional headshot:** proposal only, in `docs/product/optional-headshot-proposal.md`. Not implemented. It does not block the EXCO fix.
+**Optional headshot:** proposal only, in `docs/product/optional-headshot-proposal.md`. Not implemented.
 
 ## Priority order for the project owner (now)
 
-1. **Execute Phase 23C** on a real phone + tablet using the 23C packet (unblocks visual/UX acceptance).  
-2. **Execute Phase 23D** with real participants using the 23D packet (unblocks comprehension evidence).  
-3. **Privacy-L1** — choose one of the three legal reply lines after reviewing `/privacy`.  
-4. **AUTH-B** — authorise or explicitly defer each COLLISION-0N UUID (no bulk reclaim).  
-5. **Backup class** — fill Dashboard fields in `ops-backup-class-owner-check.md`.  
-6. **Pilot closeout** — complete `pilot-closeout-packet.md` only after real cohort evidence exists.
+1. **Signed-in EXCO retest** on the azure origin: EXCO in member navigation, open EXCO, then Opportunities. Confirm profile and member navigation remain.
+2. **Finish Phase 23C** rows that are not in the owner-reported table above. Phase 23C stays **NOT LOCKED**.
+3. **Execute Phase 23D** with real participants.
+4. **Privacy-L1** — choose one of the three legal reply lines after reviewing `/privacy`.
+5. **AUTH-B** — authorise or explicitly defer each COLLISION-0N UUID (no bulk reclaim).
+6. **Backup class** — fill Dashboard fields in `ops-backup-class-owner-check.md`.
+7. **Pilot closeout** — complete `pilot-closeout-packet.md` only after real cohort evidence exists.
 
-**Next single action:** On the released azure origin, run the DEF-23C-02 physical tap on a real iPad and a landscape iPhone, and redo the phone menu task (DEF-23C-01) on the iPhone 12 Pro Max. Phase 23C is **NOT LOCKED**. AUTH-A still blocks unrestricted public launch. Privacy-L1, backup class, AUTH-B, Phase 23D, and pilot closeout stay open and independent of that tap.
+**AUTH-A dependency:** the hosted provider differential remains on Production. Upstream [supabase/auth#1547](https://github.com/supabase/auth/issues/1547) is an alternative path, not the only remediation: the approved non-Production server-only publishable/deactivated-legacy candidate is in draft #25. Its completed hosted/local evidence does not authorize Production cutover or close AUTH-A.
+
+**Next single action:** On the azure origin, sign in and confirm EXCO appears in member navigation, opens, and reaches Opportunities, with profile still available.
