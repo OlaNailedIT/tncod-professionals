@@ -22,7 +22,7 @@
 | **LC-F** Privacy and operations | Privacy-L1, backup class/recovery, monitoring, operators | **AWAITING HUMAN** |
 | **LC-G** Freeze and launch | Frozen candidate + GO/NO-GO | **NOT STARTED** — 23 Oct target contingent on remaining LC gates, not completed AUTH-A |
 
-**Critical path to 23 October:** AUTH-A Production cutover and exact #21 release closed 18 Oct, ahead of the **19 Oct** readiness checkpoint. Do not rerun Stage B/C, replay the migration or repeat the already-passing desktop return journey. Focus remaining work on AUTH-B, Privacy-L1, actual free-tier data/object recovery, operator/cadence/content ownership, physical-device/comprehension/pilot acceptance and Preview database isolation. No date or pilot exception overrides these public-launch gates.
+**Critical path to 23 October:** AUTH-A cutover, exact #21 release and approved Preview database/access controls verified 18 Oct, ahead of the **19 Oct** readiness checkpoint. Do not rerun Stage B/C, replay the migration, repeat the passing desktop return journey or reopen the completed Preview controls without new evidence. Focus remaining work on AUTH-B, Privacy-L1, actual free-tier data/object recovery, operator/cadence/content ownership and remaining physical-device/comprehension/pilot acceptance. No date or pilot exception overrides these public-launch gates.
 
 **Live identity:**
 

@@ -30,8 +30,9 @@ uniformly, prior genuine session/refresh and fresh sign-in passed, modern keys
 remain active. Integration-created public-variable drift was cleaned under
 separate exact approval and final provider/release checks passed 7/7.
 **AUTH-A Production cutover: PASS/CLOSED.** Future key/integration changes must
-recheck public Auth scopes before any build. Shared Preview database isolation
-and all other LC gates remain separate; public-launch PASS is still withheld.
+recheck public Auth scopes before any build. The separately approved Preview
+database/access controls are now verified below; other LC gates remain separate
+and public-launch PASS is still withheld.
 See `auth-a-stage-c-retirement.md`; do not repeat completed Stage B/C work.
 Evidence: `docs/release/auth-a-hosted-proof.md`.
 
