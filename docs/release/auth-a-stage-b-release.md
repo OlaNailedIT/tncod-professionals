@@ -1,6 +1,10 @@
 # AUTH-A Stage B — private configuration and recovery baseline
 
-Updated: 2026-10-17. **DEPLOYED / CORE AUTHENTICATED CHECKS PASS / CONSUMER-RECOVERY DISPOSITION RECORDED. STAGE C NOT AUTHORIZED.**
+Stage B record: 2026-10-17. **DEPLOYED / CORE AUTHENTICATED CHECKS PASS /
+CONSUMER-RECOVERY DISPOSITION RECORDED.** Subsequent Stage C was explicitly
+authorized and executed 2026-10-18. Final configuration drift was separately
+approved for exact cleanup and resolved; AUTH-A Production cutover is closed;
+see `auth-a-stage-c-retirement.md`. No completed Stage B work needs repeating.
 
 The owner approved Stage B, then separately approved restricted in-memory
 Supabase CLI credential reuse to create a fresh publishable key only on
@@ -169,8 +173,9 @@ providers, never in a plaintext recovery file. Future rollback must restore both
 the tested artifact and matching private config; never blindly select the old
 legacy-dependent Stage A build after key retirement.
 
-AUTH-A and unrestricted launch remain OPEN. Stage C may now be proposed under the
-recorded review but must not execute without separate explicit project/key and
-restricted credential-use authorization. Recheck actual state before mutation;
-stop on any new mismatch or unapproved consumer. No automatic re-enable, JWT
-rotation, migration, new fixture or paid fallback.
+AUTH-A Production cutover is PASS/CLOSED; unrestricted launch remains OPEN for
+other LC gates. The Stage C approval boundary was satisfied; named retirement and
+genuine session checks executed. Final readback found an integration-associated
+public variable recreated around retirement; separate exact cleanup was approved,
+executed and verified. See `auth-a-stage-c-retirement.md` for evidence and limits.
+No automatic re-enable, JWT rotation, migration, new fixture or paid fallback.

@@ -1,6 +1,11 @@
 # AUTH-A — Stage B consumer and recovery disposition
 
-Date: 2026-10-17. **STAGE B READINESS REVIEW RECORDED / STAGE C NOT AUTHORIZED.**
+Historical review: 2026-10-17. **STAGE B READINESS RECORDED.** Subsequent explicit
+owner authorization covered Stage C; retirement and authenticated acceptance ran
+2026-10-18. Configuration drift was cleaned under separate exact approval and
+final verification passed; AUTH-A Production cutover is closed. Current evidence:
+`auth-a-stage-c-retirement.md`. The proposal/stop boundaries below describe the
+earlier pre-approval review; they are not the current retirement state.
 Read-only review following the owner's explicit confirmation
 that no other app, script, automation or integration uses Production API keys.
 This confirmation does not authorize key deactivation or a public launch.
@@ -68,7 +73,9 @@ review. Stage C requires separate explicit approval naming Production project
 publishable UUID above. Preserve both current modern keys. Verification must
 use normal genuine sign-in/session flows and suppress all raw credentials.
 No new fixture, migration, account/role mutation or spending is implicitly approved.
-AUTH-A/public-launch PASS remains withheld until actual post-retirement evidence.
+At this historical review, AUTH-A/public-launch PASS was withheld pending actual
+post-retirement evidence. Stage C subsequently supplied that evidence and the exact
+cleanup; AUTH-A Production cutover is now closed. Public-launch gates remain separate.
 
 ### Proposed Stage C approval scope — not execution authorization
 

@@ -1,11 +1,11 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-17 (AUTH-A Stage B core checks and cleanup PASS; consumer/recovery disposition recorded; Stage C unapproved)
+**Authority date:** 2026-10-18 (AUTH-A Stage C PASS/CLOSED; exact integration-variable cleanup separately approved and verified; public-launch gates remain open)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
 **Authoritative Git SHA (`origin/main` tip):** `bcd113de137bde1216aa147fc9cc699b40156884` (PR #25 merge; PR #22/#23 included)
 
-**Authoritative Production (live Ready / azure):** Vercel `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · source CLI, clean reviewed `bcd113d` checkout and matching `meta.gitCommitSha`; actual azure alias pointer verified after staged tests and promotion. Private config is live; fresh emailed-code sign-in, existing-session continuity, renewal/token rotation, desktop Member↔EXCO, owner-operated registration, private-document HTTP access/denial and synthetic logout passed. Exact synthetic fixture cleanup verified; audit retained. Consumer/exposure and application-recovery disposition is recorded; separate key-retirement approval remains open. Evidence: `docs/release/auth-a-stage-b-release.md` and `auth-a-stage-b-consumer-review.md`. Earlier Stage A Git-linked build/CI evidence is retained separately.
+**Authoritative Production (live Ready / azure):** Vercel `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · source CLI, clean reviewed `bcd113d` checkout and matching `meta.gitCommitSha`; actual azure alias/deployment identity reconfirmed after Stage C. Stage B private configuration and approved fixture evidence stand. Separately authorized Stage C disabled legacy anon/service_role, deleted only the named old publishable and preserved both modern keys. Actual old/missing/invalid-key known/unknown denial, prior-session continuity/refresh and fresh sign-in/navigation passed. An integration-associated public variable was recreated; separately approved exact cleanup passed three readbacks with all 20 other rows preserved. No deployment was created during that drift window. Current evidence: `docs/release/auth-a-stage-c-retirement.md`. Earlier failures/limits remain recorded; no overall public-launch PASS.
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Fresh signed-in desktop Member↔EXCO acceptance passed on the Stage B release; physical phone/tablet acceptance remains separate. **OPEN reliability:** automatic Git→Vercel Production trigger for that historical merge remains unexplained (symptom ≠ root cause).
 **LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
 provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
@@ -22,13 +22,17 @@ PR #25 head `ab9080b` was reviewed and released under explicit Stage A approval.
 Separate Stage B approval then covered private Production configuration and a
 fresh publishable key, while retaining all existing provider keys and 16 unrelated
 environment entries. No migration, real-account role change or paid resource.
-Core Stage B authenticated checks passed. Deployed-consumer and recovery
-disposition is now recorded in `auth-a-stage-b-consumer-review.md`: actual
-scheduler and Production target match the modern build; no Preview Auth env;
-owner confirmed no external consumers. Old anon/default publishable keys still
-pass the read-only Auth gateway check; exact retirement is proposed but Stage C
-is unapproved. Shared Preview database isolation remains a separate open risk.
-AUTH-A/public-launch PASS stays withheld. See `auth-a-stage-b-release.md`.
+Core Stage B authenticated checks passed. Consumer/recovery disposition is in
+`auth-a-stage-b-consumer-review.md`; scheduler/Production target match the modern
+build, no Preview Auth env, owner confirmed no external consumers. Stage C was
+explicitly authorized and executed: old keys now deny known/unknown identifiers
+uniformly, prior genuine session/refresh and fresh sign-in passed, modern keys
+remain active. Integration-created public-variable drift was cleaned under
+separate exact approval and final provider/release checks passed 7/7.
+**AUTH-A Production cutover: PASS/CLOSED.** Future key/integration changes must
+recheck public Auth scopes before any build. Shared Preview database isolation
+and all other LC gates remain separate; public-launch PASS is still withheld.
+See `auth-a-stage-c-retirement.md`; do not repeat completed Stage B/C work.
 Evidence: `docs/release/auth-a-hosted-proof.md`.
 
 **LC-F note:** Free plan identified. Use the $0 operator-managed recovery
@@ -206,7 +210,7 @@ Mapped to Launch Completion (see board LC overview). Do not treat historical pha
 - **LC-B** — signed-in Member↔EXCO acceptance on azure after #22 Production recovery (`docs/release/pr-22-signed-in-acceptance.md`)
 - **LC-B** — PR #21 interest roster release + named migration authorization (`docs/release/pr-21-release-packet.md`)
 - **LC-B** — PR #23 dashboard clarity released; signed-in CTA acceptance remains (`docs/release/pr-23-review.md`) — do not re-implement
-- **LC-C / AUTH-A** — private Stage B live, acceptance incomplete; provider E-API residual remains, Stage C unapproved (unrestricted launch blocked; pilot exception remains)
+- **LC-C** — AUTH-A Stage C PASS/CLOSED on current strict baseline; AUTH-B still open. Do not repeat Stage B/C; preserve public-variable guard after integration/key changes
 - **LC-C / AUTH-B** — owner confirmations for remaining reclaim candidates
 - **LC-F / PRIVACY-L1** — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
 - **LC-E / Phase 23C** — remaining packet rows (owner-reported navigation/profile/privacy checks carry forward; device models not recorded)

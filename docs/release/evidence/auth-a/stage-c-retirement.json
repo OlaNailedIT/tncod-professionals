@@ -1,0 +1,550 @@
+{
+  "date": "2026-10-18",
+  "stageCAuthorized": true,
+  "scope": "Only named key retirement on brpppukzqgpzxjelwwrj; private modern keys preserved; genuine operator verification",
+  "result": "PASS / AUTH-A PRODUCTION CUTOVER CLOSED",
+  "initialAttempt": {
+    "projectContextOutputCaptureStoppedBeforeCredentialAccess": true,
+    "providerMutationAttempted": false
+  },
+  "initial": {
+    "runId": "99dbdc6b-e30d-4fcc-ba74-ab10ed4fce53",
+    "at": "2026-10-18T03:52:07.451Z",
+    "state": "retirement_attempted_verification_incomplete",
+    "stage": "actual middleware session renewal after retirement",
+    "project": "brpppukzqgpzxjelwwrj",
+    "checks": [
+      {
+        "name": "fresh Vercel preflight targets tested modern-compatible recovery artifact",
+        "pass": true
+      },
+      {
+        "name": "exact Production project and organization",
+        "pass": true
+      },
+      {
+        "name": "exact five-key inventory with no ambiguous or additional key",
+        "pass": true
+      },
+      {
+        "name": "both preserved keys have the exact expected modern types",
+        "pass": true
+      },
+      {
+        "name": "legacy control is enabled before retirement",
+        "pass": true
+      },
+      {
+        "name": "pre-change gateway accepts anon",
+        "pass": true
+      },
+      {
+        "name": "pre-change gateway accepts service_role",
+        "pass": true
+      },
+      {
+        "name": "pre-change gateway accepts 1ea4c8c4-27ee-4375-8283-e410e1269c96",
+        "pass": true
+      },
+      {
+        "name": "pre-change gateway accepts e312b964-4eec-4d4d-90be-b2b5d67293c8",
+        "pass": true
+      },
+      {
+        "name": "pre-retirement: hydrated form retains approved operator email",
+        "pass": true
+      },
+      {
+        "name": "pre-retirement: genuine operator session verified",
+        "pass": true
+      },
+      {
+        "name": "pre-change user token is authenticated and bound to operator, not service_role",
+        "pass": true
+      },
+      {
+        "name": "all exact key identities and values unchanged immediately before retirement",
+        "pass": true
+      },
+      {
+        "name": "Auth configuration and enabled legacy control unchanged immediately before retirement",
+        "pass": true
+      },
+      {
+        "name": "legacy disabled readback",
+        "pass": true
+      },
+      {
+        "name": "old publishable absent and both preserved modern keys unchanged",
+        "pass": true
+      },
+      {
+        "name": "Auth configuration unchanged",
+        "pass": true
+      },
+      {
+        "name": "missing known OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "missing unknown OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "missing known and unknown have identical denial responses",
+        "pass": true
+      },
+      {
+        "name": "invalid known OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "invalid unknown OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "invalid known and unknown have identical denial responses",
+        "pass": true
+      },
+      {
+        "name": "anon known OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "anon unknown OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "anon known and unknown have identical denial responses",
+        "pass": true
+      },
+      {
+        "name": "service_role known OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "service_role unknown OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "service_role known and unknown have identical denial responses",
+        "pass": true
+      },
+      {
+        "name": "1ea4c8c4-27ee-4375-8283-e410e1269c96 known OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "1ea4c8c4-27ee-4375-8283-e410e1269c96 unknown OTP denied at gateway",
+        "pass": true
+      },
+      {
+        "name": "1ea4c8c4-27ee-4375-8283-e410e1269c96 known and unknown have identical denial responses",
+        "pass": true
+      },
+      {
+        "name": "preserved private publishable still accepted",
+        "pass": true
+      },
+      {
+        "name": "preserved administrative secret reads existing private bucket metadata",
+        "pass": true
+      },
+      {
+        "name": "pre-retirement operator session survives key retirement",
+        "pass": true
+      },
+      {
+        "name": "renewed operator request remains authenticated",
+        "pass": true
+      },
+      {
+        "name": "actual middleware refresh rotates refresh token and renews expiry",
+        "pass": true
+      },
+      {
+        "name": "real authenticated user-scoped REST request returns only targeted own profile",
+        "pass": true
+      },
+      {
+        "name": "same operator profile is not readable anonymously",
+        "pass": true
+      },
+      {
+        "name": "application identity substitution remains denied",
+        "pass": true
+      }
+    ],
+    "mutations": [
+      {
+        "operation": "disable legacy API-key control",
+        "ids": [
+          "anon",
+          "service_role"
+        ],
+        "status": "verified_disabled",
+        "at": "2026-10-18T03:50:42.372Z"
+      },
+      {
+        "operation": "delete exact old publishable",
+        "id": "1ea4c8c4-27ee-4375-8283-e410e1269c96",
+        "status": "verified_absent",
+        "at": "2026-10-18T03:50:46.459Z"
+      }
+    ],
+    "denialChecks": [
+      {
+        "keyId": "missing",
+        "identifierClass": "known",
+        "status": 401
+      },
+      {
+        "keyId": "missing",
+        "identifierClass": "unknown",
+        "status": 401
+      },
+      {
+        "keyId": "invalid",
+        "identifierClass": "known",
+        "status": 401
+      },
+      {
+        "keyId": "invalid",
+        "identifierClass": "unknown",
+        "status": 401
+      },
+      {
+        "keyId": "anon",
+        "identifierClass": "known",
+        "status": 401
+      },
+      {
+        "keyId": "anon",
+        "identifierClass": "unknown",
+        "status": 401
+      },
+      {
+        "keyId": "service_role",
+        "identifierClass": "known",
+        "status": 401
+      },
+      {
+        "keyId": "service_role",
+        "identifierClass": "unknown",
+        "status": 401
+      },
+      {
+        "keyId": "1ea4c8c4-27ee-4375-8283-e410e1269c96",
+        "identifierClass": "known",
+        "status": 401
+      },
+      {
+        "keyId": "1ea4c8c4-27ee-4375-8283-e410e1269c96",
+        "identifierClass": "unknown",
+        "status": 401
+      }
+    ],
+    "warnings": [
+      "Stopped at actual middleware session renewal after retirement; TimeoutError; no automatic key re-enable or deployment rollback."
+    ],
+    "credentialsLogged": false,
+    "spending": 0,
+    "accountRoleChanges": false,
+    "jwtSigningRotation": false,
+    "authPolicyChanges": false,
+    "migrations": false,
+    "newFixtures": false,
+    "deploymentChanges": false
+  },
+  "browser": {
+    "at": "2026-10-18T03:54:46.556Z",
+    "state": "passed",
+    "stage": "focused post-retirement checks complete; no global logout invoked",
+    "checks": [
+      {
+        "name": "prior exact retirement and session-refresh evidence retained",
+        "pass": true
+      },
+      {
+        "name": "hydrated form retains exact operator email",
+        "pass": true
+      },
+      {
+        "name": "fresh genuine post-retirement operator sign-in",
+        "pass": true
+      },
+      {
+        "name": "fresh session is ordinary authenticated user scope, not service_role",
+        "pass": true
+      },
+      {
+        "name": "hydrated member navigation reaches authorized EXCO overview",
+        "pass": true
+      },
+      {
+        "name": "EXCO return reaches member dashboard without sign-in",
+        "pass": true
+      },
+      {
+        "name": "substituted identity remains denied",
+        "pass": true
+      },
+      {
+        "name": "anonymous member API remains denied",
+        "pass": true
+      },
+      {
+        "name": "anonymous EXCO route redirects to sign-in",
+        "pass": true
+      },
+      {
+        "name": "Production session helper remains disabled",
+        "pass": true
+      }
+    ],
+    "events": [
+      {
+        "path": "/sign-in",
+        "status": 200,
+        "document": true,
+        "rsc": false
+      },
+      {
+        "path": "/sign-in",
+        "status": 200,
+        "document": false,
+        "rsc": false
+      },
+      {
+        "path": "/sign-in",
+        "status": 200,
+        "document": false,
+        "rsc": false
+      },
+      {
+        "path": "/sign-in",
+        "status": 200,
+        "document": false,
+        "rsc": false
+      },
+      {
+        "path": "/dashboard",
+        "status": 200,
+        "document": false,
+        "rsc": true
+      },
+      {
+        "path": "/dashboard",
+        "status": 200,
+        "document": false,
+        "rsc": true
+      },
+      {
+        "path": "/dashboard",
+        "status": 200,
+        "document": false,
+        "rsc": false
+      },
+      {
+        "path": "/dashboard",
+        "status": 200,
+        "document": false,
+        "rsc": true
+      },
+      {
+        "path": "/exco",
+        "status": 200,
+        "document": false,
+        "rsc": true
+      },
+      {
+        "path": "/exco",
+        "status": 200,
+        "document": false,
+        "rsc": true
+      }
+    ],
+    "consoleErrors": 1,
+    "pageErrors": 0,
+    "keyChanges": false,
+    "credentialsLogged": false,
+    "accountRoleChanges": false,
+    "newFixtures": false
+  },
+  "provider": {
+    "at": "2026-10-18T04:03:19.172Z",
+    "state": "passed",
+    "stage": "read-only final provider and release readback complete",
+    "project": "brpppukzqgpzxjelwwrj",
+    "release": {
+      "artifactVerified": true,
+      "verified": true,
+      "at": "2026-10-18T04:03:03.9630367Z",
+      "sha": "bcd113de137bde1216aa147fc9cc699b40156884",
+      "deploymentId": "dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC",
+      "publicAuthVariablesPresent": false
+    },
+    "checks": [
+      {
+        "name": "fresh exact modern-compatible Production artifact identity",
+        "pass": true
+      },
+      {
+        "name": "Production identity remains exact and healthy",
+        "pass": true
+      },
+      {
+        "name": "legacy anon and service_role remain disabled",
+        "pass": true
+      },
+      {
+        "name": "only the two preserved modern keys remain; retired old publishable absent",
+        "pass": true
+      },
+      {
+        "name": "preserved key e312b964-4eec-4d4d-90be-b2b5d67293c8 still accepted",
+        "pass": true
+      },
+      {
+        "name": "preserved key f5b854cd-dc0a-41d5-8881-4659fa8c3bbf still accepted",
+        "pass": true
+      },
+      {
+        "name": "public auth key variables remain absent",
+        "pass": true
+      }
+    ],
+    "keyMutations": false,
+    "credentialsLogged": false,
+    "spending": 0
+  },
+  "configurationDrift": {
+    "variable": "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "id": "tX0USW87AdVSwyRX",
+    "target": [
+      "production"
+    ],
+    "configurationId": "icfg_4ZAv3ps9iSGFdX4E4Bblx7Co",
+    "matchingProviderKeyId": "e312b964-4eec-4d4d-90be-b2b5d67293c8",
+    "matchVerifiedInMemory": true,
+    "createdAt": 1792295446075,
+    "updatedAt": 1792295450373,
+    "currentBuildChanged": false,
+    "publicBundleExposureFromThisDriftProven": false,
+    "cleanupAuthorized": true,
+    "cleanupVerified": true,
+    "resolved": true
+  },
+  "scopeLimits": {
+    "noNewFixture": true,
+    "noMigration": true,
+    "noAccountRoleChange": true,
+    "noSigningKeyRotation": true,
+    "noAuthPolicyChange": true,
+    "noDeployment": true,
+    "spending": 0
+  },
+  "authAClosed": true,
+  "publicLaunchPass": false,
+  "initialFinalProvider": {
+    "at": "2026-10-18T03:57:26.094Z",
+    "state": "verification_incomplete",
+    "stage": "final configuration drift gate",
+    "project": "brpppukzqgpzxjelwwrj",
+    "release": {
+      "at": "2026-10-18T03:57:18.0042402Z",
+      "publicAuthVariablesPresent": true,
+      "artifactVerified": true,
+      "sha": "bcd113de137bde1216aa147fc9cc699b40156884",
+      "verified": false,
+      "deploymentId": "dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC"
+    },
+    "checks": [
+      {
+        "name": "fresh exact modern-compatible Production artifact identity",
+        "pass": true
+      },
+      {
+        "name": "Production identity remains exact and healthy",
+        "pass": true
+      },
+      {
+        "name": "legacy anon and service_role remain disabled",
+        "pass": true
+      },
+      {
+        "name": "only the two preserved modern keys remain; retired old publishable absent",
+        "pass": true
+      },
+      {
+        "name": "preserved key e312b964-4eec-4d4d-90be-b2b5d67293c8 still accepted",
+        "pass": true
+      },
+      {
+        "name": "preserved key f5b854cd-dc0a-41d5-8881-4659fa8c3bbf still accepted",
+        "pass": true
+      },
+      {
+        "name": "public auth key variables remain absent",
+        "pass": false
+      }
+    ],
+    "keyMutations": false,
+    "credentialsLogged": false,
+    "spending": 0,
+    "errorType": "Error"
+  },
+  "cleanup": {
+    "at": "2026-10-18T04:02:59.8621975Z",
+    "state": "passed",
+    "project": "prj_YL2rguqWGr4kSjJTQhuU7r8g6pce",
+    "authorizedVariable": "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "authorizedEntryId": "tX0USW87AdVSwyRX",
+    "cleanupAttempted": true,
+    "checks": [
+      {
+        "pass": true,
+        "name": "exact existing project and authorized Production row"
+      },
+      {
+        "pass": true,
+        "name": "exact public variable removed; other settings unchanged across three readbacks"
+      }
+    ],
+    "absenceReadbacks": [
+      {
+        "publicAuthVariablesAbsent": true,
+        "at": "2026-10-18T04:01:44.2848483Z",
+        "otherProviderRowsUnchanged": true,
+        "pass": true
+      },
+      {
+        "publicAuthVariablesAbsent": true,
+        "at": "2026-10-18T04:02:21.6068414Z",
+        "otherProviderRowsUnchanged": true,
+        "pass": true
+      },
+      {
+        "publicAuthVariablesAbsent": true,
+        "at": "2026-10-18T04:02:59.8562789Z",
+        "otherProviderRowsUnchanged": true,
+        "pass": true
+      }
+    ],
+    "otherEntriesPreserved": 20,
+    "keyChanges": false,
+    "deploymentChanges": false,
+    "spending": 0,
+    "credentialValuesLogged": false
+  },
+  "deploymentWindowReview": {
+    "method": "Native Vercel CLI project-scoped latest-20 listing",
+    "checkedAt": "2026-10-18T04:02:17.1727505Z",
+    "project": "tncod-professionals",
+    "entries": 20,
+    "newestCreatedAt": 1792263458357,
+    "driftCreatedAt": 1792295446075,
+    "deploymentsCreatedDuringDriftWindow": 0,
+    "limit": "CLI identity projection used unrecognized id/uid names and returned null for those fields; timestamps/project names were valid. Active deployment identity is independently verified by actual alias and deployment API readback."
+  }
+}
