@@ -3,9 +3,9 @@
 **Authority date:** 2026-10-18 (AUTH-A Stage C PASS/CLOSED; exact integration-variable cleanup separately approved and verified; public-launch gates remain open)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
-**Authoritative Git SHA (`origin/main` tip):** `bcd113de137bde1216aa147fc9cc699b40156884` (PR #25 merge; PR #22/#23 included)
+**Authoritative Git SHA (`origin/main` tip):** `ce2ebaaa8fa507b0669a7565b67bbadd6673aaeb` (PR #21 merge; PR #22/#23/#25 included)
 
-**Authoritative Production (live Ready / azure):** Vercel `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · source CLI, clean reviewed `bcd113d` checkout and matching `meta.gitCommitSha`; actual azure alias/deployment identity reconfirmed after Stage C. Stage B private configuration and approved fixture evidence stand. Separately authorized Stage C disabled legacy anon/service_role, deleted only the named old publishable and preserved both modern keys. Actual old/missing/invalid-key known/unknown denial, prior-session continuity/refresh and fresh sign-in/navigation passed. An integration-associated public variable was recreated; separately approved exact cleanup passed three readbacks with all 20 other rows preserved. No deployment was created during that drift window. Current evidence: `docs/release/auth-a-stage-c-retirement.md`. Earlier failures/limits remain recorded; no overall public-launch PASS.
+**Authoritative Production (live Ready / azure):** Vercel `dpl_7b6CRFCKJDW6zp6xnrMgbGpMH5pK` · source **git**, `gitSource.sha` and `meta.githubCommitSha` equal `ce2ebaaa8fa507b0669a7565b67bbadd6673aaeb`; actual azure alias points to this deployment. PR #21 released after its exact named migration and merge approval. Public Auth variables absent and all three private Production Auth row IDs unchanged. Stage B/C evidence stands; Auth implementation unchanged by this release. Prior modern strict artifact `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` remains the application recovery baseline with matching private configuration; never re-enable old keys or restore Viewer roster access. Evidence: `pr-21-production-release-2026-10-18.md` and `auth-a-stage-c-retirement.md`. No overall public-launch PASS.
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Fresh signed-in desktop Member↔EXCO acceptance passed on the Stage B release; physical phone/tablet acceptance remains separate. **OPEN reliability:** automatic Git→Vercel Production trigger for that historical merge remains unexplained (symptom ≠ root cause).
 **LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
 provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
@@ -39,6 +39,14 @@ Evidence: `docs/release/auth-a-hosted-proof.md`.
 proposal in `docs/operations/free-tier-recovery-plan.md`; do not require a
 paid backup/PITR feature. Protected destination/key custody, operator/cadence,
 export authorization and actual data-plus-objects restore remain unproven.
+
+**Preview database scope (18 Oct):** separately approved removal of Preview from
+the exact shared DATABASE_URL row is verified; Production's stored representation
+and all 19 unrelated settings unchanged, active deployment unchanged. This fixes
+future inheritance from that row, not credentials retained by existing immutable
+previews. Containment/other bindings remain a separate review; no mutating Preview
+tests, credential rotation, new resource or paid spend. See
+`preview-database-scope-2026-10-18.md`.
 
 **Hosting read-only check:** existing Vercel team/project is active Hobby;
 GitHub link and `main` production branch match. No paid change. Plan identity
@@ -143,10 +151,10 @@ Historical preflight **BLOCKED** reports remain evidence of the earlier gate and
 ## Locked Auth residuals (unrestricted launch)
 
 ```text
-AUTH-A  E-API provider-level enumeration residual is NOT accepted
-        for unrestricted/public launch. Controlled pilot may continue.
-        Unrestricted Auth PASS remains withheld until residual removed
-        or separately reassessed to PASS.
+AUTH-A  Production Stage C PASS/CLOSED on 2026-10-18 under the selected
+        strict server-only publishable-key mitigation and old-key retirement.
+        This is not an upstream GoTrue response change. Preserve the public
+        Auth-variable release guard; do not repeat the completed cutover.
 
 AUTH-B  Remaining identifier-collision candidates must be individually
         resolved under the approved reclaim process before unrestricted launch.
@@ -155,7 +163,7 @@ AUTH-C  The designated working test account remains retained through
         controlled-pilot closeout.
 ```
 
-Do **not** claim `AUTH PASS` or `UNRESTRICTED LAUNCH READY`.
+Do **not** claim overall `AUTH PASS` while AUTH-B is open, or `UNRESTRICTED LAUNCH READY` while other launch gates remain open.
 
 ---
 
@@ -207,8 +215,8 @@ Consolidated owner board: `docs/release/gate-6b-action-board.md`
 
 Mapped to Launch Completion (see board LC overview). Do not treat historical phase PASS as automatic clearance of these rows.
 
-- **LC-B** — signed-in Member↔EXCO acceptance on azure after #22 Production recovery (`docs/release/pr-22-signed-in-acceptance.md`)
-- **LC-B** — PR #21 interest roster release + named migration authorization (`docs/release/pr-21-release-packet.md`)
+- **LC-B** — remaining physical phone/tablet Member↔EXCO acceptance on current azure; desktop already verified Stage B/C (`docs/release/pr-22-signed-in-acceptance.md`)
+- **LC-B / LC-D** — PR #21 **released** with named migration verified; genuine-content/interest acceptance and operator cadence remain (`docs/release/pr-21-production-release-2026-10-18.md`)
 - **LC-B** — PR #23 dashboard clarity released; signed-in CTA acceptance remains (`docs/release/pr-23-review.md`) — do not re-implement
 - **LC-C** — AUTH-A Stage C PASS/CLOSED on current strict baseline; AUTH-B still open. Do not repeat Stage B/C; preserve public-variable guard after integration/key changes
 - **LC-C / AUTH-B** — owner confirmations for remaining reclaim candidates

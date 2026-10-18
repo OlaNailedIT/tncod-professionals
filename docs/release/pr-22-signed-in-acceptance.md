@@ -1,11 +1,24 @@
 # PR #22 — Signed-in acceptance check (Member ↔ EXCO)
 
-**As of:** 2026-10-16  
+**As of:** 2026-10-18 — desktop return verified; remaining physical-device checks only
 **Reviewed head:** `b80bc5d01ce73651958997f1860e8996cadfaab5`  
 **Merge SHA:** `1a699153cb6259628c9dc1372051aec5f1bf4b04`  
 **PR:** https://github.com/OlaNailedIT/tncod-professionals/pull/22 · **MERGED**
 
-## Production identity (updated 2026-10-16 LC-B recovery)
+## Current acceptance baseline — do not deploy an older build
+
+Current main includes #22 at `ce2ebaaa8fa507b0669a7565b67bbadd6673aaeb`.
+Azure serves Git-linked READY `dpl_7b6CRFCKJDW6zp6xnrMgbGpMH5pK`, with the preserved private
+Auth configuration. Actual desktop Member → EXCO → Member navigation passed in
+Stage B and again after Stage C key retirement. Do not ask for another desktop
+sign-in/return test without a new regression. Evidence: `auth-a-stage-c-retirement.md`.
+PR #21 release identity/configuration: `pr-21-production-release-2026-10-18.md`.
+
+Physical phone/tablet EXCO return and the full EXCO surface checklist remain open.
+Use the current verified release containing #22; **never roll back to the historical
+legacy-dependent #22 recovery artifact just to run this checklist**.
+
+## Historical Production identity (2026-10-16 LC-B recovery; superseded)
 
 | Fact | Value |
 | --- | --- |
@@ -17,18 +30,18 @@
 | GitHub Deployments API | Latest recorded Production still `7115716634` / `71b5570` — **no** GitHub deployment row for `1a69915` (webhook absent; Vercel Ready + azure alias are authoritative) |
 | “Member dashboard” on azure | **Present** in deployed application JS after recovery (read-only smoke; homepage chunk `page-0853a8d8daaf56e6.js`) |
 
-**Signed-in acceptance** is now unblocked on azure for the #22 journey below. Do not claim browser PASS until the signed-in walk is actually performed.
+The table above is historical recovery evidence, not today's deployment target.
 
-## Human journey (run only on the #22 Production identity)
+## Remaining physical-device journey (current verified release containing #22)
 
-Environment: azure once it serves `1a69915`. Account: existing EXCO-capable signed-in user (do not re-assign SUPER_ADMIN).
+Environment: current verified azure release. Account: existing EXCO-capable signed-in user (do not re-assign SUPER_ADMIN).
 
 1. Start on **Member** `/dashboard` (session already established — do not re-sign-in mid-journey).
 2. Open **EXCO** from member navigation.
 3. Confirm EXCO workspace loads; open **Opportunities** from EXCO manage nav if present.
 4. Use the labelled **Member dashboard** control → expect `/dashboard` without typing a URL or signing in again.
 5. Confirm member destinations remain: Dashboard, Directory, Profile, Businesses, Opportunities, Settings.
-6. Repeat on **desktop**, **phone**, and **tablet**.
+6. Complete only the still-unverified **phone** and **tablet** checks. Desktop is already verified.
 
 Record: PASS/FAIL, device class (model/browser if known — do not invent), Production SHA/deployment id observed.
 

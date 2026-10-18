@@ -5,7 +5,7 @@
 **Head:** `7f517fb6bb02f18836902074e7d12d0a4ef9aa02`
 
 **Checks:** fresh local verification PASS; CI verify PASS ([run 38954110458](https://github.com/OlaNailedIT/tncod-professionals/actions/runs/38954110458)); new-head Vercel preview PASS. Earlier-head checks were not reused to certify this head.
-**Disposition:** **RELEASED WITH NARROW CORRECTION** — publication does not prove effective directory listing. Migration/Auth/roles untouched. Owner explicitly approved PR #23 release only. Merged at `2026-10-17T05:28:42Z` as `52f3d8c1edeeb6dc5965c1129431148a8a2a8500`; current `main` matches. No check bypass.
+**Disposition:** **RELEASED WITH NARROW CORRECTION** — publication does not prove effective directory listing. Migration/Auth/roles untouched. Owner explicitly approved PR #23 release only. Merged at `2026-10-17T05:28:42Z` as `52f3d8c1edeeb6dc5965c1129431148a8a2a8500`; main matched at that release and later main includes it. No check bypass.
 
 ## Production release evidence
 
@@ -42,11 +42,16 @@
 
 **None.** #23 is dashboard copy/logic only (next-action labels, PageIntro, CTAs). It does not import interest-roster code, migrations, or EXCO opportunity queries. Prior “after #21” sequencing was queue preference, not a hard dependency.
 
-## Recommended release order relative to queue
+## Historical recommended queue order — superseded by recorded releases
 
 1. #22 Production recovery is done (`dpl_DTe6dmsQ…` on azure) — run signed-in acceptance.
 2. #23 may merge/release independently of #21 (docs+UI only; no DB). Retest dashboard wording/destinations after release.
 3. #21 still requires explicit owner migration authorization before Production apply/merge.
+
+Update 2026-10-18: #21 subsequently received exact owner approval, its named
+migration committed and was read back, and its merge `ce2ebaa` deployed through
+Git as READY `dpl_7b6CRFCKJDW6zp6xnrMgbGpMH5pK`. No #23 re-implementation or
+re-release is needed; remaining human comprehension/CTA acceptance is separate.
 
 ## Do not
 

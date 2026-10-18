@@ -17,7 +17,7 @@
 | Auth origin azure match | VERIFIED (prior) |
 | Phase 21 PostgREST deny | VERIFIED (prior) |
 | Production test helpers | DISABLED |
-| AUTH-A E-API residual | Provider-level — unrestricted launch blocked; pilot exception remains |
+| AUTH-A | Production Stage C PASS/CLOSED 2026-10-18; maintain integration/public-variable release guard. See `auth-a-stage-c-retirement.md` |
 | AUTH-B collisions | Owner confirmations required for remaining soft-deleted reclaim candidates |
 | AUTH-C test account | Retained through pilot closeout |
 | PRIVACY-L1 | Privacy Notice implementation may ship factually; legal sign-off pending |
@@ -33,10 +33,10 @@ Human evidence still required:
 - [ ] Real cohort participation recorded (≈10–20 target — actual count as observed)  
 - [ ] Technical defects found during pilot listed with disposition (fixed / deferred / accepted for pilot)  
 - [ ] Security defects found/remediated listed (or none observed)  
-- [ ] Remaining accepted pilot risks explicitly listed (including AUTH-A residual under pilot exception)  
+- [ ] Remaining accepted pilot risks explicitly listed (do not repeat the resolved AUTH-A exposure as an open residual)
 - [ ] Participant issues / confusion themes summarised (from 23D where available)  
 - [ ] Operational issues during pilot listed  
-- [ ] Launch blockers still open listed (AUTH-A unrestricted, AUTH-B confirmations, PRIVACY-L1 sign-off, 23C/23D if still open)  
+- [ ] Launch blockers still open listed (AUTH-B confirmations, PRIVACY-L1, protected recovery, operating ownership and 23C/23D if still open)
 - [ ] Owner/facilitator sign-off that pilot objectives were met **or** honest FAIL with reasons  
 
 ---

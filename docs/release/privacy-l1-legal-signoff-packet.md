@@ -5,6 +5,11 @@
 **Implementation:** merged Gate 6A (`/privacy` + join / sign-in / footer links)  
 **Engineering must not invent statutory conclusions.**
 
+**Owner input 2026-10-18:** use `mailto:cityofdavidprofessionals@gmail.com`.
+The current page already links that address; no duplicate code change required.
+This is contact-address selection only. Legal operator/country, actual monitoring
+and the legal sign-off below remain unconfirmed; no approval is inferred.
+
 ---
 
 ## Public text currently deployed
