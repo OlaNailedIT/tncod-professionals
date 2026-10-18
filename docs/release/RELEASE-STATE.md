@@ -44,8 +44,10 @@ export authorization and actual data-plus-objects restore remain unproven.
 the exact shared DATABASE_URL row is verified; Production's stored representation
 and all 19 unrelated settings unchanged, active deployment unchanged. This fixes
 future inheritance from that row, not credentials retained by existing immutable
-previews. Containment/other bindings remain a separate review; no mutating Preview
-tests, credential rotation, new resource or paid spend. See
+previews. Separately approved free Standard Vercel Authentication is also verified:
+two retained Previews and the unique deployment URL now require provider access,
+while the public azure site remains open (8 checks passed). No mutating Preview
+tests, credential rotation, deployment deletion, new resource or paid spend. See
 `preview-database-scope-2026-10-18.md`.
 
 **Hosting read-only check:** existing Vercel team/project is active Hobby;

@@ -1,6 +1,6 @@
 # Preview database target — narrow scope correction
 
-Date: 2026-10-18. **Approved target-only change verified.**
+Date: 2026-10-18. **Approved target-only change and separately approved free protection verified.**
 
 Owner replied **“Approve Preview-target removal only”** to the exact proposal:
 remove Preview from the existing shared DATABASE_URL entry; preserve its
@@ -42,19 +42,19 @@ disposable test environment rather than copying Production credentials or data.
 Do not widen the row again merely to make a preview green.
 
 Existing immutable Preview deployments can retain their previously supplied
-configuration. This operation did not delete/redeploy them, revoke credentials,
-change protection or disconnect an integration. Their retention/access protection
-and any other database bindings require a separate containment review. No actual
+configuration. The target-only operation did not delete/redeploy them, revoke
+credentials, change protection or disconnect an integration. Subsequent separately
+approved access protection is recorded below. No actual
 credential leak or unauthorized database access is asserted.
 
 This is not permission to rotate Production database credentials, remove other
 variables, create a hosted resource or run mutating Preview tests.
 
-## Retained deployment containment — read-only finding
+## Retained deployment containment — historical pre-change finding
 
 The first page of 100 deployment records contains **65 Ready non-Production
 deployments**, with further pages present. This is a lower-bound page count,
-not a complete historical inventory. Project metadata reports no configured
+not a complete historical inventory. Before the protection change, metadata reported no configured
 `ssoProtection`, password protection or trusted-IP protection. Two sampled retained
 Preview homepages returned HTTP 200 and the application main-content marker to
 an unauthenticated HTTP client. Neither was treated as a protected-login success.
@@ -65,13 +65,50 @@ Sample IDs: `dpl_4M2HRKfYf55DfXyiieTEz3V7Ss3Z` and
 database credential leak or unauthorized member-data access. It does show these
 old application deployments remain reachable after the prospective scope fix.
 
-Recommended containment: separately approve free Standard Vercel Authentication,
+Recommended containment was free Standard Vercel Authentication,
 keeping the public azure Production domain open while protecting Preview and
 deployment URLs. Vercel documents [Standard Protection on all plans](https://vercel.com/docs/deployment-protection)
 and [protection of existing and future selected deployments](https://vercel.com/docs/deployment-protection/methods-to-protect-deployments/vercel-authentication).
-Approval was requested, **not inferred from the target-only approval**; no
-protection change, deployment deletion, key rotation or paid option executed.
+Owner separately replied **“Approve free Standard Protection”**. This was not
+inferred from the target-only approval. No deployment deletion, key rotation
+or paid option was executed; the actual protection result follows.
 The current source scan found no runtime VERCEL_URL/VERCEL_BRANCH_URL fetch
 dependency; actual public-origin and protected-Preview tests remain necessary
 after any approved protection change. Never choose “All Deployments” and block
 the public launch domain as an unintended side effect.
+
+## Separately approved free protection — verified
+
+At `2026-10-18T14:31:39.7007993Z`, a guarded project-only PATCH changed only
+`ssoProtection.deploymentType` from null to
+`prod_deployment_urls_and_all_previews` (documented Standard Protection).
+Preflight reconfirmed the exact existing team on **Hobby**, project identity,
+unchanged active Production and the Production-only DATABASE_URL scope.
+
+Postcheck: expected protection type; compared build/Git/runtime/project settings,
+all environment rows and active Production alias unchanged. No deployment,
+resource, billing change, password add-on, trusted-IP option, key rotation or
+integration disconnection. Supabase data and settings were not touched.
+
+Anonymous HTTP matrix: **8 passed, 0 failed**:
+
+- Both previously public sampled Preview URLs: 302 to Vercel authentication,
+  no application main content.
+- Current unique Production deployment URL: 302 to Vercel authentication,
+  no application main content. This is not the public azure address.
+- Public azure `/`, `/sign-in`, `/privacy`, `/professionals`: 200 with application
+  main content, no provider login gate.
+- Public azure `/opportunities`: normal app 307 to `/sign-in` with matching next,
+  not a Vercel access restriction.
+
+These unauthenticated probes intentionally tested denial rather than using an
+authenticated bypass. The access-protected deployment skill guided the distinction
+between provider protection and the app's own sign-in; no protection was disabled
+to make a test pass.
+
+This is verified global configuration plus a three-URL denial sample, **not an
+individual test of every retained deployment or every approved bypass**. Existing
+credentials are not retroactively erased or rotated. Authorized project operators
+can still access retained deployments; do not run mutating tests there. Keep the
+prospective database scope guard and use local disposable tests. Future external
+Preview reviewers need authorized Vercel access rather than public Preview links.
