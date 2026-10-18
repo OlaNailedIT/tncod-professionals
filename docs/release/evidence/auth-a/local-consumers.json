@@ -1,0 +1,166 @@
+{
+  "scope": "Actual domain commands + local Storage/Auth Admin, not browser/email acceptance",
+  "initial": {
+    "source": "actual application domain commands + disposable Storage/Auth Admin; NOT browser/session or email delivery acceptance",
+    "at": "2026-10-16T21:21:44.662Z",
+    "database": "127.0.0.1:54322",
+    "auth": "127.0.0.1:54321",
+    "productionChanged": false,
+    "administrativeKey": "modern secret, not ordinary session key",
+    "fixtures": "unique synthetic records/documents retained; temporary privileged roles removed and owner reactivated",
+    "checks": [
+      {
+        "name": "registration schema present before fixture writes",
+        "pass": true
+      },
+      {
+        "name": "existing document bucket is private with modern administrative key",
+        "pass": true
+      },
+      {
+        "name": "synthetic owner registration persisted",
+        "pass": true
+      },
+      {
+        "name": "synthetic actor registration persisted",
+        "pass": true
+      },
+      {
+        "name": "real business command creates owner association",
+        "pass": true
+      },
+      {
+        "name": "real document upload persists metadata and private Storage object",
+        "pass": true
+      },
+      {
+        "name": "private document not readable at the public object URL",
+        "pass": true
+      },
+      {
+        "name": "owner signed URL is restricted to disposable Storage",
+        "pass": true
+      },
+      {
+        "name": "owner authorized signed download returns exact synthetic bytes",
+        "pass": true
+      },
+      {
+        "name": "unrelated MEMBER denied document URL by actual domain command",
+        "pass": true
+      },
+      {
+        "name": "EXCO_VIEWER denied document URL",
+        "pass": true
+      },
+      {
+        "name": "EXCO_ADMIN authorized document review downloads exact bytes",
+        "pass": true
+      },
+      {
+        "name": "credential consumer stopped before the next boundary completed",
+        "pass": false
+      }
+    ],
+    "passed": 12,
+    "failed": 1,
+    "completed": false,
+    "failure": "credential consumer stopped before the next boundary completed",
+    "vitest": {
+      "executed": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 0
+    },
+    "cause": "not established; failure was before the next Super Admin boundary completed"
+  },
+  "revised": {
+    "source": "actual application domain commands + disposable Storage/Auth Admin; NOT browser/session or email delivery acceptance",
+    "at": "2026-10-16T21:23:53.586Z",
+    "database": "127.0.0.1:54322",
+    "auth": "127.0.0.1:54321",
+    "productionChanged": false,
+    "administrativeKey": "modern secret, not ordinary session key",
+    "fixtures": "unique synthetic records/documents retained; temporary privileged roles removed and owner reactivated",
+    "checks": [
+      {
+        "name": "registration schema present before fixture writes",
+        "pass": true
+      },
+      {
+        "name": "disposable EXCO_ADMIN and SUPER_ADMIN document-review grants exist",
+        "pass": true
+      },
+      {
+        "name": "existing document bucket is private with modern administrative key",
+        "pass": true
+      },
+      {
+        "name": "synthetic owner registration persisted",
+        "pass": true
+      },
+      {
+        "name": "synthetic actor registration persisted",
+        "pass": true
+      },
+      {
+        "name": "real business command creates owner association",
+        "pass": true
+      },
+      {
+        "name": "real document upload persists metadata and private Storage object",
+        "pass": true
+      },
+      {
+        "name": "private document not readable at the public object URL",
+        "pass": true
+      },
+      {
+        "name": "owner signed URL is restricted to disposable Storage",
+        "pass": true
+      },
+      {
+        "name": "owner authorized signed download returns exact synthetic bytes",
+        "pass": true
+      },
+      {
+        "name": "unrelated MEMBER denied document URL by actual domain command",
+        "pass": true
+      },
+      {
+        "name": "EXCO_VIEWER denied document URL",
+        "pass": true
+      },
+      {
+        "name": "EXCO_ADMIN authorized document review downloads exact bytes",
+        "pass": true
+      },
+      {
+        "name": "SUPER_ADMIN authorized document review downloads exact bytes",
+        "pass": true
+      },
+      {
+        "name": "canonical suspension synchronizes Auth ban and application status",
+        "pass": true
+      },
+      {
+        "name": "canonical activation restores Auth access and application status",
+        "pass": true
+      }
+    ],
+    "passed": 16,
+    "failed": 0,
+    "completed": true,
+    "failure": null,
+    "errorCategory": null,
+    "vitest": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "changes": "Added read-only role-grant preflight and redacted failure-stage diagnostics; no application/permission change",
+  "overlappingRuns": true,
+  "productionChanged": false
+}

@@ -1,0 +1,167 @@
+{
+  "projectId": "hyzkearnbhxznkeokacj",
+  "scope": "Hosted provider/SSR SDK fixture proof; NOT deployed application acceptance",
+  "checks": [
+    {
+      "name": "owner-controlled mailbox supplied",
+      "pass": true
+    },
+    {
+      "name": "required key types available without publishing values",
+      "pass": true
+    },
+    {
+      "name": "legacy keys initially enabled",
+      "pass": true
+    },
+    {
+      "name": "legacy anon works before deactivation",
+      "pass": true
+    },
+    {
+      "name": "fixture inventory available",
+      "pass": true
+    },
+    {
+      "name": "existing fixture is this experiment only",
+      "pass": true
+    },
+    {
+      "name": "second synthetic identity provisioned",
+      "pass": true
+    },
+    {
+      "name": "fixture UUIDs validated",
+      "pass": true
+    },
+    {
+      "name": "hosted existing-user OTP request with server-held publishable",
+      "pass": true
+    },
+    {
+      "name": "unknown identifier rejected without creating account",
+      "pass": true,
+      "detail": "otp_disabled"
+    },
+    {
+      "name": "unknown identity absent from Auth inventory",
+      "pass": true
+    },
+    {
+      "name": "fixture verification token obtained without printing it",
+      "pass": true
+    },
+    {
+      "name": "user-scoped SSR OTP verification",
+      "pass": true
+    },
+    {
+      "name": "SSR session cookies set without API key",
+      "pass": true
+    },
+    {
+      "name": "fresh request reads SSR session",
+      "pass": true
+    },
+    {
+      "name": "user-scoped session refresh before key deactivation",
+      "pass": true
+    },
+    {
+      "name": "publishable anonymous RLS denies fixture rows",
+      "pass": true
+    },
+    {
+      "name": "authenticated RLS exposes own rows only",
+      "pass": true
+    },
+    {
+      "name": "hosted legacy setting disabled",
+      "pass": true
+    },
+    {
+      "name": "previous anon key rejected on hosted Auth",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "previous service-role key rejected on hosted Auth",
+      "pass": true
+    },
+    {
+      "name": "publishable still works after hosted deactivation",
+      "pass": true
+    },
+    {
+      "name": "missing: no identifier-dependent Auth response",
+      "pass": true,
+      "detail": {
+        "known": 401,
+        "unknown": 401
+      }
+    },
+    {
+      "name": "invalid: no identifier-dependent Auth response",
+      "pass": true,
+      "detail": {
+        "known": 401,
+        "unknown": 401
+      }
+    },
+    {
+      "name": "user JWT as key: no identifier-dependent Auth response",
+      "pass": true,
+      "detail": {
+        "known": 401,
+        "unknown": 401
+      }
+    },
+    {
+      "name": "bearer only: no identifier-dependent Auth response",
+      "pass": true,
+      "detail": {
+        "known": 401,
+        "unknown": 401
+      }
+    },
+    {
+      "name": "pre-deactivation JWT works with publishable key",
+      "pass": true
+    },
+    {
+      "name": "pre-deactivation session refresh survives legacy deactivation",
+      "pass": true
+    },
+    {
+      "name": "authenticated RLS remains narrow after deactivation",
+      "pass": true
+    },
+    {
+      "name": "SSR sign-out clears session",
+      "pass": true
+    },
+    {
+      "name": "legacy-key recovery restored initial setting",
+      "pass": true
+    },
+    {
+      "name": "initial signup setting restored",
+      "pass": true
+    }
+  ],
+  "executed": 32,
+  "passed": 32,
+  "failed": 0,
+  "applicationBundleScan": "NOT EXECUTED",
+  "applicationEndToEnd": "NOT EXECUTED",
+  "productionChanged": false,
+  "firstRun": {
+    "executed": 21,
+    "passed": 19,
+    "failed": 2,
+    "reason": "Immediate setting and recovery readback; retained as failures. Bounded propagation waits added before successful rerun."
+  },
+  "sourceCommit": "8d3f82740e0c73a14e1d4a46a118adfd886a30cd"
+}

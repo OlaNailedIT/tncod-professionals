@@ -49,3 +49,29 @@ credential leak or unauthorized database access is asserted.
 
 This is not permission to rotate Production database credentials, remove other
 variables, create a hosted resource or run mutating Preview tests.
+
+## Retained deployment containment — read-only finding
+
+The first page of 100 deployment records contains **65 Ready non-Production
+deployments**, with further pages present. This is a lower-bound page count,
+not a complete historical inventory. Project metadata reports no configured
+`ssoProtection`, password protection or trusted-IP protection. Two sampled retained
+Preview homepages returned HTTP 200 and the application main-content marker to
+an unauthenticated HTTP client. Neither was treated as a protected-login success.
+No member route, private record or mutation was requested by these probes.
+
+Sample IDs: `dpl_4M2HRKfYf55DfXyiieTEz3V7Ss3Z` and
+`dpl_Ca469CerRwQiKqG6rvP7ksNbSTx7`. Anonymous homepage access is not proof of a
+database credential leak or unauthorized member-data access. It does show these
+old application deployments remain reachable after the prospective scope fix.
+
+Recommended containment: separately approve free Standard Vercel Authentication,
+keeping the public azure Production domain open while protecting Preview and
+deployment URLs. Vercel documents [Standard Protection on all plans](https://vercel.com/docs/deployment-protection)
+and [protection of existing and future selected deployments](https://vercel.com/docs/deployment-protection/methods-to-protect-deployments/vercel-authentication).
+Approval was requested, **not inferred from the target-only approval**; no
+protection change, deployment deletion, key rotation or paid option executed.
+The current source scan found no runtime VERCEL_URL/VERCEL_BRANCH_URL fetch
+dependency; actual public-origin and protected-Preview tests remain necessary
+after any approved protection change. Never choose “All Deployments” and block
+the public launch domain as an unintended side effect.
