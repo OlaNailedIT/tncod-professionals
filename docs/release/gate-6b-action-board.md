@@ -17,7 +17,7 @@
 | **LC-A** Control the release | One accurate backlog + identities | **IN PROGRESS** — this board reconciliation |
 | **LC-B** Finish existing delivery | #22/#23 signed-in acceptance; #21 release | **IN PROGRESS** — #21/#22/#23 released; #21 named migration verified. Desktop return already passed; remaining physical-device/CTA and genuine-interest acceptance open. Historical #22 auto-deploy omission unexplained |
 | **LC-C** Trust and access | AUTH-A proof/decision; AUTH-B; named security residuals | **IN PROGRESS** — AUTH-A Production cutover PASS/CLOSED; AUTH-B awaiting human. Do not repeat Stage B/C |
-| **LC-D** Operating promise | Guidance, verification policy, follow-up ownership, support, genuine content | **NOT READY** — actual aggregate inventory: 23 active profile records, 0 verified active profiles, 0 opportunities/interest. Not 23 confirmed participants. Owner/cohort operating inputs needed; see `launch-operating-readiness.md` |
+| **LC-D** Operating promise | Guidance, verification policy, follow-up ownership, support, genuine content | **IN PROGRESS / NOT LAUNCH-READY** — owner accepted initial verification/publication, genuine posting and interest follow-up responsibility; interest weekly/before close. Last inventory: 23 active profile records, 0 verified/0 opportunities/interest, not 23 confirmed participants. Genuine content/cohort evidence and backup operator open; see `launch-operating-readiness.md` |
 | **LC-E** Acceptance | Devices, journeys, comprehension, pilot | **AWAITING HUMAN** — carry forward owner-reported checks; do not restart them |
 | **LC-F** Privacy and operations | Privacy-L1, backup class/recovery, monitoring, operators | **AWAITING HUMAN** |
 | **LC-G** Freeze and launch | Frozen candidate + GO/NO-GO | **NOT STARTED** — 23 Oct target contingent on remaining LC gates, not completed AUTH-A |
@@ -37,6 +37,7 @@
 | PR #21 | **MERGED / RELEASED** · approved head `267fd3012b06c489b298581da0a59b1a9b59466c`, merge `ce2ebaa` · fresh checks PASS; exact named migration committed and independently read back · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — 34 local tests passed, 0 failed/skipped; typecheck/lint/build PASS. Real-content acceptance separate; see `pr-21-production-release-2026-10-18.md` |
 | PR #23 | **MERGED / RELEASED** · head `7f517fb`, merge `52f3d8c` · CI/preview PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/23 — `docs/release/pr-23-review.md`; signed-in acceptance pending |
 | PR #25 | **MERGED / STAGES A–C COMPLETE** · head `ab9080b`, merge `bcd113d` · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — AUTH-A Production cutover PASS/CLOSED. Evidence: `docs/release/auth-a-stage-c-retirement.md` |
+| PR #26 | **OPEN / REVIEWABLE, NOT RELEASED** · head `2ffae6413702bb30105eff58f33d9a329fd37903`; exact-head verify/build and Vercel Preview PASS. Public privacy operator/country/monitored-inbox copy only + 4 passing tests. Not full Privacy-L1 approval. https://github.com/OlaNailedIT/tncod-professionals/pull/26 |
 | Phase 23C | **NOT LOCKED** |
 | Public launch | **WITHHELD** — remaining AUTH-B, privacy, recovery, operations and human acceptance gates; AUTH-A closed |
 
@@ -54,19 +55,19 @@ Carry forward completed owner-reported checks; missing device/browser metadata i
 | --- | --- | --- |
 | A | AUTH-B owner confirmations (COLLISION-01…08) | **AWAITING HUMAN** (LC-C) |
 | B | Privacy Notice legal/privacy sign-off | **AWAITING HUMAN** (LC-F) |
-| C | Free-tier protected data/object recovery | **AWAITING HUMAN** — Free plan identified; no paid backup/PITR dependency. Protected destination/key custody, cadence and export/drill approval pending. Plan: `docs/operations/free-tier-recovery-plan.md`; historical schema-only drill PASS (LC-F) |
+| C | Free-tier protected data/object recovery | **PREPARATION PARTIAL / AWAITING HUMAN** — approved empty owner/SYSTEM-only local folder prepared; existing GnuPG 2.4.9 and local pg_dump 17.11 available. No export or encrypted backup. Independent second-copy location, key custody, cadence and bounded export/drill approval pending. Plan: `docs/operations/free-tier-recovery-plan.md`; historical schema-only drill PASS (LC-F) |
 | D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. Owner-reported phone/tablet navigation + join/sign-in/dashboard + profile/privacy save **carry forward**; device/browser models **not recorded**. Remaining packet rows stay open (LC-E) |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** — dashboard clarity in **#23** is released. Full comprehension still needs real participants (LC-E) |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (LC-E) |
 | G | EXCO surface / Member↔EXCO return | **PARTIAL ACCEPTANCE** — actual signed-in desktop Member↔EXCO↔Member passed on current Stage B azure release; physical phone/tablet checks remain. Checklist: `docs/release/pr-22-signed-in-acceptance.md` (LC-B). Historical auto-deploy reliability finding remains **OPEN** |
-| H | Current interest roster | **RELEASED / REAL-CONTENT ACCEPTANCE OPEN** — exact owner-approved transaction/migration verified, #21 merged as `ce2ebaa`, matching Git-linked Production READY. No synthetic content. Cadence **NOT ACCEPTED**; real-interest acceptance needs genuine content. Evidence: `docs/release/pr-21-production-release-2026-10-18.md` (LC-B/D) |
+| H | Current interest roster | **RELEASED / REAL-CONTENT ACCEPTANCE OPEN** — exact migration and Git-linked release verified. **Operator/cadence accepted 18 Oct:** project owner, weekly/before closure. No synthetic content; real-interest acceptance still needs genuine activity. Evidence: `docs/release/pr-21-production-release-2026-10-18.md`; operator procedure (LC-B/D) |
 | J | Dashboard clarity (#23) | **RELEASED** under separate #23-only owner approval; signed-in CTA acceptance pending. No hard dependency on #21. Evidence: `docs/release/pr-23-review.md` (LC-B). Do **not** re-implement |
 | K | AUTH-A release preparation | **PASS/CLOSED** — exact Stage C retirement, genuine prior-session refresh/fresh sign-in and final readback verified; integration public-variable drift separately approved for exact cleanup and resolved. Recorded strict artifact/private config remains recovery baseline. Future provider/integration changes require a public-variable pre-build guard. Evidence: `docs/release/auth-a-stage-c-retirement.md` (LC-C) |
 | N | Preview database scope / access containment | **APPROVED CONTROLS VERIFIED** — Preview removed from DATABASE_URL; Production and 19 unrelated rows unchanged. Separately approved free Standard Protection verified: 2 retained Previews + unique deployment URL gated; public azure pages remain open (8 checks passed). No credential rotation/deletion or member-data leak asserted. Existing configurations remain available to authorized operators; no mutating Preview tests. See `preview-database-scope-2026-10-18.md` (LC-F) |
 | L | Git→Vercel Production auto-deploy | **OPEN** — merge `1a69915` produced no automatic Production deployment; recovered via authorized CLI. Targeted diagnosis continues; does not block #22 signed-in acceptance |
 | M | Free hosting plan / permitted-use fit | **PLAN VERIFIED** — existing Vercel project is active Hobby; no purchase/upgrade. Exact nonprofit professional/service-directory fit needs provider clarification before unrestricted launch, not an assumed violation or paid dependency. Current usage headroom not measured. See `docs/release/hosting-free-plan-check.md` (LC-F) |
 | I | Optional headshot | **DEFERRED** post-launch / proposal only — not a launch dependency |
-| O | Real launch content and operating ownership | **NOT READY** — aggregate Production readback: 0 verified active profiles, 0 opportunities. No bulk approval/fake listings. Use existing verification/publication/create workflows with real willing members and named operators; see `launch-operating-readiness.md` (LC-D) |
+| O | Real launch content and operating ownership | **INITIAL OWNER ACCEPTED / REAL CONTENT OPEN** — project owner accepted verification/publication/posting/interest duties; no backup operator named. Last aggregate inventory: 0 verified active profiles, 0 opportunities. No bulk approval/fake listings or agent publication/contact authority. See `launch-operating-readiness.md` (LC-D) |
 
 ---
 
@@ -111,7 +112,7 @@ Owner confirmation 2026-10-18: legal organization **Triumphant Nation City of Da
 country **Nigeria**, inbox `cityofdavidprofessionals@gmail.com` **actively monitored**.
 These facts are recorded in the notice candidate and sign-off packet; do not ask
 for them again. Public copy already links the inbox; operator/country draft update
-is not yet published. Registered address and remaining legal wording/sign-off are
+is implemented in reviewable PR #26, not yet published. Registered address and remaining legal wording/sign-off are
 not inferred from this confirmation. No new consent or retention policy.
 
 **Approval options (reply with exactly one):**
@@ -249,7 +250,7 @@ EXCO navigation includes the existing `/opportunities` page. Creating an opportu
 
 **Signed-in acceptance:** desktop Member↔EXCO passed in Stage B/C. Remaining phone/tablet EXCO surfaces/return and real opportunity acceptance remain open. Do not restart the desktop sign-in test.
 
-**Interest roster:** PR #21 is merged and on Git-linked Production; named migration verified. The operator procedure names the project owner, but proposed weekly/before-close review cadence is **not accepted**. Real-content/interest acceptance remains open; inventory currently has no opportunities or interests.
+**Interest roster:** PR #21 is merged and on Git-linked Production; named migration verified. The project owner accepted initial operator responsibility and weekly/before-close interest review on 18 Oct. Real-content/interest acceptance remains open; last inventory had no opportunities or interests. Do not confuse accepted duties with completed real follow-up.
 
 **Optional headshot:** proposal only, in `docs/product/optional-headshot-proposal.md`. Not implemented.
 

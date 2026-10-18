@@ -56,8 +56,41 @@ A protected Production-data drill and cleanup/retention instructions remain
 pending separate authorization. The historical schema-only drill stays PASS
 within its original scope; do not repeat it or relabel it full recovery.
 
+## Preparation evidence — 2026-10-18
+
+Owner answered “okay” to preparing `C:\Users\O\TNCOD-Private-Backups` and a
+question about a second copy. This authorizes the empty local folder preparation,
+not an unspecified second destination, member-data export or restore.
+
+- Exact folder created outside the repository/synced ChatGPT project. Permission
+  readback: inheritance disabled; owner matches the executing Windows user; exactly
+  two allow rules (that owner and Windows SYSTEM), no unexpected or inherited rules.
+  Folder is empty. No backup, member export or private document was created there.
+- Existing Git-distributed GnuPG **2.4.9** is available; version only was inspected.
+  No keyring/credential store was opened, and no encryption/recovery key generated.
+  No new software, paid resource or provider setting change.
+- Existing disposable database container is healthy. Docker named-pipe endpoint
+  confirmed local; `pg_dump --version` in that container reports **17.11**. This is
+  tool availability only, not a successful connection/export/restore proof.
+- No second independent copy location or encryption-key custody was supplied.
+  Those decisions remain open. A restricted folder is not itself an encrypted
+  backup, an off-machine copy or a tested recovery arrangement.
+
+Owner subsequently answered **“no independent storage available yet”**. This is
+a real recovery dependency, not authority to purchase storage or choose a personal
+cloud account. [Google documents free shared account storage of up to 15 GB](https://support.google.com/mail/answer/9312312)
+as a possible existing-account option; this is not verified available capacity.
+The Drive connector profile was read only (no file content/search/write): it is
+connected to a different account from the known operator email and exposes no
+storage-quota field. No ownership, Free-plan/headroom or backup destination inferred.
+Using the existing church inbox's Drive was proposed for separate direction/access
+confirmation. No folder was created there and no data uploaded or new account made.
+
+The owner's separate acceptance of platform verification/posting/interest duties
+does **not** accept the backup operator/cadence or authorize a Production export.
+
 ## Current gate
 
-**Free plan identified; recovery NOT proven.** Still required: operator/cadence
+**Free plan identified; restricted empty folder/tools prepared; recovery NOT proven.** Still required: operator/cadence
 acceptance, protected destination and key custody, authorized export, and a
 successful data-plus-objects restore drill. No paid feature is a prerequisite.

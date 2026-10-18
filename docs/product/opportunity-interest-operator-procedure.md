@@ -1,18 +1,24 @@
 # Operator procedure — expressed interest follow-up
 
-**Status:** procedure written for review. Human acceptance of the owner and the cadence is **NOT RECORDED**.  
+**Status:** initial owner and interest-review cadence **ACCEPTED by the project owner on 2026-10-18**. Real-interest acceptance remains separate.
 **Capability:** current interest roster on `/opportunities/[id]`  
 **Not in the product:** messaging, notifications, exports, applications, or introductions
 
 ## Human owner
 
-The project owner is the human owner of this procedure. No named operator has accepted the cadence below. Do not treat this document as that acceptance.
+The project owner explicitly answered “Yes, record this operating arrangement”
+to acting as initial operator for professional verification/publication, genuine
+opportunity posting and interest follow-up, with interest reviewed weekly and
+before closure. A backup operator has not been named. This does not authorize an
+agent to approve members, publish records/listings or contact people automatically.
 
-## Proposed review cadence
+## Accepted initial interest-review cadence
 
-During the controlled pilot, an EXCO_ADMIN or SUPER_ADMIN reviews expressed interest once a week, and again before closing an opportunity.
+The project owner, using existing EXCO_ADMIN/SUPER_ADMIN access, reviews expressed interest once a week, and again before closing an opportunity.
 
-That cadence is a proposal. It is not an agreed operating commitment until the project owner accepts it.
+This is an accepted operating commitment, not measured service performance or a
+response-time guarantee. It does not set a review frequency for professional
+verification/publication or create automatic messaging/introductions.
 
 ## Who may review
 

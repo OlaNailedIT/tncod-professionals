@@ -12,11 +12,18 @@ ask for them again without contradictory evidence. No registered address, named
 case handler, response-time commitment or approval of the full notice was supplied.
 The legal sign-off below remains pending.
 
-The candidate's “Who we are” section now includes the owner-confirmed operator,
-country and monitored inbox. This is a **documentation draft**, not a Production
-publication claim. Current `/privacy` already links the inbox but describes the
-community without explicitly naming its legal operator/country. Proposed narrow
-public wording for the next reviewed factual-notice change:
+The candidate's “Who we are” section includes the owner-confirmed operator,
+country and monitored inbox. Matching public copy is now implemented in
+[PR #26](https://github.com/OlaNailedIT/tncod-professionals/pull/26), head
+`2ffae6413702bb30105eff58f33d9a329fd37903`: **OPEN / NOT RELEASED**. Four focused
+tests passed (0 failed/skipped), typecheck/lint passed, and exact-head CI verify
+(including build) and Vercel Preview checks passed. Two fact tests failed against
+the original page before the fix. These are isolated notice-render tests, not
+browser/physical-device acceptance or full legal sign-off. No runtime policy,
+database, Auth, environment, dependency or Production change.
+
+Current Production `/privacy` still has the previous paragraph until separately
+released; it already links the inbox. Narrow wording represented by this change:
 
 > TNCOD Professionals is operated by Triumphant Nation City of David, Nigeria, for professionals and related community participants. For privacy questions, contact cityofdavidprofessionals@gmail.com. This inbox is actively monitored.
 

@@ -41,6 +41,17 @@ proposal in `docs/operations/free-tier-recovery-plan.md`; do not require a
 paid backup/PITR feature. Protected destination/key custody, operator/cadence,
 export authorization and actual data-plus-objects restore remain unproven.
 
+Preparation on 18 Oct: owner-approved empty folder
+`C:\Users\O\TNCOD-Private-Backups` created with inheritance disabled and owner/
+SYSTEM-only allow rules verified. Existing GnuPG 2.4.9 and local pg_dump 17.11
+available. No key generated, Production export, backup, restore, second-copy
+destination or spending. See the same Free-tier plan; recovery is not proven.
+
+**Privacy facts:** operator/country/monitored inbox owner-confirmed; matching
+public paragraph implemented in open PR #26 at `2ffae64`, focused tests 4/4 and
+exact-head verify/build + Preview PASS. Not merged/deployed and not a full
+Privacy-L1 sign-off. Existing operator facts should not be requested again.
+
 **Preview database scope (18 Oct):** separately approved removal of Preview from
 the exact shared DATABASE_URL row is verified; Production's stored representation
 and all 19 unrelated settings unchanged, active deployment unchanged. This fixes

@@ -1,6 +1,6 @@
 # LC-D — useful launch and operating readiness
 
-Evidence date: 2026-10-18. **NOT READY / OWNER AND COHORT INPUT REQUIRED.**
+Evidence date: 2026-10-18. **NOT READY / INITIAL OPERATOR ACCEPTED; CONTENT AND COHORT EVIDENCE OPEN.**
 This is Launch Completion LC-D, not a new product phase or authority to reopen
 locked work. Technical implementation alone does not establish a useful network.
 
@@ -52,11 +52,11 @@ Start with a small genuinely useful cohort and expand only when operators can su
 
 | Decision/evidence | Existing owning gate | Current state |
 | --- | --- | --- |
-| Verification/publication operator and backup contact | LC-D/F operating ownership | Not accepted here |
-| Genuine opportunity source and publisher | LC-D | No opportunities in current inventory |
-| Interest follow-up owner/cadence | #21 operator procedure | Weekly/before-close proposal exists; acceptance not recorded |
+| Verification/publication operator and backup contact | LC-D/F operating ownership | **Project owner accepted initial operator role 18 Oct**; backup operator not named. No authority for automatic member approval/publication |
+| Genuine opportunity source and publisher | LC-D | **Project owner accepted initial posting responsibility**; genuine content/source and real journey still needed; no opportunities in last inventory |
+| Interest follow-up owner/cadence | #21 operator procedure | **Accepted 18 Oct:** project owner; weekly and before closing an opportunity. Not a response-time promise or proof follow-up occurred |
 | Monitored privacy contact, legal operator/country | Privacy-L1 / LC-D/F | **Owner confirmed 18 Oct:** Triumphant Nation City of David, Nigeria; `cityofdavidprofessionals@gmail.com` actively monitored. No response-time commitment, backup case handler or full legal sign-off inferred. Candidate updated; public operator/country copy not yet published |
-| Protected backup destination/key custody and daily-launch proposal | LC-F recovery | Separate acceptance/export/drill authority still needed |
+| Protected backup destination/key custody and daily-launch proposal | LC-F recovery | Empty restricted local folder prepared; owner reports **no independent storage available yet**. Second-location/key custody and separate export/drill authority still needed. Platform operating acceptance does not accept backup cadence |
 | Real device/cohort evidence | LC-E | Existing PASS reports carry forward; remaining rows unfilled |
 
 These are operating commitments, not features to implement. Do not promise response

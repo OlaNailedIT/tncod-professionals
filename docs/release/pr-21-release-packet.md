@@ -84,7 +84,7 @@ Roll back the **application** release. Keep the tighter SELECT policy and the hi
 | Viewer/Member cannot obtain another person’s roster | Owner / EXCO operator |
 | Withdraw / empty / closed behaviours as specified | Owner / EXCO operator |
 | Potential matches remain a separate panel; no contact on roster | Owner / EXCO operator |
-| Operator cadence | Proposed only until owner accepts |
+| Operator cadence | **Accepted 2026-10-18:** project owner; interest review weekly and before opportunity closure. Real follow-up remains unproven |
 
 ## Out of scope
 
