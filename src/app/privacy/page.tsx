@@ -36,13 +36,13 @@ export default function PrivacyNoticePage() {
               <div>
                 <h2 className="text-h2 text-foreground">Who we are</h2>
                 <p className="mt-3 layout-prose text-body text-muted-foreground">
-                  TNCOD Professionals is a community professional network for Triumphant Nation City of
-                  David (TNCOD) professionals and related community participants. For privacy questions
-                  about this product, contact{" "}
+                  TNCOD Professionals is a community professional network operated by Triumphant Nation City of David, Nigeria,
+                  for professionals and related community participants. For privacy questions about this
+                  product, contact{" "}
                   <a className="underline underline-offset-2" href="mailto:cityofdavidprofessionals@gmail.com">
                     cityofdavidprofessionals@gmail.com
                   </a>
-                  .
+                  . This inbox is actively monitored.
                 </p>
               </div>
 
