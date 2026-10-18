@@ -1,19 +1,20 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-16 (PR #21 runbook amended for approval; AUTH-A server-only key candidate recorded; EXCO signed-in retest still independent)
+**Updated:** 2026-10-16 (Phase 23D dashboard-clarity PR; PR #22 merged to main; PR #21 still separate; AUTH-A candidate unchanged)
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
-**AUTH-A:** **unrestricted launch blocked**. Feasibility (2026-10-16): server-held **publishable** + Dashboard deactivation of previously exposed `anon` is an **unproven candidate** — see `docs/release/auth-a-eapi-closeout.md`. Secret-key SSR rejected (RLS bypass). #1547 remains an alternate path. Controlled pilot exception remains.
+**AUTH-A:** **unrestricted launch blocked**. Feasibility (2026-10-16): server-held **publishable** + Dashboard deactivation of previously exposed `anon` is an **unproven candidate** — see `docs/release/auth-a-eapi-closeout.md`. Secret-key SSR rejected (RLS bypass). #1547 remains an alternate path. Controlled pilot exception remains. Cutover **not approved**.
 
 **Live identity:**
 
 | Fact | Value |
 | --- | --- |
-| `origin/main` | `71b5570aaf5b1dd950001662f8bf16e3a0d5fde3` (PR #20 merge, 2026-10-16T09:33:05Z) |
-| GitHub Production deployment | id `7115716634` · environment Production · sha `71b5570aaf5b1dd950001662f8bf16e3a0d5fde3` · status success · 2026-10-16T09:34:15Z |
-| Azure origin | `https://tncod-professionals-azure.vercel.app` serves that deployment (page chunk `app/page-2194e43327d5ea22.js`) |
-| PR #20 | **MERGED** · reviewed head `7bf171d03de77626c978ae82a57e8a0c028cdbcd` · https://github.com/OlaNailedIT/tncod-professionals/pull/20 |
-| PR #18 | **MERGED** · head `bcc42d1` · https://github.com/OlaNailedIT/tncod-professionals/pull/18 |
+| `origin/main` | `1a699153cb6259628c9dc1372051aec5f1bf4b04` (PR #22 merge) |
+| GitHub Production deployment | id `7115716634` · sha `71b5570…` (PR #20) — **Git-linked Production deploy for `1a69915` had not appeared at last check**; azure may still serve PR #20 until that catches up |
+| Azure origin | `https://tncod-professionals-azure.vercel.app` |
+| PR #22 | **MERGED** · reviewed head `b80bc5d` · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — Member dashboard return in EXCO shell |
+| PR #21 | **OPEN** · head `4666248` · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — interest roster; migration not on Production |
+| PR #20 | **MERGED** · reviewed head `7bf171d` |
 | Phase 23C | **NOT LOCKED** |
 | Public launch | **BLOCKED** — AUTH-A remains an unrestricted-launch blocker |
 
@@ -32,10 +33,10 @@ Do **not** fabricate devices, participants, legal sign-off, reclaim evidence, or
 | B | Privacy Notice legal/privacy sign-off | **AWAITING HUMAN** |
 | C | Backup class (Dashboard) + production-data recovery posture | **AWAITING HUMAN** (schema-only disposable restore drill **PASS**) |
 | D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. Owner-reported results below cover part of the packet. Device and browser are not recorded. Remaining packet rows stay open |
-| E | Phase 23D participant comprehension | **AWAITING HUMAN** |
+| E | Phase 23D participant comprehension | **AWAITING HUMAN** — **partial implementation in review**: member **dashboard clarity** only (human labels + next-step + PageIntro). Full Phase 23D acceptance still requires real participant evidence |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (depends on D/E + owner judgment on A/B/C) |
-| G | EXCO surface acceptance | **AWAITING HUMAN** — PR #20 is on Production. Signed-in retest: see EXCO in member navigation, open it, then open Opportunities. Member and profile navigation stay in place |
-| H | Current interest roster | **IN REVIEW** — PR #21. Not merged. Migration not applied to Production. Production runbook amended (transactional apply; app rollback keeps tighter policy). Operator cadence **NOT ACCEPTED** |
+| G | EXCO surface acceptance | **AWAITING HUMAN** — PR #22 merged (Member → EXCO → Member dashboard return). Production deploy for `1a69915` may still be pending. Authenticated navigation acceptance remains pending owner confirmation |
+| H | Current interest roster | **IN REVIEW** — PR #21. Not merged. Migration not applied to Production. Operator cadence **NOT ACCEPTED** |
 | I | Optional headshot | **NOT STARTED** — proposal only, pending a display and privacy decision |
 
 ---
@@ -160,6 +161,8 @@ How to record: mark each task **PASS** or **FAIL**; if FAIL add severity S0–S3
 **Packet (fill this):** `docs/release/phase-23d-comprehension-packet.md`  
 **Participants:** real controlled-pilot cohort members (non-PII labels only).  
 Facilitator records verbatim understanding vs the “understanding looks like” column. Do not coach mid-task. Do not fabricate participants.
+
+**Implemented portion (in review, not accepted):** member **dashboard clarity** — human status labels via `present*`, one state-derived next-step (`resolveMemberNextAction` with PENDING ≠ UNDER_REVIEW), `PageIntro`, secondary links to existing `/opportunities` · `/profile` · `/settings/privacy`. Not the full Phase 23D surface set. Full acceptance remains **AWAITING HUMAN**.
 
 ---
 

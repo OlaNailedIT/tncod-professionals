@@ -1,0 +1,75 @@
+{
+  "projectId": "hyzkearnbhxznkeokacj",
+  "scope": "Actual local production-build artifact and HTTP checks",
+  "checks": [
+    {
+      "name": "test-project keys available for actual app build",
+      "pass": true
+    },
+    {
+      "name": "actual public bundles and prerendered outputs contain no private credentials",
+      "pass": true,
+      "detail": {
+        "files": 141
+      }
+    },
+    {
+      "name": "hosted legacy keys disabled for actual app runtime",
+      "pass": true
+    },
+    {
+      "name": "old key rejected while actual application is tested",
+      "pass": true
+    },
+    {
+      "name": "actual app starts with private keys only",
+      "pass": true
+    },
+    {
+      "name": "actual app /sign-in: 200 and no credential serialization",
+      "pass": true
+    },
+    {
+      "name": "actual app /join: 200 and no credential serialization",
+      "pass": true
+    },
+    {
+      "name": "actual app /privacy: 200 and no credential serialization",
+      "pass": true
+    },
+    {
+      "name": "actual session probe recognizes private configuration",
+      "pass": true
+    },
+    {
+      "name": "actual /dashboard keeps anonymous access gated",
+      "pass": true
+    },
+    {
+      "name": "actual /exco keeps anonymous access gated",
+      "pass": true
+    },
+    {
+      "name": "test session helper stays disabled in production build",
+      "pass": true
+    },
+    {
+      "name": "actual sign-out route redirects safely with private configuration",
+      "pass": true
+    },
+    {
+      "name": "actual OTP route is neutral and does not serialize credentials",
+      "pass": true
+    },
+    {
+      "name": "legacy-key recovery restored initial setting",
+      "pass": true
+    }
+  ],
+  "executed": 15,
+  "passed": 15,
+  "failed": 0,
+  "applicationBundleScan": "EXECUTED",
+  "fullAuthenticatedApplicationEndToEnd": "NOT EXECUTED",
+  "productionChanged": false
+}

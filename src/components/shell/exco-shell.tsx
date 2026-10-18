@@ -5,7 +5,7 @@ import { BrandLogo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumbs, type BreadcrumbItem } from "./breadcrumbs";
-import { excoNavGroups, excoNavItems } from "./nav-config";
+import { excoMemberReturnItem, excoNavGroups, excoNavItems } from "./nav-config";
 import { NavLink, type ShellLinkMode } from "./nav-link";
 import { NavigationDrawer } from "./navigation-drawer";
 import { SkipLink } from "./skip-link";
@@ -32,6 +32,17 @@ export function ExcoShell({
   breadcrumbs,
 }: ExcoShellProps) {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const memberReturn = (
+    <NavLink
+      href={excoMemberReturnItem.href}
+      label={excoMemberReturnItem.label}
+      pathname={pathname}
+      mode={mode}
+      density="exco"
+      onNavigate={onNavigate}
+    />
+  );
 
   return (
     <div
@@ -77,6 +88,12 @@ export function ExcoShell({
             </div>
           ))}
         </nav>
+        <div className="border-t border-border-subtle p-2">
+          <p className="mb-1 px-2 text-caption font-medium uppercase tracking-wide text-muted-foreground">
+            Member
+          </p>
+          {memberReturn}
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -104,6 +121,7 @@ export function ExcoShell({
                 ) : null}
               </div>
             </div>
+            <div className="shrink-0">{memberReturn}</div>
           </div>
         </header>
 
@@ -118,6 +136,26 @@ export function ExcoShell({
           onNavigate={onNavigate}
           footer={
             <>
+              <div className="mb-2">
+                <p className="mb-1 px-1 text-caption font-medium uppercase tracking-wide text-muted-foreground">
+                  Member
+                </p>
+                <NavLink
+                  href={excoMemberReturnItem.href}
+                  label={excoMemberReturnItem.label}
+                  pathname={pathname}
+                  mode={mode}
+                  density="exco"
+                  onNavigate={(href) => {
+                    onNavigate?.(href);
+                    if (mode === "button") {
+                      setDrawerOpen(false);
+                    } else {
+                      queueMicrotask(() => setDrawerOpen(false));
+                    }
+                  }}
+                />
+              </div>
               <Separator className="mb-2" />
               <p className="text-caption text-muted-foreground">
                 Navigation is presentational. Access is enforced separately.

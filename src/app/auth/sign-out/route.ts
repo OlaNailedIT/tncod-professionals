@@ -1,28 +1,16 @@
 import { NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { getSessionSupabaseConfig } from "@/lib/env/supabase-session";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
-function unwrapEnv(value: string | undefined): string | undefined {
-  if (!value) return undefined;
-  let current = value.trim();
-  while (
-    (current.startsWith('"') && current.endsWith('"') && current.length >= 2) ||
-    (current.startsWith("'") && current.endsWith("'") && current.length >= 2)
-  ) {
-    current = current.slice(1, -1);
-  }
-  return current;
-}
-
 async function clearSession() {
-  const supabaseUrl = unwrapEnv(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  const anonKey = unwrapEnv(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
-  if (!supabaseUrl || !anonKey) return;
+  const config = getSessionSupabaseConfig();
+  if (!config) return;
 
   const cookieStore = await cookies();
-  const supabase = createServerClient(supabaseUrl, anonKey, {
+  const supabase = createServerClient(config.url, config.key, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
