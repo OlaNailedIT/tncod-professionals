@@ -5,10 +5,23 @@
 **Implementation:** merged Gate 6A (`/privacy` + join / sign-in / footer links)  
 **Engineering must not invent statutory conclusions.**
 
-**Owner input 2026-10-18:** use `mailto:cityofdavidprofessionals@gmail.com`.
-The current page already links that address; no duplicate code change required.
-This is contact-address selection only. Legal operator/country, actual monitoring
-and the legal sign-off below remain unconfirmed; no approval is inferred.
+**Owner confirmation 2026-10-18:** legal organization: **Triumphant Nation City of David**;
+country: **Nigeria**; someone actively monitors `cityofdavidprofessionals@gmail.com`.
+The earlier contact selection is now supplemented by these explicit facts. Do not
+ask for them again without contradictory evidence. No registered address, named
+case handler, response-time commitment or approval of the full notice was supplied.
+The legal sign-off below remains pending.
+
+The candidate's “Who we are” section now includes the owner-confirmed operator,
+country and monitored inbox. This is a **documentation draft**, not a Production
+publication claim. Current `/privacy` already links the inbox but describes the
+community without explicitly naming its legal operator/country. Proposed narrow
+public wording for the next reviewed factual-notice change:
+
+> TNCOD Professionals is operated by Triumphant Nation City of David, Nigeria, for professionals and related community participants. For privacy questions, contact cityofdavidprofessionals@gmail.com. This inbox is actively monitored.
+
+Keep the existing mailto link and product behavior. No new consent checkbox,
+compliance claim, retention period, address, statutory conclusion or policy change.
 
 ---
 
@@ -44,7 +57,8 @@ These may remain as written unless legal requires different wording:
 
 | Item | Current state in public text |
 | --- | --- |
-| Controller identity (legal entity / address) | Not asserted as registered controller particulars |
+| Operator identity and country | Owner confirmed Triumphant Nation City of David, Nigeria; candidate updated, public copy not yet changed |
+| Registered/postal address and final controller wording | Not supplied or independently verified; no particulars invented |
 | Applicable legal bases | Not asserted |
 | Retention schedules | Not asserted with fixed periods |
 | International / data-transfer wording | Hosting regions mentioned only generically in candidate doc; public page soft |

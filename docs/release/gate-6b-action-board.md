@@ -107,9 +107,12 @@ I confirm this soft-deleted Auth-absent identity may release email/phone under t
 **Engineering claim:** factual notice is **deployed** (HTTP 200; join / sign-in / footer link to `/privacy`).  
 **Legal claim:** **PENDING** — do not treat as signed-off.
 
-Owner update 2026-10-18: “use this mailto:cityofdavidprofessionals@gmail.com”.
-This confirms the requested contact address, already linked by the current privacy
-page. It does not confirm legal operator/country, monitoring or legal sign-off.
+Owner confirmation 2026-10-18: legal organization **Triumphant Nation City of David**,
+country **Nigeria**, inbox `cityofdavidprofessionals@gmail.com` **actively monitored**.
+These facts are recorded in the notice candidate and sign-off packet; do not ask
+for them again. Public copy already links the inbox; operator/country draft update
+is not yet published. Registered address and remaining legal wording/sign-off are
+not inferred from this confirmation. No new consent or retention policy.
 
 **Approval options (reply with exactly one):**
 

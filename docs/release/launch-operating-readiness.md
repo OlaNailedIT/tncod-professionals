@@ -55,7 +55,7 @@ Start with a small genuinely useful cohort and expand only when operators can su
 | Verification/publication operator and backup contact | LC-D/F operating ownership | Not accepted here |
 | Genuine opportunity source and publisher | LC-D | No opportunities in current inventory |
 | Interest follow-up owner/cadence | #21 operator procedure | Weekly/before-close proposal exists; acceptance not recorded |
-| Monitored official support/privacy contact, legal operator/country | Privacy-L1 / LC-D/F | Owner selected `cityofdavidprofessionals@gmail.com` 18 Oct; legal operator/country and monitoring unconfirmed. No legal sign-off inferred |
+| Monitored privacy contact, legal operator/country | Privacy-L1 / LC-D/F | **Owner confirmed 18 Oct:** Triumphant Nation City of David, Nigeria; `cityofdavidprofessionals@gmail.com` actively monitored. No response-time commitment, backup case handler or full legal sign-off inferred. Candidate updated; public operator/country copy not yet published |
 | Protected backup destination/key custody and daily-launch proposal | LC-F recovery | Separate acceptance/export/drill authority still needed |
 | Real device/cohort evidence | LC-E | Existing PASS reports carry forward; remaining rows unfilled |
 
