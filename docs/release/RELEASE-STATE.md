@@ -1,11 +1,11 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-18 (AUTH-A Stage C PASS/CLOSED; exact integration-variable cleanup separately approved and verified; public-launch gates remain open)
+**Authority date:** 2026-10-19 (PR #26 factual privacy release verified; AUTH-A/roster evidence preserved; public-launch gates remain open)
 **Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
 **Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
-**Authoritative Git SHA (`origin/main` tip):** `ce2ebaaa8fa507b0669a7565b67bbadd6673aaeb` (PR #21 merge; PR #22/#23/#25 included)
+**Authoritative Git SHA (`origin/main` tip):** `9b3d37dda4acccad4022c573f4623e9747bc138b` (PR #26 merge; PR #21/#22/#23/#25 included)
 
-**Authoritative Production (live Ready / azure):** Vercel `dpl_7b6CRFCKJDW6zp6xnrMgbGpMH5pK` · source **git**, `gitSource.sha` and `meta.githubCommitSha` equal `ce2ebaaa8fa507b0669a7565b67bbadd6673aaeb`; actual azure alias points to this deployment. PR #21 released after its exact named migration and merge approval. Public Auth variables absent and all three private Production Auth row IDs unchanged. Stage B/C evidence stands; Auth implementation unchanged by this release. Prior modern strict artifact `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` remains the application recovery baseline with matching private configuration; never re-enable old keys or restore Viewer roster access. Evidence: `pr-21-production-release-2026-10-18.md` and `auth-a-stage-c-retirement.md`. No overall public-launch PASS.
+**Authoritative Production (live Ready / azure):** Vercel `dpl_5LvWaU6YJbwJoU5oGUcRHD7En9ug` · source **git**, Git-source/commit metadata match `9b3d37dda4acccad4022c573f4623e9747bc138b`; actual azure alias pointer verified. Exact owner-approved PR #26 delivered operator/country/monitored-inbox copy only, no configuration/database/Auth change. Live notice 200 and both facts/two mailto links verified; post-merge main CI PASS. Pre-release private Auth, Production-only database scope and Standard Protection guards passed. Prior Auth/roster proofs remain valid within their scope. Modern application recovery baseline `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` requires matching private configuration and keeping tighter roster policy/history; never re-enable old keys. Evidence: `privacy-operator-release-2026-10-19.md`, prior roster and Stage C reports. No public-launch PASS.
 **LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Fresh signed-in desktop Member↔EXCO acceptance passed on the Stage B release; physical phone/tablet acceptance remains separate. **OPEN reliability:** automatic Git→Vercel Production trigger for that historical merge remains unexplained (symptom ≠ root cause).
 **LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
 provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
@@ -48,9 +48,16 @@ available. No key generated, Production export, backup, restore, second-copy
 destination or spending. See the same Free-tier plan; recovery is not proven.
 
 **Privacy facts:** operator/country/monitored inbox owner-confirmed; matching
-public paragraph implemented in open PR #26 at `2ffae64`, focused tests 4/4 and
-exact-head verify/build + Preview PASS. Not merged/deployed and not a full
-Privacy-L1 sign-off. Existing operator facts should not be requested again.
+paragraph **released and live** via PR #26 at merge `9b3d37d`, focused tests 4/4,
+exact-head and post-merge CI PASS. Full Privacy-L1 sign-off remains pending.
+Existing operator facts should not be requested again.
+
+**Backup destination direction (19 Oct):** owner selected the existing church
+Drive for `cityofdavidprofessionals@gmail.com`, $0/encrypted-only, direction only.
+Owner reports 25.1 MB used of 15 GB; not connector-verified quota. This chat's
+Drive profile still selects a different Gmail account despite the owner reporting
+connection; screenshot/account availability clarification requested. No Drive
+folder, upload, export, encryption key or restore authorized/executed by that reply.
 
 **Preview database scope (18 Oct):** separately approved removal of Preview from
 the exact shared DATABASE_URL row is verified; Production's stored representation

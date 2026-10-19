@@ -86,6 +86,26 @@ storage-quota field. No ownership, Free-plan/headroom or backup destination infe
 Using the existing church inbox's Drive was proposed for separate direction/access
 confirmation. No folder was created there and no data uploaded or new account made.
 
+### Church-Drive direction — owner reply and verification, 19 Oct
+
+Owner answered **“Yes—church Google Drive, $0 only”** for the existing Drive of
+`cityofdavidprofessionals@gmail.com`, explicitly direction-only: no export/upload.
+Owner reports **25.1 MB used out of 15 GB**; quota is owner-reported, not exposed
+or independently verified by the connector. No subscription or new account needed
+is assumed; no spending is authorized.
+
+After the owner reported “Church Drive connected”, one fresh read-only profile
+check still returned a different Gmail profile. This does not prove the church
+account was not added; it means the selected connection available to this call
+does not match the approved destination. No account-selection override is exposed
+by this tool. A screenshot of the connected-account list was requested rather
+than guessing, revoking accounts or trying writes against the wrong account.
+No Drive files searched/read, folder created, upload, key or backup operation.
+
+Remaining: correct account availability, exact private destination and sharing
+readback, encryption/key custody, backup cadence and explicit export/isolated
+restore authority. Direction/account connection alone cannot close recovery.
+
 The owner's separate acceptance of platform verification/posting/interest duties
 does **not** accept the backup operator/cadence or authorize a Production export.
 

@@ -15,15 +15,18 @@ The legal sign-off below remains pending.
 The candidate's “Who we are” section includes the owner-confirmed operator,
 country and monitored inbox. Matching public copy is now implemented in
 [PR #26](https://github.com/OlaNailedIT/tncod-professionals/pull/26), head
-`2ffae6413702bb30105eff58f33d9a329fd37903`: **OPEN / NOT RELEASED**. Four focused
+`2ffae6413702bb30105eff58f33d9a329fd37903`: **MERGED / RELEASED** as `9b3d37d`.
+Exact owner release approval, Git-linked Production and live notice verified;
+see `privacy-operator-release-2026-10-19.md`. Four focused
 tests passed (0 failed/skipped), typecheck/lint passed, and exact-head CI verify
 (including build) and Vercel Preview checks passed. Two fact tests failed against
 the original page before the fix. These are isolated notice-render tests, not
 browser/physical-device acceptance or full legal sign-off. No runtime policy,
-database, Auth, environment, dependency or Production change.
+database, Auth, environment or dependency change. Only the approved public copy
+was released; this is not full privacy/legal sign-off.
 
-Current Production `/privacy` still has the previous paragraph until separately
-released; it already links the inbox. Narrow wording represented by this change:
+Current Production `/privacy` now contains the owner-confirmed operator/country,
+monitored-inbox statement and both existing mailto links. Narrow wording represented by this change:
 
 > TNCOD Professionals is operated by Triumphant Nation City of David, Nigeria, for professionals and related community participants. For privacy questions, contact cityofdavidprofessionals@gmail.com. This inbox is actively monitored.
 
@@ -64,7 +67,7 @@ These may remain as written unless legal requires different wording:
 
 | Item | Current state in public text |
 | --- | --- |
-| Operator identity and country | Owner confirmed Triumphant Nation City of David, Nigeria; candidate updated, public copy not yet changed |
+| Operator identity and country | Owner confirmed Triumphant Nation City of David, Nigeria; candidate updated and public copy released/verified via PR #26 |
 | Registered/postal address and final controller wording | Not supplied or independently verified; no particulars invented |
 | Applicable legal bases | Not asserted |
 | Retention schedules | Not asserted with fixed periods |

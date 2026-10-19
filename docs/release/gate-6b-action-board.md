@@ -1,9 +1,9 @@
 # Gate 6B — Consolidated human action board
 
 **Opened:** 2026-10-12  
-**Updated:** 2026-10-18 (AUTH-A Stage C PASS/CLOSED; separately approved exact public-variable cleanup verified; no paid dependency)
+**Updated:** 2026-10-19 (approved PR #26 factual privacy release verified; church-Drive direction selected, active account mismatch unresolved; no paid dependency)
 
-**Current release:** PR #21 merged at `2026-10-18T14:00:36Z` as `ce2ebaaa8fa507b0669a7565b67bbadd6673aaeb`. Git-source Production `dpl_7b6CRFCKJDW6zp6xnrMgbGpMH5pK` is READY and the actual azure alias points to it. The exact owner-approved migration committed once; independent readback confirms Admin-only roster SELECT, RLS enabled and one history row. Eight read-only public/access checks passed; public Auth variables absent, private Auth row IDs/targets preserved. Real-interest acceptance is unproven because inventory contains no opportunities/interests. See `pr-21-production-release-2026-10-18.md`.
+**Current release:** exact owner-approved PR #26 merged as `9b3d37dda4acccad4022c573f4623e9747bc138b`; Git-source Production `dpl_5LvWaU6YJbwJoU5oGUcRHD7En9ug` is READY, both Git source fields match and actual azure alias points to it. Live `/privacy` 200 contains confirmed operator/Nigeria, monitored inbox and two mailto links; post-merge main CI PASS. No database/configuration/Auth change or full legal sign-off. See `privacy-operator-release-2026-10-19.md`. Prior #21 migration/roster and Stage C proofs stand; real-content/pilot/recovery gates remain open.
 
 **Latest release evidence:** Stage C completed on unchanged READY artifact `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC`, CLI source clean `bcd113d`; actual alias/deployment identity reconfirmed. Explicitly approved legacy anon/service_role retirement and exact old publishable deletion verified; modern keys unchanged. Ten known/unknown denial requests returned 401, genuine pre-change session/refresh and fresh sign-in/desktop Member↔EXCO passed. Integration-associated public-variable drift was found, then separately approved exact cleanup passed three readbacks with all 20 other env rows unchanged. No deploy was created during that drift window; no spending, policy/JWT change, fixture, migration or role change. Initial navigation timeout, first failed drift gate and evidence limits are retained. Evidence: `docs/release/auth-a-stage-c-retirement.md` and its sanitized JSON. Stage B fixture evidence stands; do not repeat it.
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  
@@ -28,16 +28,16 @@
 
 | Fact | Value |
 | --- | --- |
-| `origin/main` | `ce2ebaaa8fa507b0669a7565b67bbadd6673aaeb` (PR #21 merge) |
-| Ready Production (Vercel / azure) | `dpl_7b6CRFCKJDW6zp6xnrMgbGpMH5pK` · source git; Git source/commit metadata match main; actual azure alias pointer verified |
+| `origin/main` | `9b3d37dda4acccad4022c573f4623e9747bc138b` (PR #26 merge) |
+| Ready Production (Vercel / azure) | `dpl_5LvWaU6YJbwJoU5oGUcRHD7En9ug` · source git; both Git source/commit metadata fields match main; actual azure alias pointer verified |
 | Modern strict application recovery baseline | `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` · reviewed `bcd113d`, matching private configuration; keep tighter roster policy/history on app rollback |
 | Prior Ready Production (superseded) | `dpl_E4iNVkhfeViyz3HEuTtHzwiUJoef` · sha `bcd113d`, Stage A legacy-compatible config; NOT strict post-retirement recovery |
-| Azure origin | `https://tncod-professionals-azure.vercel.app` · current alias confirmed in deployment metadata; public smoke 4 routes 200, dashboard/EXCO 307 to sign-in |
+| Azure origin | `https://tncod-professionals-azure.vercel.app` · current alias confirmed in deployment metadata; new privacy copy 200 with both facts/two mailto links verified; prior access-smoke evidence preserved |
 | PR #22 | **MERGED / RELEASED** · head `b80bc5d`, merge `1a69915`, included in current modern baseline · https://github.com/OlaNailedIT/tncod-professionals/pull/22 — desktop return verified Stage B/C; physical phone/tablet checks remain. Historical auto-deploy omission remains unexplained; do not select its superseded recovery artifact |
 | PR #21 | **MERGED / RELEASED** · approved head `267fd3012b06c489b298581da0a59b1a9b59466c`, merge `ce2ebaa` · fresh checks PASS; exact named migration committed and independently read back · https://github.com/OlaNailedIT/tncod-professionals/pull/21 — 34 local tests passed, 0 failed/skipped; typecheck/lint/build PASS. Real-content acceptance separate; see `pr-21-production-release-2026-10-18.md` |
 | PR #23 | **MERGED / RELEASED** · head `7f517fb`, merge `52f3d8c` · CI/preview PASS · https://github.com/OlaNailedIT/tncod-professionals/pull/23 — `docs/release/pr-23-review.md`; signed-in acceptance pending |
 | PR #25 | **MERGED / STAGES A–C COMPLETE** · head `ab9080b`, merge `bcd113d` · https://github.com/OlaNailedIT/tncod-professionals/pull/25 — AUTH-A Production cutover PASS/CLOSED. Evidence: `docs/release/auth-a-stage-c-retirement.md` |
-| PR #26 | **OPEN / REVIEWABLE, NOT RELEASED** · head `2ffae6413702bb30105eff58f33d9a329fd37903`; exact-head verify/build and Vercel Preview PASS. Public privacy operator/country/monitored-inbox copy only + 4 passing tests. Not full Privacy-L1 approval. https://github.com/OlaNailedIT/tncod-professionals/pull/26 |
+| PR #26 | **MERGED / RELEASED / VERIFIED** · approved head `2ffae6413702bb30105eff58f33d9a329fd37903`, merge `9b3d37d`; exact-head and post-merge verify PASS. Live privacy operator/country/monitored-inbox copy verified; no full Privacy-L1 approval. See `privacy-operator-release-2026-10-19.md` |
 | Phase 23C | **NOT LOCKED** |
 | Public launch | **WITHHELD** — remaining AUTH-B, privacy, recovery, operations and human acceptance gates; AUTH-A closed |
 
@@ -55,7 +55,7 @@ Carry forward completed owner-reported checks; missing device/browser metadata i
 | --- | --- | --- |
 | A | AUTH-B owner confirmations (COLLISION-01…08) | **AWAITING HUMAN** (LC-C) |
 | B | Privacy Notice legal/privacy sign-off | **AWAITING HUMAN** (LC-F) |
-| C | Free-tier protected data/object recovery | **PREPARATION PARTIAL / AWAITING HUMAN** — approved empty owner/SYSTEM-only local folder prepared; existing GnuPG 2.4.9 and local pg_dump 17.11 available. No export or encrypted backup. Independent second-copy location, key custody, cadence and bounded export/drill approval pending. Plan: `docs/operations/free-tier-recovery-plan.md`; historical schema-only drill PASS (LC-F) |
+| C | Free-tier protected data/object recovery | **PREPARATION PARTIAL / CONNECTION UNVERIFIED** — restricted local folder/tools prepared. Owner selected existing church Drive as $0/encrypted-only direction, reports 25.1 MB used/15 GB. Profile check still selects another account after reported connection; screenshot requested. No cloud write/export/key/backup. Exact destination/custody/cadence/export/drill approval pending; Free-tier plan (LC-F) |
 | D | Phase 23C real-device acceptance | **AWAITING HUMAN** — **NOT LOCKED**. Owner-reported phone/tablet navigation + join/sign-in/dashboard + profile/privacy save **carry forward**; device/browser models **not recorded**. Remaining packet rows stay open (LC-E) |
 | E | Phase 23D participant comprehension | **AWAITING HUMAN** — dashboard clarity in **#23** is released. Full comprehension still needs real participants (LC-E) |
 | F | Controlled-pilot closeout | **AWAITING HUMAN** (LC-E) |
@@ -112,7 +112,7 @@ Owner confirmation 2026-10-18: legal organization **Triumphant Nation City of Da
 country **Nigeria**, inbox `cityofdavidprofessionals@gmail.com` **actively monitored**.
 These facts are recorded in the notice candidate and sign-off packet; do not ask
 for them again. Public copy already links the inbox; operator/country draft update
-is implemented in reviewable PR #26, not yet published. Registered address and remaining legal wording/sign-off are
+is released/verified via PR #26; it is not full legal approval. Registered address and remaining legal wording/sign-off are
 not inferred from this confirmation. No new consent or retention policy.
 
 **Approval options (reply with exactly one):**
