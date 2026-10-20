@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Alert, Button } from "@/components/ui";
 import { submitProfileAction } from "@/features/professional/actions";
 import { memberMaySubmitVerification } from "@/features/professional/verification-status";
+import { presentVerificationStatus } from "@/lib/status";
 import type { VerificationStatus } from "@prisma/client";
 
 export function SubmitForVerificationButton({
@@ -71,11 +72,11 @@ export function SubmitForVerificationButton({
         </Button>
       ) : verificationStatus === "PENDING" || verificationStatus === "UNDER_REVIEW" ? (
         <p className="text-sm text-muted-foreground">
-          Your profile is already in the verification queue ({verificationStatus}).
+          Your profile is already in the verification queue ({presentVerificationStatus(verificationStatus as VerificationStatus).label}).
         </p>
       ) : verificationStatus === "VERIFIED" ? (
         <p className="text-sm text-muted-foreground">
-          Your professional verification is VERIFIED. Directory publication is a separate EXCO
+          Your professional verification is complete. Directory publication is a separate EXCO
           action.
         </p>
       ) : null}

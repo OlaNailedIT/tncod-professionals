@@ -164,7 +164,7 @@
   --density-exco-stack: var(--space-sm);
 
   /* —— Layout composition (Phase 5.4) — references Phase 5.2 spacing —— */
-  --layout-page-gutter: var(--space-lg);
+  --layout-page-gutter: calc(var(--space-lg) + var(--space-xs)); /* 20px phone minimum */
   --layout-content-narrow: 40rem; /* 640 */
   --layout-content-standard: 60rem; /* 960 */
   --layout-content-wide: 80rem; /* 1280 */
@@ -393,6 +393,13 @@
     width: 100%;
     margin-inline: auto;
     min-width: 0;
+    padding-inline: var(--layout-page-gutter);
+  }
+
+  /* A frame or containing Container already supplies the page gutter. */
+  .layout-page .layout-container,
+  .layout-container .layout-container {
+    padding-inline: 0;
   }
 
   .layout-container-narrow {
@@ -409,6 +416,7 @@
 
   .layout-container-full {
     max-width: none;
+    padding-inline: 0;
   }
 
   .layout-prose {

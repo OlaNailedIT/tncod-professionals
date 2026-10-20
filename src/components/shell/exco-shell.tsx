@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { BrandLogo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -54,14 +55,25 @@ export function ExcoShell({
 
       <aside className="hidden w-52 shrink-0 border-r border-border-subtle bg-surface lg:flex lg:flex-col">
         <div className="border-b border-border-subtle px-3 py-3">
-          <button
-            type="button"
-            className="max-w-[120px] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="EXCO home"
-            onClick={() => onNavigate?.("/exco")}
-          >
-            <BrandLogo className="max-w-[120px]" alt="" />
-          </button>
+          {mode === "link" ? (
+            <Link
+              href="/exco"
+              className="max-w-[120px] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="EXCO home"
+              onClick={() => onNavigate?.("/exco")}
+            >
+              <BrandLogo className="max-w-[120px]" alt="" />
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="max-w-[120px] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="EXCO home"
+              onClick={() => onNavigate?.("/exco")}
+            >
+              <BrandLogo className="max-w-[120px]" alt="" />
+            </button>
+          )}
           <p className="mt-2 text-caption font-medium uppercase tracking-wide text-muted-foreground">
             EXCO
           </p>
