@@ -13,8 +13,12 @@ import {
 } from "@/components/ui";
 import type { OwnMemberProfile } from "@/features/profile/own-profile";
 import { SubmitForVerificationButton } from "@/features/professional/submit-for-verification-button";
-import { professionalVerificationLabel } from "@/features/professional/verification-status";
-import type { VerificationStatus } from "@prisma/client";
+import {
+  presentProfileStatus,
+  presentVerificationStatus,
+  presentVisibilityStatus,
+} from "@/lib/status";
+import type { ProfileStatus, VerificationStatus, VisibilityStatus } from "@/types/status";
 
 function sectionStateLabel(completed: number, total: number): string {
   if (total === 0) return "Not started";
@@ -35,6 +39,9 @@ export function ProfileCompletionOverview({ profile }: { profile: OwnMemberProfi
   const { completion } = profile;
   const percent = completion.percent;
   const progressLabel = `Profile ${percent}% complete`;
+  const profileState = presentProfileStatus(profile.profileStatus as ProfileStatus);
+  const verificationState = presentVerificationStatus(profile.verificationStatus as VerificationStatus);
+  const visibilityState = presentVisibilityStatus(profile.visibilityStatus as VisibilityStatus);
 
   let intro: string;
   let cta: string | null = "Complete profile";
@@ -60,12 +67,11 @@ export function ProfileCompletionOverview({ profile }: { profile: OwnMemberProfi
         <CardContent className="space-y-4">
           <Progress value={percent} max={100} label={progressLabel} />
           <div className="flex flex-wrap gap-2" aria-label="Independent status fields">
-            <StatusBadge intent="info">Profile: {profile.profileStatus}</StatusBadge>
-            <StatusBadge intent="neutral">
-              Professional verification:{" "}
-              {professionalVerificationLabel(profile.verificationStatus as VerificationStatus)}
+            <StatusBadge intent={profileState.intent}>Profile: {profileState.label}</StatusBadge>
+            <StatusBadge intent={verificationState.intent}>
+              Professional verification: {verificationState.label}
             </StatusBadge>
-            <StatusBadge intent="neutral">Directory visibility: {profile.visibilityStatus}</StatusBadge>
+            <StatusBadge intent={visibilityState.intent}>Directory visibility: {visibilityState.label}</StatusBadge>
           </div>
           {profile.clarificationMessage &&
           (profile.verificationStatus === "NEEDS_CLARIFICATION" ||
@@ -133,8 +139,8 @@ export function ProfileCompletionOverview({ profile }: { profile: OwnMemberProfi
                   label="Headshot"
                   value={
                     profile.hasHeadshot
-                      ? "Added (upload/change not available in this step)"
-                      : "Not available in this step yet"
+                      ? "Added — changes are not available yet"
+                      : "Uploads are not available yet"
                   }
                 />
               ) : null}
@@ -145,19 +151,17 @@ export function ProfileCompletionOverview({ profile }: { profile: OwnMemberProfi
                 <Link href="/businesses" className="underline-offset-2 hover:underline">
                   Manage businesses
                 </Link>
-                . Business verification does not change this completion percentage formula.
+                . Business verification is separate from your profile completion.
               </p>
             ) : null}
             {section.id === "about" ? (
               <p className="mt-3 text-caption text-muted-foreground">
-                Headshot is excluded from the completion percentage until private upload UX ships. Storage remains
-                private.
+                You do not need a headshot to complete your profile. Uploads are not available yet.
               </p>
             ) : null}
             {section.id === "community" ? (
               <p className="mt-3 text-caption text-muted-foreground">
-                Service/department is not a separate stored field in the Phase 2 schema. Areas of service is the
-                community field.
+                Add your church team or department under Areas of service.
               </p>
             ) : null}
           </CardContent>

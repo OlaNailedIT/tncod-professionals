@@ -66,11 +66,14 @@ Default for app content: **standard**. Avoid inventing per-route max-widths.
 
 ## 5. Page gutters
 
-`--layout-page-gutter` (applied by `PageFrame` / `.layout-page`):
+`--layout-page-gutter` is applied by `PageFrame` / `.layout-page` and standalone
+`Container` instances. Containers inside a frame or another Container do not add
+the gutter a second time. `width="full"` remains intentionally edge-to-edge.
+The 20px phone minimum follows the later Phase 23C remediation decision.
 
 | Viewport | Value | Source token |
 | --- | --- | --- |
-| default / mobile | 16px | `--space-lg` |
+| default / mobile | 20px | `--space-lg` + `--space-xs` |
 | ≥640px | 24px | `--space-xl` |
 | ≥1024px | 32px | `--space-2xl` |
 | ≥1536px | 48px | `--space-3xl` |

@@ -70,7 +70,7 @@ export default function HomePage() {
               <ol className="mt-3 max-w-2xl list-decimal space-y-2 pl-5 text-body text-muted-foreground">
                 <li>Join with a short registration — about a minute, no password.</li>
                 <li>We create your professional record with private defaults.</li>
-                <li>Sign in later with a passwordless email link when you need access.</li>
+                <li>Sign in later with a one-time code sent to your email. No password needed.</li>
               </ol>
               <p className="mt-4 max-w-2xl text-body-sm text-muted-foreground">
                 Registration is not verification, and it does not publish you to the directory.
