@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { BrandLogo } from "@/components/brand/logo";
+import { ProfessionalsLogo } from "@/components/brand/professionals-logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AccountMenu } from "./account-menu";
@@ -46,7 +46,7 @@ export function MemberShell({
         className="max-w-[140px] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="TNCOD Professionals home"
       >
-        <BrandLogo className="max-w-[140px]" alt="" />
+        <ProfessionalsLogo compact alt="" />
       </Link>
     ) : (
       <button
@@ -55,7 +55,7 @@ export function MemberShell({
         aria-label="TNCOD Professionals home"
         onClick={() => onNavigate?.("/dashboard")}
       >
-        <BrandLogo className="max-w-[140px]" alt="" />
+        <ProfessionalsLogo compact alt="" />
       </button>
     );
 
