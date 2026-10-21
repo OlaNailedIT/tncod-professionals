@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-17",
+  "projectId": "brpppukzqgpzxjelwwrj",
+  "vercelProjectId": "prj_YL2rguqWGr4kSjJTQhuU7r8g6pce",
+  "ownerExternalConsumers": {"answer": "none", "source": "Explicit owner reply, not repository inference"},
+  "scheduler": {
+    "enabledAt": 1789041170342,
+    "disabledAt": null,
+    "updatedAt": 1792235990186,
+    "deploymentId": "dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC",
+    "productionTargetId": "dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC",
+    "path": "/api/internal/registration-cleanup",
+    "schedule": "0 3 * * *",
+    "invokedByThisReview": false,
+    "scheduledRunSuccessClaimed": false
+  },
+  "environmentScope": {
+    "supabaseAuthVariablesTargetingPreview": 0,
+    "productionPublicAnonPublishableVariablesPresent": false,
+    "privateStrictConfigProductionOnly": true,
+    "databaseUrlSharedWithPreview": true,
+    "databaseIsolationResolved": false,
+    "valuesLogged": false
+  },
+  "readOnlyGatewayProbe": {
+    "method": "GET",
+    "path": "/auth/v1/settings",
+    "results": [
+      {"keyId": "missing", "status": 401},
+      {"keyId": "invalid", "status": 401},
+      {"keyId": "anon", "status": 200},
+      {"keyId": "1ea4c8c4-27ee-4375-8283-e410e1269c96", "status": 200},
+      {"keyId": "e312b964-4eec-4d4d-90be-b2b5d67293c8", "status": 200}
+    ],
+    "initialIncompleteAttemptRetained": true,
+    "otpProbeOrEmailSend": false,
+    "accountReadOrMutation": false,
+    "keyChanges": false,
+    "keyValuesOrBodiesLogged": false,
+    "limit": "Auth gateway acceptance only, not fresh OTP-response enumeration evidence. Native inventory disabled fields absent/null were not treated as proof."
+  },
+  "proposedRetirementIdentifiers": ["anon", "service_role", "1ea4c8c4-27ee-4375-8283-e410e1269c96"],
+  "preserveIdentifiers": ["e312b964-4eec-4d4d-90be-b2b5d67293c8", "f5b854cd-dc0a-41d5-8881-4659fa8c3bbf"],
+  "defaultPublishableExposureProven": false,
+  "defaultPublishableDisposition": "Conservative retirement proposal because exposure provenance is uncertain",
+  "recovery": {
+    "deploymentId": "dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC",
+    "applicationSha": "bcd113de137bde1216aa147fc9cc699b40156884",
+    "platformSelectionAndAuthenticatedAcceptancePreviouslyProved": true,
+    "requiresMatchingPrivateConfiguration": true,
+    "dataBackupRestoreProved": false
+  },
+  "productionFaultOrStatusToggleExecuted": false,
+  "stageCAuthorized": false,
+  "authAClosed": false,
+  "spending": 0
+}

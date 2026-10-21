@@ -1,9 +1,80 @@
 # TNCOD Professionals — Release State
 
-**Authority date:** 2026-10-12  
-**Release Gate 5:** Release hygiene / clean source reconstruction  
-**Authoritative Git SHA (current `origin/main` tip):** `6618ac87c806e1a58cd027c34c08783bb7ed6567`  
-**Authoritative Production:** GitHub Production deployment `7021555704` · sha `6618ac8` · env URL matches live Vercel Production alias for `https://tncod-professionals-azure.vercel.app`
+**Authority date:** 2026-10-19 (PR #26 factual privacy release verified; AUTH-A/roster evidence preserved; public-launch gates remain open)
+**Release Gate 5:** Release hygiene / clean source reconstruction (historical)  
+**Launch Completion:** stages LC-A–LC-G organize remaining work; historical phases retain contracts. Operational backlog: `docs/release/gate-6b-action-board.md`.  
+**Authoritative Git SHA (`origin/main` tip):** `9b3d37dda4acccad4022c573f4623e9747bc138b` (PR #26 merge; PR #21/#22/#23/#25 included)
+
+**Authoritative Production (live Ready / azure):** Vercel `dpl_5LvWaU6YJbwJoU5oGUcRHD7En9ug` · source **git**, Git-source/commit metadata match `9b3d37dda4acccad4022c573f4623e9747bc138b`; actual azure alias pointer verified. Exact owner-approved PR #26 delivered operator/country/monitored-inbox copy only, no configuration/database/Auth change. Live notice 200 and both facts/two mailto links verified; post-merge main CI PASS. Pre-release private Auth, Production-only database scope and Standard Protection guards passed. Prior Auth/roster proofs remain valid within their scope. Modern application recovery baseline `dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC` requires matching private configuration and keeping tighter roster policy/history; never re-enable old keys. Evidence: `privacy-operator-release-2026-10-19.md`, prior roster and Stage C reports. No public-launch PASS.
+**LC-B note:** Git-linked webhook created **no** deployment for `1a69915` after merge (deployment absent, not a failed build). Recovered 2026-10-16 via CLI Production deploy from clean checkout of that merge SHA on the linked project; azure alias updated. Fresh signed-in desktop Member↔EXCO acceptance passed on the Stage B release; physical phone/tablet acceptance remains separate. **OPEN reliability:** automatic Git→Vercel Production trigger for that historical merge remains unexplained (symptom ≠ root cause).
+**LC-C note:** AUTH-A non-Production core acceptance is passing: hosted
+provider/SSR 32 checks; earlier strict build/key-isolation checks; actual local
+PKCE/profile/role journey 19 checks; Storage/account-control components 16
+checks; focused numeric OTP/session renewal/signed-document HTTP 13 checks
+(the latter: 1 test passed, 0 failed, 0 skipped). Runs overlap; do not sum them
+as unique acceptance criteria. Earlier failed attempts remain in the reports.
+The two-email quota hypothesis was not proven: runtime inspection found a
+different local setting. Fresh Production registration is now verified after
+owner-operated normal-browser CAPTCHA; automated live CAPTCHA failed and was
+not bypassed. The focused document/logout run passed 12 checks; prior failures
+remain recorded, and overlapping runs are not summed. Exact fixtures removed.
+PR #25 head `ab9080b` was reviewed and released under explicit Stage A approval.
+Separate Stage B approval then covered private Production configuration and a
+fresh publishable key, while retaining all existing provider keys and 16 unrelated
+environment entries. No migration, real-account role change or paid resource.
+Core Stage B authenticated checks passed. Consumer/recovery disposition is in
+`auth-a-stage-b-consumer-review.md`; scheduler/Production target match the modern
+build, no Preview Auth env, owner confirmed no external consumers. Stage C was
+explicitly authorized and executed: old keys now deny known/unknown identifiers
+uniformly, prior genuine session/refresh and fresh sign-in passed, modern keys
+remain active. Integration-created public-variable drift was cleaned under
+separate exact approval and final provider/release checks passed 7/7.
+**AUTH-A Production cutover: PASS/CLOSED.** Future key/integration changes must
+recheck public Auth scopes before any build. The separately approved Preview
+database/access controls are now verified below; other LC gates remain separate
+and public-launch PASS is still withheld.
+See `auth-a-stage-c-retirement.md`; do not repeat completed Stage B/C work.
+Evidence: `docs/release/auth-a-hosted-proof.md`.
+
+**LC-F note:** Free plan identified. Use the $0 operator-managed recovery
+proposal in `docs/operations/free-tier-recovery-plan.md`; do not require a
+paid backup/PITR feature. Protected destination/key custody, operator/cadence,
+export authorization and actual data-plus-objects restore remain unproven.
+
+Preparation on 18 Oct: owner-approved empty folder
+`C:\Users\O\TNCOD-Private-Backups` created with inheritance disabled and owner/
+SYSTEM-only allow rules verified. Existing GnuPG 2.4.9 and local pg_dump 17.11
+available. No key generated, Production export, backup, restore, second-copy
+destination or spending. See the same Free-tier plan; recovery is not proven.
+
+**Privacy facts:** operator/country/monitored inbox owner-confirmed; matching
+paragraph **released and live** via PR #26 at merge `9b3d37d`, focused tests 4/4,
+exact-head and post-merge CI PASS. Full Privacy-L1 sign-off remains pending.
+Existing operator facts should not be requested again.
+
+**Backup destination direction (19 Oct):** owner selected the existing church
+Drive for `cityofdavidprofessionals@gmail.com`, $0/encrypted-only, direction only.
+Owner reports 25.1 MB used of 15 GB; not connector-verified quota. This chat's
+Drive profile still selects a different Gmail account despite the owner reporting
+connection; screenshot/account availability clarification requested. No Drive
+folder, upload, export, encryption key or restore authorized/executed by that reply.
+
+**Preview database scope (18 Oct):** separately approved removal of Preview from
+the exact shared DATABASE_URL row is verified; Production's stored representation
+and all 19 unrelated settings unchanged, active deployment unchanged. This fixes
+future inheritance from that row, not credentials retained by existing immutable
+previews. Separately approved free Standard Vercel Authentication is also verified:
+two retained Previews and the unique deployment URL now require provider access,
+while the public azure site remains open (8 checks passed). No mutating Preview
+tests, credential rotation, deployment deletion, new resource or paid spend. See
+`preview-database-scope-2026-10-18.md`.
+
+**Hosting read-only check:** existing Vercel team/project is active Hobby;
+GitHub link and `main` production branch match. No paid change. Plan identity
+does not resolve exact permitted-use fit for professional/service listings;
+provider clarification and usage monitoring remain an operating decision.
+See `docs/release/hosting-free-plan-check.md`. Historical missing automatic
+deployment root cause remains unconfirmed; current auto-assignment is true.
 
 This document is the **current release-state summary** for humans and agents.  
 It does not replace locked phase contracts. It reconciles verified Production/gate evidence with repository status.
@@ -101,10 +172,10 @@ Historical preflight **BLOCKED** reports remain evidence of the earlier gate and
 ## Locked Auth residuals (unrestricted launch)
 
 ```text
-AUTH-A  E-API provider-level enumeration residual is NOT accepted
-        for unrestricted/public launch. Controlled pilot may continue.
-        Unrestricted Auth PASS remains withheld until residual removed
-        or separately reassessed to PASS.
+AUTH-A  Production Stage C PASS/CLOSED on 2026-10-18 under the selected
+        strict server-only publishable-key mitigation and old-key retirement.
+        This is not an upstream GoTrue response change. Preserve the public
+        Auth-variable release guard; do not repeat the completed cutover.
 
 AUTH-B  Remaining identifier-collision candidates must be individually
         resolved under the approved reclaim process before unrestricted launch.
@@ -113,7 +184,7 @@ AUTH-C  The designated working test account remains retained through
         controlled-pilot closeout.
 ```
 
-Do **not** claim `AUTH PASS` or `UNRESTRICTED LAUNCH READY`.
+Do **not** claim overall `AUTH PASS` while AUTH-B is open, or `UNRESTRICTED LAUNCH READY` while other launch gates remain open.
 
 ---
 
@@ -163,16 +234,21 @@ Consolidated owner board: `docs/release/gate-6b-action-board.md`
 
 ## Remaining launch gates (not complete)
 
-- AUTH-A — provider-level E-API residual (unrestricted launch blocked; pilot exception remains)
-- AUTH-B — owner confirmations for remaining reclaim candidates
-- PRIVACY-L1 — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
-- Phase 23C — real phone/tablet human acceptance
-- Phase 23D — participant / task comprehension evidence
-- Controlled pilot closeout (human)
-- Dashboard backup **class** confirmation (schema-only disposable restore drill **PASS**)
-- Protected production-data recovery drill (not executed)
+Mapped to Launch Completion (see board LC overview). Do not treat historical phase PASS as automatic clearance of these rows.
+
+- **LC-B** — remaining physical phone/tablet Member↔EXCO acceptance on current azure; desktop already verified Stage B/C (`docs/release/pr-22-signed-in-acceptance.md`)
+- **LC-B / LC-D** — PR #21 **released** with named migration verified; genuine-content/interest acceptance and operator cadence remain (`docs/release/pr-21-production-release-2026-10-18.md`)
+- **LC-B** — PR #23 dashboard clarity released; signed-in CTA acceptance remains (`docs/release/pr-23-review.md`) — do not re-implement
+- **LC-C** — AUTH-A Stage C PASS/CLOSED on current strict baseline; AUTH-B still open. Do not repeat Stage B/C; preserve public-variable guard after integration/key changes
+- **LC-C / AUTH-B** — owner confirmations for remaining reclaim candidates
+- **LC-F / PRIVACY-L1** — Privacy Notice **legal** sign-off (factual `/privacy` deployed)
+- **LC-E / Phase 23C** — remaining packet rows (owner-reported navigation/profile/privacy checks carry forward; device models not recorded)
+- **LC-E / Phase 23D** — participant comprehension (dashboard PR is only a partial implementation)
+- **LC-E** — Controlled pilot closeout (human)
+- **LC-F** — Free-tier protected backup destination/key custody + operator/cadence acceptance (historical schema-only drill **PASS**)
+- **LC-F** — Protected production-data recovery drill (not executed)
 - Monitoring alerting (optional; dashboards / procedure exist)
-- Phase 23 brand/theme/navigation UI (intentionally deferred from dirty tree)
+- Headshot UX / export / CRM / public business discovery — **deferred** (not launch blockers)
 
 ---
 

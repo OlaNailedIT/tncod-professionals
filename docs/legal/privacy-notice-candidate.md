@@ -10,15 +10,19 @@ This candidate describes **verified application behaviour**. It does not assert 
 
 ## Who we are
 
-TNCOD Professionals is a community professional network operated for Triumphant Nation City of David (TNCOD) professionals and related community participants.
+TNCOD Professionals is a community professional network operated by Triumphant Nation City of David, Nigeria, for professionals and related community participants.
 
-**LEGAL SIGN-OFF REQUIRED:** exact legal entity name, registered address, and data-controller designation for the public notice.
+**Owner confirmation, 2026-10-18:** Triumphant Nation City of David is the legal organization under which the platform operates; country: Nigeria. This is owner-supplied identity, not independent registry verification or approval of the entire notice.
+
+**LEGAL SIGN-OFF STILL REQUIRED:** registered/postal address if applicable and final data-controller designation/wording. No address or registration number has been supplied or invented.
 
 Contact for privacy questions (product operations channel already used for the platform):
 
 - Email: `cityofdavidprofessionals@gmail.com` (display name: TNCOD Professionals)
 
-**LEGAL SIGN-OFF REQUIRED:** whether this address is the enduring privacy contact and whether additional postal/legal contacts must appear.
+The owner confirms someone actively monitors this inbox. No named case handler, response-time commitment or indefinite monitoring guarantee is inferred.
+
+**LEGAL SIGN-OFF STILL REQUIRED:** whether additional postal/legal contacts must appear. The operator/country and monitored-inbox facts are confirmed; remaining legal wording is not approved by that confirmation.
 
 ---
 

@@ -1,11 +1,21 @@
 # Phase 23C — Human device acceptance packet
 
-**Status:** **READY / not executed**  
+**Status:** **PARTIAL / remaining human evidence required** (reconciled 2026-10-18)
 **Automation cannot close 23C.** Use a real phone and a tablet/iPad-class device.
 
 **Production origin:** `https://tncod-professionals-azure.vercel.app`  
 **Do not** treat desktop browser emulation as PASS.  
 **Do not** invent devices, screenshots, or results.
+
+## Evidence already supplied — do not restart it
+
+The owner reported phone/tablet navigation, join, email sign-in/dashboard, profile
+overview, edit/save and privacy/save passing. These are human owner reports, not
+emulated test results. Carry them forward in rows 2–7 and 9 below. Device/browser
+models and exact observation dates were not recorded; do not invent them or make
+missing model metadata a reason to rerun passing rows. Other criteria remain open.
+The later desktop Member↔EXCO result is separately verified in the Stage B/C
+records; it does not fill the remaining physical-device EXCO row.
 
 ---
 
@@ -48,14 +58,14 @@ For each row: mark PASS/FAIL, severity (S0–S3) if FAIL, optional screenshot pa
 | # | Task | Expected outcome | Phone | Tablet | Severity if FAIL | Notes / screenshot |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | Open home `/` | Brand/home readable; Join + Sign in reachable; no sideways scrolling | | | | |
-| 2 | Open public menu / nav | Home, Professionals, Join, Sign in work | | | | |
-| 3 | `/join` — register | Form usable; required fields clear; submit reachable; no clipped buttons | | | | |
-| 4 | `/sign-in` — email OTP | Enter email → receive code → enter OTP; keyboard does not hide primary actions | | | | |
-| 5 | After sign-in → `/dashboard` | Member home usable; next step is clear | | | | |
-| 6 | `/profile` overview | Status language readable (completion / verification / directory stay distinct) | | | | |
-| 7 | `/profile/edit` | Edit + save works; required vs optional clear enough to finish | | | | |
+| 2 | Open public menu / nav | Home, Professionals, Join, Sign in work | PASS — owner report | PASS — owner report | | Models/date unrecorded |
+| 3 | `/join` — register | Form usable; required fields clear; submit reachable; no clipped buttons | PASS — owner report | PASS — owner report | | Carry forward; no new registration required |
+| 4 | `/sign-in` — email OTP | Enter email → receive code → enter OTP; keyboard does not hide primary actions | PASS — owner report | PASS — owner report | | Do not request another code just for this row |
+| 5 | After sign-in → `/dashboard` | Member home usable; next step is clear | PASS — owner report | PASS — owner report | | Independent participant comprehension remains 23D |
+| 6 | `/profile` overview | Status language readable (completion / verification / directory stay distinct) | PASS — owner report | PASS — owner report | | Do not infer participant understanding from this |
+| 7 | `/profile/edit` | Edit + save works; required vs optional clear enough to finish | PASS — owner report | PASS — owner report | | Carry forward |
 | 8 | Verification presentation | You can tell verification is a separate step from joining (no false “already verified” claim) | | | | |
-| 9 | `/settings/privacy` | Visibility controls understandable; save works | | | | |
+| 9 | `/settings/privacy` | Visibility controls understandable; save works | PASS — owner report | PASS — owner report | | Legal sign-off remains separate |
 | 10 | Directory eligibility | On `/professionals`, only published+verified people appear publicly; your unpublished record is not wrongly public | | | | |
 | 11 | `/professionals` + one profile | List + detail readable on small screens | | | | |
 | 12 | `/businesses` (if applicable) | List/create/edit reachable without dead ends | | | | |

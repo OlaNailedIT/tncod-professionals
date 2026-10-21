@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-17",
+  "environment": "Production brpppukzqgpzxjelwwrj / azure origin",
+  "deploymentId": "dpl_BxLFz9gBDNvE1uTqN7Avpd9eMHRC",
+  "applicationSha": "bcd113de137bde1216aa147fc9cc699b40156884",
+  "approval": "One exact synthetic MEMBER, PRIVATE business and tiny non-sensitive document, with exact cleanup; no real-account/role changes, migration, key deactivation or spending.",
+  "registration": {
+    "source": "Owner submitted normal live form in regular browser; persisted Auth/application readback verified.",
+    "accountStatus": "ACTIVE",
+    "roles": ["MEMBER"],
+    "profileStatus": "REGISTERED",
+    "verificationStatus": "NOT_REVIEWED",
+    "visibilityStatus": "PRIVATE",
+    "provisioningObligations": 0,
+    "captcha": "Owner-reported normal-browser success; no CAPTCHA bypass or automated CAPTCHA PASS.",
+    "phoneLimit": "Stored phone differs from the proposed US fictional fixture number; no cross-country phone acceptance is claimed. Cleanup used exact UUID/email/name/ownership."
+  },
+  "focusedChecks": {
+    "passed": 12,
+    "failed": 0,
+    "checks": [
+      "Hydrated sign-in retains exact synthetic email",
+      "Genuine email-code session belongs to exact synthetic member",
+      "Existing business remains owned PRIVATE/DRAFT",
+      "Upload change/submit handlers attached before interaction",
+      "Upload uses actual server-action POST, HTTP 200",
+      "Upload success confirmed and single document persisted",
+      "Owner receives authorized private signed-document redirect",
+      "Signed download returns exact 66 synthetic bytes",
+      "Anonymous signed-document access denied",
+      "Private object denied at public URL",
+      "Nonexistent document substitution denied",
+      "Normal logout HTTP route removes synthetic member access"
+    ],
+    "notSummedWithEarlierRuns": true,
+    "consoleErrorCount": 1,
+    "pageErrorCount": 0,
+    "consoleErrorCause": "Not captured; no zero-console-error claim."
+  },
+  "earlierAttemptsRetained": [
+    "Automated live CAPTCHA failed; switched to owner-operated regular browser without changing controls.",
+    "First upload timed out with no persisted document; exact cause not proved. Hydrated focused retry passed; no application fix was made.",
+    "Focused initial sign-in stopped with Email is required before code entry. Readiness was corrected in the harness, not the application."
+  ],
+  "cleanup": {
+    "userId": "5d999e7e-bcd4-420b-857d-5f3fb28654ca",
+    "profileId": "e91fd971-2e36-4cc5-8278-b1f0937d329f",
+    "businessId": "50d843ea-7e59-4c9a-bd19-d04499cb2399",
+    "documentId": "56ad3643-16e3-4330-8a14-c6a1bdea710a",
+    "sequence": "Normal synthetic-account logout; exact Storage object removal; guarded atomic domain cleanup; exact Auth Admin deletion; final readback.",
+    "authIdentities": 0,
+    "applicationUsers": 0,
+    "profiles": 0,
+    "businesses": 0,
+    "documents": 0,
+    "fixtureRoles": 0,
+    "sessions": 0,
+    "privateObjects": 0,
+    "auditEntriesPreserved": 2,
+    "realOperatorActive": true,
+    "realOperatorRolesUnchanged": ["EXCO_VIEWER", "SUPER_ADMIN"]
+  },
+  "credentialsCodesCookiesSignedUrlsLogged": false,
+  "newDeploymentThisFixturePass": false,
+  "keysDisabled": false,
+  "paidResourcesAdded": false,
+  "productionFaultInjectionPerformed": false,
+  "authAClosed": false,
+  "stageCAuthorized": false
+}
