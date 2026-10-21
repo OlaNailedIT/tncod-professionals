@@ -14,12 +14,12 @@
   --brand-white: #ffffff;
 
   /* —— Level 2: Semantic colour —— */
-  --background: #f5f7fb;
+  --background: #faf9f6;
   --foreground: var(--brand-primary);
 
   --surface: var(--brand-white);
-  --surface-muted: #eef2f8;
-  --surface-subtle: #e4eaf3;
+  --surface-muted: #f3f0ea;
+  --surface-subtle: #ebe7df;
 
   --primary: var(--brand-primary);
   --primary-foreground: var(--brand-white);

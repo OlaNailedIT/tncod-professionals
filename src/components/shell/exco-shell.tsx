@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { BrandLogo } from "@/components/brand/logo";
+import { ProfessionalsLogo } from "@/components/brand/professionals-logo";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumbs, type BreadcrumbItem } from "./breadcrumbs";
@@ -58,20 +58,20 @@ export function ExcoShell({
           {mode === "link" ? (
             <Link
               href="/exco"
-              className="max-w-[120px] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="max-w-[160px] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="EXCO home"
               onClick={() => onNavigate?.("/exco")}
             >
-              <BrandLogo className="max-w-[120px]" alt="" />
+              <ProfessionalsLogo compact alt="" />
             </Link>
           ) : (
             <button
               type="button"
-              className="max-w-[120px] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="max-w-[160px] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="EXCO home"
               onClick={() => onNavigate?.("/exco")}
             >
-              <BrandLogo className="max-w-[120px]" alt="" />
+              <ProfessionalsLogo compact alt="" />
             </button>
           )}
           <p className="mt-2 text-caption font-medium uppercase tracking-wide text-muted-foreground">

@@ -9,10 +9,11 @@ type BrandLogoProps = {
 };
 
 /**
- * Official TNCOD logo — do not recolour, redraw, or substitute.
+ * Parent church logo — attribution only, not primary product chrome.
+ * Preserve the owner-supplied artwork; use ProfessionalsLogo for the product.
  * Asset: public/brand/tncod-logo.jpg
  */
-export function BrandLogo({
+export function ParentBrandLogo({
   className,
   alt = "Triumphant Nation City of David",
   priority = false,
@@ -21,10 +22,13 @@ export function BrandLogo({
     <Image
       src="/brand/tncod-logo.jpg"
       alt={alt}
-      width={640}
-      height={240}
+      width={194}
+      height={148}
       priority={priority}
       className={cn("h-auto w-full max-w-xs object-contain", className)}
     />
   );
 }
+
+/** Compatibility for existing design-system specimens; still the parent mark. */
+export const BrandLogo = ParentBrandLogo;

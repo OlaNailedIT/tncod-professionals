@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BrandLogo } from "@/components/brand/logo";
 import { Container, Section, Stack } from "@/components/layout";
 import { ProductPublicShell } from "@/components/shell/product-public-shell";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ export default function HomePage() {
       <div className="relative overflow-hidden border-b border-border-subtle bg-gradient-to-b from-surface via-background to-background">
         <Container width="standard" className="py-16 md:py-24">
           <Stack gap="comfortable">
-            <BrandLogo className="max-w-[280px]" priority />
             <div className="max-w-2xl">
               <h1 className="text-display text-foreground">TNCOD Professionals</h1>
               <p className="mt-4 text-body-lg text-muted-foreground">
