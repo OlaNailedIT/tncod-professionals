@@ -33,6 +33,19 @@ describe("Turnstile registration verification", () => {
     expect(String(request.body)).toContain("idempotency_key=");
   });
 
+  it("accepts the new approved hostname while the existing site URL remains configured", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        hostname: "codprofessionals.viix.solutions",
+        action: "registration",
+      }),
+    }));
+
+    await expect(verifyRegistrationCaptcha("new-domain-token")).resolves.toBe(true);
+  });
+
   it("rejects a token issued for another hostname or action", async () => {
     const fetchMock = vi
       .fn()

@@ -18,9 +18,9 @@ vi.mock("@/lib/logger", () => ({
 
 import { POST } from "@/app/api/auth/request-otp/route";
 
-function makeRequest(body: unknown) {
+function makeRequest(body: unknown, hostname = "tncod-professionals-azure.vercel.app") {
   return {
-    url: "https://tncod-professionals-azure.vercel.app/api/auth/request-otp",
+    url: `https://${hostname}/api/auth/request-otp`,
     cookies: { getAll: () => [] },
     json: async () => body,
   } as unknown as import("next/server").NextRequest;
@@ -54,6 +54,24 @@ describe("POST /api/auth/request-otp neutralization", () => {
     expect(member.status).toBe(200);
     expect(unknown.status).toBe(200);
     await expect(member.json()).resolves.toEqual(await unknown.json());
+  });
+
+  it("returns email-code callbacks to each approved hostname without trusting an arbitrary host", async () => {
+    vi.stubEnv("AUTH_E2E_HELPER", "1");
+    const body = { email: "member@example.com", next: "/dashboard" };
+    const oldSite = await POST(makeRequest(body));
+    const newSite = await POST(makeRequest(body, "codprofessionals.viix.solutions"));
+    const unknownSite = await POST(makeRequest(body, "untrusted.example"));
+
+    expect((await oldSite.json()).emailRedirectTo).toBe(
+      "https://tncod-professionals-azure.vercel.app/auth/callback?next=%2Fdashboard",
+    );
+    expect((await newSite.json()).emailRedirectTo).toBe(
+      "https://codprofessionals.viix.solutions/auth/callback?next=%2Fdashboard",
+    );
+    expect((await unknownSite.json()).emailRedirectTo).toBe(
+      "https://tncod-professionals-azure.vercel.app/auth/callback?next=%2Fdashboard",
+    );
   });
 
   it("uses the private low-privilege key without exposing it or provider differences", async () => {
