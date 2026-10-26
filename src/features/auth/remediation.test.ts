@@ -70,7 +70,10 @@ describe("Phase 4 OTP and inactive-account controls", () => {
       token: "123456",
     });
 
-    expect(result.ok).toBe(false);
+    expect(result).toEqual({
+      ok: false,
+      message: "We couldn't verify that code. Check your latest email or request a new code.",
+    });
     expect(mocks.signOut).toHaveBeenCalledWith({ scope: "local" });
   });
 
@@ -92,7 +95,7 @@ describe("Phase 4 OTP and inactive-account controls", () => {
     expect(first).toEqual(replay);
     expect(first).toEqual({
       ok: false,
-      message: "That code is invalid or has expired. Request a new code and try again.",
+      message: "We couldn't verify that code. Check your latest email or request a new code.",
     });
   });
 });

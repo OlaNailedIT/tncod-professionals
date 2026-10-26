@@ -77,7 +77,7 @@ export async function verifySignInOtpAction(input: {
     logger.info("auth_sign_in_verify_failed", { error_category: "otp_verify" });
     return {
       ok: false,
-      message: "That code is invalid or has expired. Request a new code and try again.",
+      message: "We couldn't verify that code. Check your latest email or request a new code.",
     };
   }
 
@@ -86,7 +86,7 @@ export async function verifySignInOtpAction(input: {
     logger.info("auth_sign_in_verify_failed", { error_category: "inactive_identity" });
     return {
       ok: false,
-      message: "That code is invalid or has expired. Request a new code and try again.",
+      message: "We couldn't verify that code. Check your latest email or request a new code.",
     };
   }
 

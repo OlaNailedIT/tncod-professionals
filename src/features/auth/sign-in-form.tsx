@@ -326,7 +326,8 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
                   />
                 </Field>
                 <p id="sign-in-code-hint" className="text-body-sm text-muted-foreground">
-                  Paste the full code from your email, or type it here.
+                  Paste the full code from your latest email, or type it here. The countdown shows
+                  when you can request another code, not when this one expires.
                 </p>
                 <FormActions>
                   <Button type="submit" disabled={!controlsReady}>
@@ -338,7 +339,7 @@ export function SignInForm({ nextPath }: { nextPath: string }) {
                     disabled={!resendReady}
                     onClick={() => void onResend()}
                   >
-                    {resendSeconds > 0 ? `Resend code (${resendSeconds}s)` : "Resend code"}
+                    {resendSeconds > 0 ? `Resend available in ${resendSeconds}s` : "Resend code"}
                   </Button>
                   <Button type="button" variant="ghost" disabled={!controlsReady} onClick={onUseDifferentEmail}>
                     Use a different email
