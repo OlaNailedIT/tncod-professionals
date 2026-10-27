@@ -1,5 +1,9 @@
 # Gate 6B — Consolidated human action board
 
+> **Current status:** [Launch gates — 27 October 2026](launch-gates-2026-10-27.md).
+> The identities and pending labels below are historical and must not be used to
+> restart completed AUTH-A, AUTH-B, privacy, roster or PR #29/#31 work.
+
 **Opened:** 2026-10-12  
 **Updated:** 2026-10-16 (Phase 23D dashboard-clarity PR; PR #22 merged to main; PR #21 still separate; AUTH-A candidate unchanged)
 **Gate 6A:** PASS — do not reopen without a new reproducible regression  

@@ -1,5 +1,9 @@
 # TNCOD Professionals — Release State
 
+> **Current status:** [Launch gates — 27 October 2026](launch-gates-2026-10-27.md).
+> The SHA and Production identity below are historical evidence, not the current
+> release. Preserve them for chronology; use the dated ledger for active gates.
+
 **Authority date:** 2026-10-12  
 **Release Gate 5:** Release hygiene / clean source reconstruction  
 **Authoritative Git SHA (current `origin/main` tip):** `6618ac87c806e1a58cd027c34c08783bb7ed6567`  
