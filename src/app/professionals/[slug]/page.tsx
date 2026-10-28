@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProductPublicShell } from "@/components/shell/product-public-shell";
+import { DirectoryShell } from "@/components/shell/directory-shell";
 import { MetadataGroup, MetadataItem, StatusBadge, Surface } from "@/components/ui";
 import { getDirectoryProfessionalBySlug } from "@/features/directory/list";
+import { getAuthenticatedUser } from "@/server/auth/session";
 
 export const dynamic = "force-dynamic";
 
@@ -18,13 +19,16 @@ export default async function ProfessionalPublicProfilePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const record = await getDirectoryProfessionalBySlug(decodeURIComponent(slug));
+  const [record, identity] = await Promise.all([
+    getDirectoryProfessionalBySlug(decodeURIComponent(slug)),
+    getAuthenticatedUser(),
+  ]);
   if (!record) {
     notFound();
   }
 
   return (
-    <ProductPublicShell pathname="/professionals">
+    <DirectoryShell isMember={Boolean(identity)}>
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8">
         <p className="text-sm text-muted-foreground">
           <Link href="/professionals" className="underline-offset-2 hover:underline">
@@ -77,6 +81,6 @@ export default async function ProfessionalPublicProfilePage({
           private profile fields are not available here.
         </p>
       </div>
-    </ProductPublicShell>
+    </DirectoryShell>
   );
 }

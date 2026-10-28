@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ProductPublicShell } from "@/components/shell/product-public-shell";
+import { DirectoryShell } from "@/components/shell/directory-shell";
 import { EmptyState } from "@/components/ui";
 import { DirectoryFiltersForm } from "@/features/directory/filters-form";
 import { DirectoryProfessionalCard } from "@/features/directory/professional-card";
+import { loadDirectoryMemberContext } from "@/features/directory/self-status";
+import { DirectorySelfStatusNote } from "@/features/directory/self-status-note";
 import {
   listDirectoryIndustryOptions,
   listDirectoryProfessionals,
@@ -29,9 +31,10 @@ export default async function ProfessionalsDirectoryPage({
 }) {
   const raw = await searchParams;
   const query = parseDirectoryQuery(raw);
-  const [result, industries] = await Promise.all([
+  const [result, industries, member] = await Promise.all([
     listDirectoryProfessionals(query),
     listDirectoryIndustryOptions(),
+    loadDirectoryMemberContext(),
   ]);
 
   const hasFilters = Boolean(
@@ -39,7 +42,7 @@ export default async function ProfessionalsDirectoryPage({
   );
 
   return (
-    <ProductPublicShell pathname="/professionals">
+    <DirectoryShell isMember={member.isMember}>
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Professionals Directory</h1>
@@ -48,6 +51,8 @@ export default async function ProfessionalsDirectoryPage({
             completion, verification, and directory publication remain separate.
           </p>
         </div>
+
+        <DirectorySelfStatusNote status={member.selfStatus} />
 
         <DirectoryFiltersForm query={query} industries={industries} />
 
@@ -108,6 +113,6 @@ export default async function ProfessionalsDirectoryPage({
           </nav>
         ) : null}
       </div>
-    </ProductPublicShell>
+    </DirectoryShell>
   );
 }
