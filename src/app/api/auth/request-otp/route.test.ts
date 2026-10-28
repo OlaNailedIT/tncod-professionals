@@ -60,14 +60,18 @@ describe("POST /api/auth/request-otp neutralization", () => {
     vi.stubEnv("AUTH_E2E_HELPER", "1");
     const body = { email: "member@example.com", next: "/dashboard" };
     const oldSite = await POST(makeRequest(body));
-    const newSite = await POST(makeRequest(body, "codprofessionals.viix.solutions"));
+    const viixSite = await POST(makeRequest(body, "codprofessionals.viix.solutions"));
+    const resourcesSite = await POST(makeRequest(body, "codprofessionals.69resources.com"));
     const unknownSite = await POST(makeRequest(body, "untrusted.example"));
 
     expect((await oldSite.json()).emailRedirectTo).toBe(
       "https://tncod-professionals-azure.vercel.app/auth/callback?next=%2Fdashboard",
     );
-    expect((await newSite.json()).emailRedirectTo).toBe(
+    expect((await viixSite.json()).emailRedirectTo).toBe(
       "https://codprofessionals.viix.solutions/auth/callback?next=%2Fdashboard",
+    );
+    expect((await resourcesSite.json()).emailRedirectTo).toBe(
+      "https://codprofessionals.69resources.com/auth/callback?next=%2Fdashboard",
     );
     expect((await unknownSite.json()).emailRedirectTo).toBe(
       "https://tncod-professionals-azure.vercel.app/auth/callback?next=%2Fdashboard",

@@ -5,8 +5,19 @@
 const { spawnSync } = require("child_process");
 
 const PROD = "https://tncod-professionals-azure.vercel.app";
-const LEGACY = "https://tncod-professionals-olanailedits-projects.vercel.app";
+const VIIX = "https://codprofessionals.viix.solutions";
+const RESOURCES = "https://codprofessionals.69resources.com";
 const REF = "brpppukzqgpzxjelwwrj";
+const REQUIRED_REDIRECTS = [
+  `${PROD}/auth/callback`,
+  `${VIIX}/auth/callback`,
+  `${RESOURCES}/auth/callback`,
+];
+
+function mergeRedirectAllowList(current) {
+  const existing = String(current || "").split(",").map((entry) => entry.trim()).filter(Boolean);
+  return [...new Set([...existing, ...REQUIRED_REDIRECTS])].join(",");
+}
 
 function getToken() {
   const ps = `
@@ -52,16 +63,14 @@ async function main() {
     console.log("TOKEN=ABSENT");
     process.exit(2);
   }
-  const allow = [
-    PROD,
-    `${PROD}/`,
-    `${PROD}/auth/callback`,
-    `${PROD}/**`,
-    LEGACY,
-    `${LEGACY}/`,
-    `${LEGACY}/auth/callback`,
-    `${LEGACY}/**`,
-  ].join(",");
+  // Read before writing: Auth may have gained more approved redirects since this
+  // script was created. Never replace them with an older fixed list.
+  const preflight = await fetch(`https://api.supabase.com/v1/projects/${REF}/config/auth`, {
+    headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+  });
+  if (!preflight.ok) throw new Error(`Auth config preflight failed (${preflight.status})`);
+  const current = await preflight.json();
+  const allow = mergeRedirectAllowList(current.uri_allow_list);
 
   if (!verifyOnly) {
     const patch = await fetch(
@@ -123,7 +132,7 @@ async function main() {
   );
   if (
     j.site_url !== `${PROD}/` ||
-    !allowed.includes(`${PROD}/auth/callback`) ||
+    !REQUIRED_REDIRECTS.every((redirect) => allowed.includes(redirect)) ||
     j.disable_signup !== true ||
     j.external_email_enabled !== true ||
     !magicLink.includes("{{ .Token }}") ||
@@ -134,7 +143,11 @@ async function main() {
   console.log("REPAIR_OK");
 }
 
-main().catch((e) => {
-  console.error(e.message);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });
+}
+
+module.exports = { mergeRedirectAllowList };

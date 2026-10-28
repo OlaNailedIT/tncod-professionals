@@ -33,12 +33,15 @@ describe("Turnstile registration verification", () => {
     expect(String(request.body)).toContain("idempotency_key=");
   });
 
-  it("accepts the new approved hostname while the existing site URL remains configured", async () => {
+  it.each([
+    "codprofessionals.viix.solutions",
+    "codprofessionals.69resources.com",
+  ])("accepts approved hostname %s while the existing site URL remains configured", async (hostname) => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
         success: true,
-        hostname: "codprofessionals.viix.solutions",
+        hostname,
         action: "registration",
       }),
     }));

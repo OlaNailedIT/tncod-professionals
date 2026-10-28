@@ -1,7 +1,8 @@
-/** The two public origins served during the VIIX domain transition. */
+/** Public origins approved for the domain transition. */
 const productionHostnames = new Set([
   "tncod-professionals-azure.vercel.app",
   "codprofessionals.viix.solutions",
+  "codprofessionals.69resources.com",
 ]);
 
 export function isProductionSiteHostname(hostname: string): boolean {
