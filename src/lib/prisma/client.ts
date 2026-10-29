@@ -1,6 +1,7 @@
 import "server-only";
 
 import { PrismaClient } from "@prisma/client";
+import { runtimePrismaUrl } from "@/lib/prisma/runtime-url";
 
 /**
  * Privileged database access. Bypasses PostgreSQL RLS.
@@ -10,7 +11,10 @@ const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 export function getPrisma(): PrismaClient {
   if (!globalForPrisma.prisma) {
-    globalForPrisma.prisma = new PrismaClient();
+    const runtimeUrl = runtimePrismaUrl(process.env.DATABASE_URL);
+    globalForPrisma.prisma = runtimeUrl && runtimeUrl !== process.env.DATABASE_URL
+      ? new PrismaClient({ datasources: { db: { url: runtimeUrl } } })
+      : new PrismaClient();
   }
   return globalForPrisma.prisma;
 }
