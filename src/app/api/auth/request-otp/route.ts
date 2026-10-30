@@ -5,6 +5,7 @@ import { sanitizeNextPath } from "@/lib/auth/safe-redirect";
 import { classifyAuthErrorMessage } from "@/lib/auth/classify-auth-error";
 import { logger } from "@/lib/logger";
 import { getSessionSupabaseConfig } from "@/lib/env/supabase-session";
+import { isProductionSiteHostname } from "@/lib/site-hosts";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
@@ -33,9 +34,13 @@ function unwrapEnv(value: string | undefined): string | undefined {
  */
 export async function POST(request: NextRequest) {
   const config = getSessionSupabaseConfig();
+  const requestUrl = new URL(request.url);
   const origin =
+    (requestUrl.protocol === "https:" && isProductionSiteHostname(requestUrl.hostname)
+      ? requestUrl.origin
+      : null) ||
     unwrapEnv(process.env.NEXT_PUBLIC_SITE_URL)?.replace(/\/$/, "") ||
-    new URL(request.url).origin;
+    requestUrl.origin;
 
   let body: unknown;
   try {

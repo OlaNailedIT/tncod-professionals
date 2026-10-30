@@ -1,6 +1,7 @@
 import "server-only";
 
 import { randomUUID } from "node:crypto";
+import { isProductionSiteHostname } from "@/lib/site-hosts";
 
 const VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const EXPECTED_ACTION = "registration";
@@ -56,7 +57,9 @@ export async function verifyRegistrationCaptcha(
     const result = (await response.json()) as TurnstileResponse;
     return (
       result.success === true &&
-      result.hostname === expectedHostname &&
+      (result.hostname === expectedHostname ||
+        (typeof result.hostname === "string" &&
+          isProductionSiteHostname(result.hostname))) &&
       result.action === EXPECTED_ACTION
     );
   } catch {
