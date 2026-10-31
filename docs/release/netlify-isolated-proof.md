@@ -5,7 +5,7 @@ Scope: hosting compatibility for the existing application. No database migration
 
 ## What changes
 
-- Generate Prisma before the Netlify build and include the Node 20+ Linux engine target alongside native. The datasource and runtime transaction-pooler fix are unchanged.
+- Explicitly activate Netlify's Next.js adapter, generate Prisma before the build and include the Node 20+ Linux engine target alongside native. The datasource and runtime transaction-pooler fix are unchanged. The actual hosted project omitted adapter activation despite framework detection, so automatic detection alone is insufficient evidence.
 - Preserve the design laboratory's Production 404 for both Vercel and Netlify deployment contexts. Local and preview access stays available.
 - Match the existing `0 3 * * *` UTC registration-cleanup schedule on Netlify. The scheduled function requires the runtime context to identify a published Production deploy, then calls that deploy's existing authenticated cleanup route. It does not duplicate cleanup SQL or weaken the route's bearer check.
 - The maintenance sender rejects missing/short secrets, invalid deployment identities and preview/unpublished invocations. Redirects are refused so the secret cannot be forwarded elsewhere. Errors omit response bodies. The sender times out at 25 seconds to fit Netlify's documented 30-second scheduled-function limit; verify real completion before any cutover.

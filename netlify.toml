@@ -6,6 +6,9 @@
   NODE_VERSION = "22"
   NEXT_TELEMETRY_DISABLED = "1"
 
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [functions."registration-cleanup"]
   schedule = "0 3 * * *"
 
