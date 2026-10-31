@@ -51,4 +51,15 @@ jobs:
         run: |
           set -euo pipefail
           test -f node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node
+          test -f .netlify/functions/registration-cleanup.zip
+          unzip -Z1 .netlify/functions/___netlify-server-handler.zip > /tmp/tncod-netlify-server-files.txt
+          grep -F 'libquery_engine-rhel-openssl-3.0.x.so.node' /tmp/tncod-netlify-server-files.txt
+          node --input-type=module -e '
+            import { readFileSync } from "node:fs";
+            const manifest = JSON.parse(readFileSync(".next/prerender-manifest.json", "utf8"));
+            if (!manifest.notFoundRoutes.includes("/design-system")) {
+              throw new Error("Production build did not withhold the design laboratory");
+            }
+            console.log("Production laboratory 404 artifact verified");
+          '
           find .netlify -type f \( -name '*.zip' -o -name '*rhel-openssl-3.0.x*' -o -name '*manifest*.json' \) -print
