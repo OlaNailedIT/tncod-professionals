@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { isProductionDeployment } from "@/lib/env/deployment";
 import { BrandLogo } from "@/components/brand/logo";
 import { Container, Grid, PageFrame, Section, Stack } from "@/components/layout";
 import {
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
  * Available in local/preview; Production returns 404.
  */
 function assertDesignSystemAllowed() {
-  if (process.env.VERCEL_ENV === "production") {
+  if (isProductionDeployment()) {
     notFound();
   }
 }

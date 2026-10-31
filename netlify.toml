@@ -1,0 +1,13 @@
+[build]
+  command = "npm run prisma:generate && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+[functions."registration-cleanup"]
+  schedule = "0 3 * * *"
+
+# Configure all secrets privately in the Functions/Build environment as required.
+# Never put Production credentials in this file or in deploy-preview contexts.

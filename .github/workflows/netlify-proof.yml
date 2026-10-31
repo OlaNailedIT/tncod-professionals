@@ -1,0 +1,54 @@
+name: netlify-proof
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/netlify-proof.yml'
+      - 'netlify.toml'
+      - 'netlify/**'
+      - 'prisma/schema.prisma'
+      - 'src/lib/env/deployment*'
+      - 'src/lib/maintenance/**'
+      - 'src/app/design-system/page.tsx'
+      - 'package*.json'
+      - 'next.config.ts'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Netlify isolated packaging
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      # Loopback/synthetic values only. This job never deploys or reads secrets.
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      SUPABASE_URL: http://127.0.0.1:54321
+      SUPABASE_PUBLISHABLE_KEY: sb_publishable_build_only_placeholder
+      SUPABASE_AUTH_SERVER_ONLY: '1'
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+      NEXT_TELEMETRY_DISABLED: '1'
+      NETLIFY_AUTH_TOKEN: ''
+      NETLIFY_SITE_ID: ''
+      CONTEXT: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked application dependencies
+        run: npm ci
+      - name: Build through Netlify without account access or deployment
+        run: npx --yes --package=netlify-cli@27.16.1 -- netlify build --offline
+      - name: Inspect generated function and engine artifacts
+        run: |
+          set -euo pipefail
+          test -f node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node
+          find .netlify -type f \( -name '*.zip' -o -name '*rhel-openssl-3.0.x*' -o -name '*manifest*.json' \) -print

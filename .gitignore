@@ -35,4 +35,5 @@ scripts/migrations/phase18/derived/
 *.tsbuildinfo
 
 .vercel/
+.netlify/
 .env.local
