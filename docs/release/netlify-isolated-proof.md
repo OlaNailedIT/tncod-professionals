@@ -16,7 +16,7 @@ The Vercel cron remains intact. Do not activate two live maintenance operators i
 
 The new checkout has no copied `.env` files. Use loopback-only database/Auth placeholders for builds. Never import a Production environment file or attach Production member data to this proof.
 
-Required validation: focused context/maintenance tests and existing cleanup-route authorization tests; changed-file lint; typecheck; Next build through Netlify's adapter; generated engine and function/schedule packaging inspection. Build success alone does not prove hosted connectivity or member journeys.
+Required validation: focused context/maintenance tests and existing cleanup-route authorization tests; changed-file lint; typecheck; Next build through Netlify's adapter; generated engine and function/schedule packaging inspection; actual HTTP checks against that production build (homepage 200, laboratory 404, unauthenticated maintenance 401). Build success alone does not prove hosted connectivity or member journeys.
 
 ## Hosted proof and cutover conditions
 

@@ -54,14 +54,27 @@ jobs:
           test -f .netlify/functions/registration-cleanup.zip
           unzip -Z1 .netlify/functions/___netlify-server-handler.zip > /tmp/tncod-netlify-server-files.txt
           grep -F 'libquery_engine-rhel-openssl-3.0.x.so.node' /tmp/tncod-netlify-server-files.txt
-          node --input-type=module -e '
-            import { readFileSync } from "node:fs";
-            const manifest = JSON.parse(readFileSync(".next/prerender-manifest.json", "utf8"));
-            const absentPage = manifest.notFoundRoutes.includes("/design-system");
-            const appStatus = manifest.routes["/design-system"]?.initialStatus;
-            if (!absentPage && appStatus !== 404) {
-              throw new Error("Production build did not withhold the design laboratory");
-            }
-            console.log("Production laboratory 404 artifact verified");
-          '
           find .netlify -type f \( -name '*.zip' -o -name '*rhel-openssl-3.0.x*' -o -name '*manifest*.json' \) -print
+      - name: Verify built production HTTP boundaries
+        run: |
+          set -euo pipefail
+          node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3100 > /tmp/tncod-next-proof.log 2>&1 &
+          app_pid=$!
+          trap 'kill "$app_pid" 2>/dev/null || true' EXIT
+          ready=false
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:3100/ > /tmp/tncod-home-proof.html; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          test "$ready" = true
+          grep -Fq 'TNCOD Professionals' /tmp/tncod-home-proof.html
+          lab_status=$(curl --silent --show-error --output /tmp/tncod-lab-proof.html --write-out '%{http_code}' http://127.0.0.1:3100/design-system)
+          test "$lab_status" = 404
+          grep -Fq 'This page could not be found' /tmp/tncod-lab-proof.html
+          cleanup_status=$(curl --silent --show-error --output /tmp/tncod-cleanup-proof.json --write-out '%{http_code}' http://127.0.0.1:3100/api/internal/registration-cleanup)
+          test "$cleanup_status" = 401
+          grep -Fq '"ok":false' /tmp/tncod-cleanup-proof.json
+          echo 'Built HTTP boundaries verified: homepage 200, laboratory 404, unauthenticated maintenance 401'
