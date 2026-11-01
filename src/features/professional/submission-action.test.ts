@@ -1,11 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppError } from "@/lib/errors";
 
-const mocks = vi.hoisted(() => ({ identity: vi.fn(), submit: vi.fn(), revalidate: vi.fn(), log: vi.fn() }));
+const mocks = vi.hoisted(() => ({ identity: vi.fn(), submit: vi.fn(), revalidate: vi.fn(), log: vi.fn(), headers: vi.fn(), redirect: vi.fn() }));
 vi.mock("@/server/auth/session", () => ({ requireAuthenticatedUser: mocks.identity }));
 vi.mock("@/features/professional/submit-profile", () => ({ submitProfile: mocks.submit }));
 vi.mock("@/features/professional/exco-review", () => ({ applyExcoProfessionalDecision: vi.fn(), publishProfile: vi.fn(), unpublishProfile: vi.fn() }));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidate }));
+vi.mock("next/headers", () => ({ headers: mocks.headers }));
+vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
 vi.mock("@/lib/logger", () => ({ logger: { error: mocks.log } }));
 import { submitProfileAction } from "./actions";
 
@@ -14,6 +16,7 @@ describe("progressive submission action", () => {
     vi.resetAllMocks();
     mocks.identity.mockResolvedValue({ userId: "trusted-session-identity" });
     mocks.submit.mockResolvedValue({ ok: true });
+    mocks.headers.mockResolvedValue(new Headers({ accept: "text/x-component" }));
   });
 
   it("uses session identity, calls the existing command and refreshes after success", async () => {
@@ -21,6 +24,16 @@ describe("progressive submission action", () => {
     expect(mocks.submit).toHaveBeenCalledExactlyOnceWith("trusted-session-identity");
     expect(mocks.revalidate).toHaveBeenCalledWith("/profile");
     expect(mocks.revalidate).toHaveBeenCalledWith("/exco/verification");
+    expect(mocks.redirect).not.toHaveBeenCalled();
+  });
+
+  it("redirects successful native HTML posts outside error handling", async () => {
+    const signal = new Error("framework redirect signal");
+    mocks.headers.mockResolvedValue(new Headers({ accept: "text/html,application/xhtml+xml" }));
+    mocks.redirect.mockImplementation(() => { throw signal; });
+    await expect(submitProfileAction()).rejects.toBe(signal);
+    expect(mocks.redirect).toHaveBeenCalledExactlyOnceWith("/profile");
+    expect(mocks.log).not.toHaveBeenCalled();
   });
 
   it("preserves a server eligibility refusal without success revalidation", async () => {

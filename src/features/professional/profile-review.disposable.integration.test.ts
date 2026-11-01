@@ -154,8 +154,13 @@ describe.skipIf(process.env.PHASE4_DISPOSABLE_AUTH_TESTS !== "1")("profile revie
           const row = await prisma.profile.findUniqueOrThrow({ where: { userId: id } });
           return `${row.profileStatus}:${row.verificationStatus}:${row.visibilityStatus}`;
         }, { timeout: 30_000 }).toBe("SUBMITTED:PENDING:PRIVATE");
+        // Wait for the completed action's UI response before navigating. The
+        // profile transaction precedes its audit write; polling it alone can
+        // abort an in-flight submission on a fast CI database.
+        await page.getByText(/already in the verification queue/).waitFor();
         await page.reload();
         check(`${scenario}: persisted queue confirmation replaces the submit control`, await page.getByText(/already in the verification queue/).isVisible() && await page.getByRole("button", { name: "Submit for verification", exact: true }).count() === 0);
+        check(`${scenario}: refresh shows confirmation without a contradictory error`, await page.locator("#main-content").getByRole("alert").count() === 0 && await page.getByText("Could not submit", { exact: true }).count() === 0);
         const audits = await prisma.auditLog.count({ where: { actorId: id, action: "professional.verification.submit" } });
         check(`${scenario}: one audited submission and no automatic publication`, audits === 1);
         if (scenario === "no-javascript") await page.screenshot({ path: `.cache/profile-review/no-javascript-queued-${tag}.png` });

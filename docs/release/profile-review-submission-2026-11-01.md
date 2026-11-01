@@ -8,7 +8,7 @@ Independent baseline on exact main `b9e133b1bb3f1bd3b3f8db481b57cdb29e2ecfbd`: r
 
 ## Correction
 
-Use the existing authenticated submission command through a progressively enhanced form. The eligible button no longer waits for client hydration. The hydrated flow shows `Submitting…`, prevents duplicate activation and gives accessible errors. A failed connection produces local recovery guidance and a full profile refresh, rather than an unconfirmed success or application-wide error. Expired sessions receive sign-in guidance. Unexpected server failures emit only a fixed event and safe error classification.
+Use the existing authenticated submission command through a progressively enhanced form. The eligible button no longer waits for client hydration. The hydrated flow shows `Submitting…`, prevents duplicate activation and gives accessible errors. A failed connection produces local recovery guidance and a full profile refresh, rather than an unconfirmed success or application-wide error. Native HTML success redirects to a GET of `/profile`, so refreshing does not resend the form. Expired sessions receive sign-in guidance. Unexpected server failures emit only a fixed event and safe error classification.
 
 The session remains the identity authority. The server still recalculates 100% completion and enforces the existing verification transitions. Submission does not verify or publish a member. No schema, roles, credentials, Auth key controls, datasource, pool normalization or hosting configuration changes.
 
@@ -16,17 +16,22 @@ The session remains the identity authority. The server still recalculates 100% c
 
 | Check | Result |
 | --- | --- |
-| Action, status and existing overview tests | 27/27 PASS |
+| Final action, status and existing overview tests | 28/28 PASS |
 | Changed application/test lint | PASS, zero warnings |
 | Optimized Next build, including typecheck | PASS |
 | First fixed Playwright journey | 44/44 assertions PASS across five scenarios |
 | Extended Playwright journey on the unchanged build | 52/52 assertions PASS across six scenarios |
+| Final stricter Playwright journey after native-refresh correction | 58/58 assertions PASS, zero failures |
 
 The extended run finished at `2026-11-01T18:52:10.300Z`. It used the actual optimized application, Chrome, loopback-only database/Auth and the local email catcher. Cases: desktop, 390px phone, JavaScript disabled, blocked profile bundle, failed submission transport plus recovery, and a stale profile rejected by the server. Successful submissions persisted `SUBMITTED:PENDING:PRIVATE`, replaced the button with queue confirmation after reload and produced exactly one audit event. A rejected stale submission produced no success audit. Session shortcuts remained disabled. Synthetic registrations use the existing local test CAPTCHA verifier; this is not real registration-CAPTCHA evidence.
 
 Only new tagged synthetic local fixtures were used and retained. No pre-existing local member, live member, role or data record was changed. Final test code also explicitly counts the blocked bundle request, rather than assuming an interception occurred; its fresh-database setup supplies only an absent MEMBER reference role, leaving existing roles unchanged.
 
 The new path-filtered `Profile review browser journey` CI job starts an ephemeral local Supabase stack and executes this same real application/browser journey. It uses no repository/Production application secrets, project link or hosted database. It suppresses raw CLI credential summaries and retains only synthetic screenshots and redacted assertion results. Its first actual CI outcome must be recorded before release.
+
+Visual review of the initial fixed screenshot found contradictory feedback after native form refresh: the record was queued but the refresh repeated its POST and displayed a refusal. That result was not accepted as finished. The native POST/redirect/GET correction and explicit no-error-after-refresh checks now pass. A first Linux CI run failed its audit assertion after connection-error recovery; the harness now waits for the completed action's queue response before refreshing, rather than navigating as soon as the earlier profile transaction commits. An overly broad alert check was also scoped to main content, excluding Next's empty route announcer. All failed reports remain retained.
+
+Final local result at `2026-11-01T19:06:55.277Z`: **58 passed / 0 failed**, including an explicitly observed blocked bundle, refresh without contradictory errors, recovery followed by one audited submission, and stale-completion refusal. Fresh exact-head CI remains a separate release requirement.
 
 ## Release closeout
 

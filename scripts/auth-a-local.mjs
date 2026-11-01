@@ -44,7 +44,8 @@ if (consumers) {
   const reports = await readdir('.cache/profile-review');
   const latest = reports.filter(name => /^local-.*\.json$/.test(name)).sort().at(-1);
   const prior = JSON.parse(await readFile(path.join('.cache/profile-review', latest ?? ''), 'utf8'));
-  if (!prior.completed || prior.failed !== 0 || prior.database !== '127.0.0.1:54322' || prior.auth !== '127.0.0.1:54321' || build.mtimeMs > Date.parse(prior.at)) {
+  const started = prior.checks?.some(check => check.name === 'optimized local application starts' && check.pass);
+  if (!started || prior.database !== '127.0.0.1:54322' || prior.auth !== '127.0.0.1:54321' || build.mtimeMs > Date.parse(prior.at)) {
     throw new Error('No verified optimized local profile build available for reuse');
   }
   const files = [
@@ -55,7 +56,7 @@ if (consumers) {
     const source = await stat(file);
     if (source.isFile() && source.mtimeMs > build.mtimeMs) throw new Error('Application sources changed; rebuild the local profile proof first');
   }
-  console.log('Reusing the verified optimized profile build; application sources are unchanged.');
+  console.log('Reusing the optimized profile build with verified startup; application sources are unchanged.');
 } else if (input.reuseBuild) {
   const historical = JSON.parse(await readFile('docs/release/evidence/auth-a/local-application.json', 'utf8'));
   const prior = historical.firstJourney;
