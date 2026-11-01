@@ -1,0 +1,82 @@
+name: profile-review-proof
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/profile-review-proof.yml'
+      - 'src/features/profile/**'
+      - 'src/features/professional/**'
+      - 'src/lib/env/**'
+      - 'src/lib/supabase/**'
+      - 'src/server/auth/**'
+      - 'supabase/**'
+      - 'scripts/auth-a-local*'
+      - 'package*.json'
+      - 'next.config.ts'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    name: Profile review browser journey
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - uses: supabase/setup-cli@v3
+        with:
+          version: '2.122.0'
+      - name: Start disposable local database, Auth and email catcher
+        run: |
+          set -euo pipefail
+          # No hosted account, project link, credential or migration target.
+          # The CLI summary contains local keys, so never print its raw output.
+          if ! supabase start --exclude studio,imgproxy,edge-runtime,logflare,vector,supavisor,realtime > /tmp/tncod-supabase-start.log 2>&1; then
+            node --input-type=module -e '
+              import { readFileSync } from "node:fs";
+              for (const line of readFileSync("/tmp/tncod-supabase-start.log", "utf8").split("\n")) {
+                if (/ERROR|failed/i.test(line) && !/key|secret|token|password|postgresql|https?:\/\//i.test(line)) console.error(line);
+              }
+            '
+            exit 1
+          fi
+          echo 'Disposable Supabase health checks passed'
+      - name: Generate Prisma client and install test browser
+        run: |
+          npm run prisma:generate
+          npx playwright install --with-deps chromium
+      - name: Run the real optimized application and browser journey
+        run: |
+          set -euo pipefail
+          # Pass only local status through stdin. Nothing is exported to a log,
+          # environment file, repository secret or hosted application.
+          supabase status --output json |
+            node --input-type=module -e '
+              let raw = "";
+              for await (const chunk of process.stdin) raw += chunk;
+              const status = JSON.parse(raw);
+              status.proofCase = "profile-review";
+              process.stdout.write(JSON.stringify(status));
+            ' |
+            node scripts/auth-a-local.mjs
+      - name: Retain only synthetic screenshots and redacted assertion results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile-review-${{ github.sha }}
+          path: |
+            .cache/profile-review/*.json
+            .cache/profile-review/*.png
+          include-hidden-files: true
+          retention-days: 7
+          if-no-files-found: ignore
