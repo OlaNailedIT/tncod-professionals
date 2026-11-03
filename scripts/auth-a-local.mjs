@@ -1,6 +1,6 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { createServer } from 'node:net';
-import { readFile, stat, writeFile } from 'node:fs/promises';
+import { readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const input = JSON.parse(await new Promise(resolve => {
@@ -17,6 +17,7 @@ if (!input.PUBLISHABLE_KEY?.startsWith('sb_publishable_') || !input.SECRET_KEY?.
 }
 const consumers = input.proofCase === 'consumers';
 const remaining = input.proofCase === 'remaining';
+const profileReview = input.proofCase === 'profile-review';
 if (!consumers) await new Promise((resolve, reject) => {
   const probe = createServer(); probe.once('error', () => reject(new Error('Port 3000 is occupied; no existing server will be reused or stopped')));
   probe.listen(3000, '127.0.0.1', () => probe.close(resolve));
@@ -38,6 +39,24 @@ if (consumers) {
     await writeFile(`.cache/auth-a/local-consumers-${prior.at.replaceAll(/[:.]/g, '-')}.json`, JSON.stringify(prior, null, 2));
   } catch (error) { if (error.code !== 'ENOENT') throw error; }
   console.log('Running actual domain/Storage credential consumers; no browser/email acceptance claimed.');
+} else if (profileReview && input.reuseBuild) {
+  const build = await stat('.next/BUILD_ID');
+  const reports = await readdir('.cache/profile-review');
+  const latest = reports.filter(name => /^local-.*\.json$/.test(name)).sort().at(-1);
+  const prior = JSON.parse(await readFile(path.join('.cache/profile-review', latest ?? ''), 'utf8'));
+  const started = prior.checks?.some(check => check.name === 'optimized local application starts' && check.pass);
+  if (!started || prior.database !== '127.0.0.1:54322' || prior.auth !== '127.0.0.1:54321' || build.mtimeMs > Date.parse(prior.at)) {
+    throw new Error('No verified optimized local profile build available for reuse');
+  }
+  const files = [
+    ...(await readdir('src', { recursive: true })).map(file => path.join('src', file)).filter(file => !/\.test\.tsx?$/.test(file)),
+    'next.config.ts', 'package.json', 'package-lock.json', 'tsconfig.json', 'prisma/schema.prisma',
+  ];
+  for (const file of files) {
+    const source = await stat(file);
+    if (source.isFile() && source.mtimeMs > build.mtimeMs) throw new Error('Application sources changed; rebuild the local profile proof first');
+  }
+  console.log('Reusing the optimized profile build with verified startup; application sources are unchanged.');
 } else if (input.reuseBuild) {
   const historical = JSON.parse(await readFile('docs/release/evidence/auth-a/local-application.json', 'utf8'));
   const prior = historical.firstJourney;
@@ -61,7 +80,7 @@ const buildCode = await new Promise(resolve => {
 if (buildCode !== 0) throw new Error('Local production build failed; browser proof not started');
 }
 const child = spawn(process.execPath, ['node_modules/vitest/vitest.mjs', 'run',
-  consumers ? 'src/features/business/server-only-key.disposable.integration.test.ts' : remaining ? 'src/lib/env/server-only-auth.remaining.integration.test.ts' : 'src/lib/env/server-only-auth.disposable.integration.test.ts', '--configLoader', 'runner', '--no-cache'], {
+  consumers ? 'src/features/business/server-only-key.disposable.integration.test.ts' : profileReview ? 'src/features/professional/profile-review.disposable.integration.test.ts' : remaining ? 'src/lib/env/server-only-auth.remaining.integration.test.ts' : 'src/lib/env/server-only-auth.disposable.integration.test.ts', '--configLoader', 'runner', '--no-cache'], {
   env, stdio: 'inherit',
 });
 child.once('error', () => { console.error('Could not start local proof'); process.exitCode = 1; });

@@ -1,8 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { requireAuthenticatedUser } from "@/server/auth/session";
 import { submitProfile } from "@/features/professional/submit-profile";
+import type { SubmitProfileResult } from "@/features/professional/submit-profile";
+import { AppError } from "@/lib/errors";
+import { logger } from "@/lib/logger";
 import {
   applyExcoProfessionalDecision,
   publishProfile,
@@ -21,11 +26,32 @@ function revalidateProfessionalPaths(profileId?: string) {
   }
 }
 
-export async function submitProfileAction() {
-  const user = await requireAuthenticatedUser();
-  const result = await submitProfile(user.userId);
-  if (result.ok) {
-    revalidateProfessionalPaths();
+export async function submitProfileAction(
+  _previousState: SubmitProfileResult | null = null,
+): Promise<SubmitProfileResult> {
+  // Previous form state is presentation only. Identity and eligibility always
+  // come from the authenticated session and the existing server command.
+  let result: SubmitProfileResult;
+  try {
+    const user = await requireAuthenticatedUser();
+    result = await submitProfile(user.userId);
+    if (result.ok) revalidateProfessionalPaths();
+  } catch (error) {
+    if (!(error instanceof AppError && error.code === "UNAUTHENTICATED")) {
+      logger.error("professional_submission_failed", { code: error instanceof AppError ? error.code : "INTERNAL" });
+    }
+    return {
+      ok: false,
+      message: error instanceof AppError && error.code === "UNAUTHENTICATED"
+        ? "Your session has ended. Refresh the page to sign in again."
+        : "Your submission could not be confirmed. Refresh your profile to check its status before trying again.",
+    };
+  }
+  // Native HTML submissions need POST/redirect/GET so Refresh cannot resend
+  // the command. Enhanced action requests keep their inline action state.
+  // Redirect throws a framework control signal; keep it outside the catch.
+  if (result.ok && (await headers()).get("accept")?.includes("text/html")) {
+    redirect("/profile");
   }
   return result;
 }
