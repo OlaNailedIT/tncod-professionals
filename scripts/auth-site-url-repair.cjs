@@ -150,7 +150,9 @@ async function main(args = process.argv.slice(2), dependencies = {}) {
   const allowed = String(j.uri_allow_list || "").split(",").map((entry) => entry.trim()).filter(Boolean);
   log("SITE_URL", j.site_url);
   log("ALLOW_HAS_OFFICIAL_CALLBACK_QUERY", allowed.includes(`${OFFICIAL}/auth/callback**`));
-  log("EXISTING_REDIRECTS_PRESERVED", String(current.uri_allow_list || "").split(",").map(x => x.trim()).filter(Boolean).every(entry => allowed.includes(entry)));
+  if (apply) {
+    log("EXISTING_REDIRECTS_PRESERVED", String(current.uri_allow_list || "").split(",").map(x => x.trim()).filter(Boolean).every(entry => allowed.includes(entry)));
+  }
   log("DIRECT_SIGNUP_DISABLED", j.disable_signup === true);
   log("EMAIL_OTP_PROVIDER_ENABLED", j.external_email_enabled === true);
   log("MAGIC_LINK_TOKEN_PRESENT", magicLink.includes("{{ .Token }}"));

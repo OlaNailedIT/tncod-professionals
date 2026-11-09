@@ -7,6 +7,10 @@
 > check. Its write mode requires explicit `--apply`, the exact project ref,
 > and the current Site URL from a fresh preflight. Hosted settings remain
 > unchanged until a separately approved operation and real sign-in check.
+> A read-only hosted check on 9 November also reported `ConfirmationURL`
+> and a matching anchor in the magic-link template. The historical
+> digits-only statement below is not current template proof. Template
+> inspection or correction requires its own review and approval.
 
 **Date:** 2026-09-16  
 **Authority:** Controlled Pilot authentication safety remediation (Phase 20.5 architecture preserved)  
