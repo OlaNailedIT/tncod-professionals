@@ -1,22 +1,66 @@
 /**
- * Re-apply Production Auth security config + canonical URL.
- * Idempotent. Never prints token.
+ * Inspect or, with explicit operator approval, align hosted Auth URL settings.
+ * A bare invocation is read only. Never prints a token or full Auth config.
  */
 const { spawnSync } = require("child_process");
 
-const PROD = "https://tncod-professionals-azure.vercel.app";
+const OFFICIAL = "https://codprofessionals.69resources.com";
+const AZURE = "https://tncod-professionals-azure.vercel.app";
 const VIIX = "https://codprofessionals.viix.solutions";
-const RESOURCES = "https://codprofessionals.69resources.com";
 const REF = "brpppukzqgpzxjelwwrj";
-const REQUIRED_REDIRECTS = [
-  `${PROD}/auth/callback`,
+const PREVIOUS_SITE_URL = "https://tncod-professionals-olanailedits-projects.vercel.app/";
+const REQUIRED_EXISTING_REDIRECTS = [
+  `${AZURE}/auth/callback`,
   `${VIIX}/auth/callback`,
-  `${RESOURCES}/auth/callback`,
+  `${OFFICIAL}/auth/callback`,
 ];
+const CUTOVER_REDIRECT = `${OFFICIAL}/auth/callback**`;
+const REQUIRED_REDIRECTS = [...REQUIRED_EXISTING_REDIRECTS, CUTOVER_REDIRECT];
+const SITE_URL = `${OFFICIAL}/`;
 
 function mergeRedirectAllowList(current) {
   const existing = String(current || "").split(",").map((entry) => entry.trim()).filter(Boolean);
-  return [...new Set([...existing, ...REQUIRED_REDIRECTS])].join(",");
+  return [...new Set([...existing, CUTOVER_REDIRECT])].join(",");
+}
+
+function parseArgs(args) {
+  const apply = args.includes("--apply");
+  const verifyOnly = args.includes("--verify-only");
+  const expectedPrefix = "--expected-site-url=";
+  const projectPrefix = "--project-ref=";
+  const expected = args.find(arg => arg.startsWith(expectedPrefix))?.slice(expectedPrefix.length);
+  const projectRef = args.find(arg => arg.startsWith(projectPrefix))?.slice(projectPrefix.length);
+  const known = args.every(arg =>
+    arg === "--apply" || arg === "--verify-only" ||
+    arg.startsWith(expectedPrefix) || arg.startsWith(projectPrefix));
+  if (!known || (apply && verifyOnly) || args.filter(arg => arg === "--apply").length > 1 ||
+      args.filter(arg => arg === "--verify-only").length > 1 ||
+      args.filter(arg => arg.startsWith(expectedPrefix)).length > 1 ||
+      args.filter(arg => arg.startsWith(projectPrefix)).length > 1) {
+    throw new Error("Invalid Auth URL command arguments");
+  }
+  if (apply && (!expected || projectRef !== REF)) {
+    throw new Error("Write mode requires --project-ref and --expected-site-url matching the current readback");
+  }
+  if (!apply && args.some(arg => arg.startsWith(expectedPrefix) || arg.startsWith(projectPrefix))) {
+    throw new Error("Expected Site URL and project reference are only accepted with --apply");
+  }
+  return { apply, expected };
+}
+
+function buildUrlPatch(current, expectedSiteUrl) {
+  if (current.site_url !== expectedSiteUrl) throw new Error("Hosted Site URL changed since operator preflight");
+  if (current.site_url !== PREVIOUS_SITE_URL && current.site_url !== SITE_URL) {
+    throw new Error("Hosted Site URL is outside the reviewed cutover states");
+  }
+  if (current.disable_signup !== true || current.external_email_enabled !== true) {
+    throw new Error("Hosted Auth safety preconditions changed");
+  }
+  const existing = String(current.uri_allow_list || "").split(",").map(x => x.trim());
+  if (!REQUIRED_EXISTING_REDIRECTS.every(redirect => existing.includes(redirect))) {
+    throw new Error("Required existing Auth redirects changed since operator preflight");
+  }
+  return { site_url: SITE_URL, uri_allow_list: mergeRedirectAllowList(current.uri_allow_list) };
 }
 
 function getToken() {
@@ -56,91 +100,77 @@ public class CredMan {
   return (r.stdout || "").trim() || null;
 }
 
-async function main() {
-  const verifyOnly = process.argv.includes("--verify-only");
-  const token = getToken();
-  if (!token) {
-    console.log("TOKEN=ABSENT");
-    process.exit(2);
-  }
-  // Read before writing: Auth may have gained more approved redirects since this
-  // script was created. Never replace them with an older fixed list.
-  const preflight = await fetch(`https://api.supabase.com/v1/projects/${REF}/config/auth`, {
+async function main(args = process.argv.slice(2), dependencies = {}) {
+  const { apply, expected } = parseArgs(args);
+  const token = dependencies.token ?? getToken();
+  const request = dependencies.fetch ?? fetch;
+  const log = dependencies.log ?? console.log;
+  if (!token) throw new Error("Hosted Auth credential unavailable");
+  // Always read first; never replace a newer allow-list with a fixed historical list.
+  const preflight = await request(`https://api.supabase.com/v1/projects/${REF}/config/auth`, {
     headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
   });
   if (!preflight.ok) throw new Error(`Auth config preflight failed (${preflight.status})`);
   const current = await preflight.json();
-  const allow = mergeRedirectAllowList(current.uri_allow_list);
+  log("MODE", apply ? "APPLY" : "VERIFY_ONLY");
+  log("PROJECT_REF", REF);
+  log("CURRENT_SITE_URL", current.site_url);
 
-  if (!verifyOnly) {
-    const patch = await fetch(
-      `https://api.supabase.com/v1/projects/${REF}/config/auth`,
-      {
+  if (apply) {
+    const patchBody = buildUrlPatch(current, expected);
+    if (current.site_url !== patchBody.site_url || current.uri_allow_list !== patchBody.uri_allow_list) {
+      const patch = await request(`https://api.supabase.com/v1/projects/${REF}/config/auth`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          site_url: `${PROD}/`,
-          uri_allow_list: allow,
-          disable_signup: true,
-        }),
-      }
-    );
-    console.log("PATCH", patch.status);
-    if (!patch.ok) {
-      const t = await patch.text();
-      console.log("ERR", t.slice(0, 200));
-      process.exit(1);
+        body: JSON.stringify(patchBody),
+      });
+      log("PATCH_STATUS", patch.status);
+      if (!patch.ok) throw new Error(`Auth URL update failed (${patch.status})`);
+    } else {
+      log("PATCH_STATUS", "NOT_NEEDED");
     }
   }
 
-  let j;
-  for (let attempt = 0; attempt < (verifyOnly ? 1 : 5); attempt += 1) {
-    const get = await fetch(
-      `https://api.supabase.com/v1/projects/${REF}/config/auth`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    );
+  let j = current;
+  for (let attempt = 0; attempt < (apply ? 5 : 0); attempt += 1) {
+    const get = await request(`https://api.supabase.com/v1/projects/${REF}/config/auth`, {
+      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+    });
     if (!get.ok) throw new Error(`Auth config read failed (${get.status})`);
     j = await get.json();
-    if (j.site_url === `${PROD}/` || verifyOnly) break;
+    if (j.site_url === SITE_URL &&
+        REQUIRED_REDIRECTS.every(redirect => String(j.uri_allow_list || "").split(",").map(x => x.trim()).includes(redirect))) break;
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
   const magicLink = j.mailer_templates_magic_link_content || "";
-  const allowed = String(j.uri_allow_list || "").split(",").map((entry) => entry.trim());
-  console.log("SITE_URL", j.site_url);
-  console.log(
-    "ALLOW_HAS_CANONICAL_CALLBACK",
-    allowed.includes(`${PROD}/auth/callback`)
-  );
-  console.log("DIRECT_SIGNUP_DISABLED", j.disable_signup === true);
-  console.log("EMAIL_OTP_PROVIDER_ENABLED", j.external_email_enabled === true);
-  console.log("MAGIC_LINK_TOKEN_PRESENT", magicLink.includes("{{ .Token }}"));
-  console.log("MAGIC_LINK_CONFIRMATION_URL_PRESENT", magicLink.includes("{{ .ConfirmationURL }}"));
-  console.log("MAGIC_LINK_ANCHOR_PRESENT", /<a\b[^>]*href=["']{{\s*\.ConfirmationURL\s*}}["'][^>]*>/i.test(magicLink));
-  console.log("EMAIL_OTP_EXPIRY_SECONDS", j.mailer_otp_exp);
-  console.log(
+  const allowed = String(j.uri_allow_list || "").split(",").map((entry) => entry.trim()).filter(Boolean);
+  log("SITE_URL", j.site_url);
+  log("ALLOW_HAS_OFFICIAL_CALLBACK_QUERY", allowed.includes(`${OFFICIAL}/auth/callback**`));
+  log("EXISTING_REDIRECTS_PRESERVED", String(current.uri_allow_list || "").split(",").map(x => x.trim()).filter(Boolean).every(entry => allowed.includes(entry)));
+  log("DIRECT_SIGNUP_DISABLED", j.disable_signup === true);
+  log("EMAIL_OTP_PROVIDER_ENABLED", j.external_email_enabled === true);
+  log("MAGIC_LINK_TOKEN_PRESENT", magicLink.includes("{{ .Token }}"));
+  log("MAGIC_LINK_CONFIRMATION_URL_PRESENT", magicLink.includes("{{ .ConfirmationURL }}"));
+  log("MAGIC_LINK_ANCHOR_PRESENT", /<a\b[^>]*href=["']{{\s*\.ConfirmationURL\s*}}["'][^>]*>/i.test(magicLink));
+  log("EMAIL_OTP_EXPIRY_SECONDS", j.mailer_otp_exp);
+  log(
     "LEAKED_PASSWORD_PROTECTION",
     j.password_hibp_enabled === true ? "ENABLED" : "PLAN_UNAVAILABLE"
   );
   if (
-    j.site_url !== `${PROD}/` ||
+    j.site_url !== SITE_URL ||
     !REQUIRED_REDIRECTS.every((redirect) => allowed.includes(redirect)) ||
+    !String(current.uri_allow_list || "").split(",").map(x => x.trim()).filter(Boolean).every(entry => allowed.includes(entry)) ||
     j.disable_signup !== true ||
-    j.external_email_enabled !== true ||
-    !magicLink.includes("{{ .Token }}") ||
-    !magicLink.includes("{{ .ConfirmationURL }}")
+    j.external_email_enabled !== true
   ) {
-    throw new Error("Production Auth remediation did not verify");
+    throw new Error("Hosted Auth URL configuration did not verify");
   }
-  console.log("REPAIR_OK");
+  log("URL_CONFIG_VERIFIED");
 }
 
 if (require.main === module) {
@@ -150,4 +180,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { mergeRedirectAllowList };
+module.exports = { mergeRedirectAllowList, parseArgs, buildUrlPatch, main };
