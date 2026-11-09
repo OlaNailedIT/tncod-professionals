@@ -1,5 +1,17 @@
 # Phase 23 — New-member OTP forensic remediation
 
+> **9 November 2026 operational supersession:** The owner selected
+> `https://codprofessionals.69resources.com/` as the intended official URL.
+> The Azure Site URL repair instruction later in this historical report must
+> not be used for a new cutover. The proposed script now defaults to a read-only
+> check. Its write mode requires explicit `--apply`, the exact project ref,
+> and the current Site URL from a fresh preflight. Hosted settings remain
+> unchanged until a separately approved operation and real sign-in check.
+> A read-only hosted check on 9 November also reported `ConfirmationURL`
+> and a matching anchor in the magic-link template. The historical
+> digits-only statement below is not current template proof. Template
+> inspection or correction requires its own review and approval.
+
 **Date:** 2026-09-16  
 **Authority:** Controlled Pilot authentication safety remediation (Phase 20.5 architecture preserved)  
 **Status:** Remediation deployed; pilot may resume
@@ -75,7 +87,7 @@ Phase 20: NONE
 Phase 21: NONE
 ```
 
-**Operational note:** Auth `site_url` may drift back to the Vercel project host after some deploy/sync events. Re-run `node scripts/auth-site-url-repair.cjs` if inspect shows non-azure `site_url`. Digit OTP remains valid while azure stays on the redirect allowlist.
+**Historical operational note, superseded 9 November:** Auth `site_url` may drift back to the Vercel project host after some deploy/sync events. The former instruction to re-run `node scripts/auth-site-url-repair.cjs` to force the Azure URL is withdrawn. A bare invocation and `--verify-only` now inspect without writing; a nonzero result means the proposed official URL state is not yet verified. Before any approved `--apply`, the operator must confirm the target project, the exact current Site URL, the complete existing redirect list, Vercel/Turnstile readiness, an operator-controlled test identity, and rollback authority. The reviewed write is limited to changing Site URL to `https://codprofessionals.69resources.com/` and adding its `/auth/callback**` entry while preserving existing redirects. Do not interpret a script readback as a real OTP/PKCE journey or launch approval.
 
 ---
 
